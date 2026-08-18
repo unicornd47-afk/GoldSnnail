@@ -1,0 +1,51 @@
+```
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+*.js.map
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Package lock
+package-lock.json
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# TypeScript
+*.tsbuildinfo
+*.tsx
+
+# ESLint
+.eslintcache
+
+# Obsidian plugin specific
+main.js
+manifest.json
+styles.css
+```
