@@ -1,0 +1,21 @@
+{
+  "multimodal": {
+    "digit_accuracy": 0.8333,
+    "semantic_relevance": 0.8333,
+    "grammatical_rate": 1.0000,
+    "bridge_fidelity": 1.0000
+  },
+  "text_only": {
+    "digit_accuracy": 1.0000,
+    "semantic_relevance": 0.0000,
+    "grammatical_rate": 0.7000
+  },
+  "random": {
+    "digit_accuracy": 0.3417,
+    "semantic_relevance": 0.0750,
+    "grammatical_rate": 1.0000
+  },
+  "dataset": "N-MNIST 3-digit",
+  "encoding": "8d-radial",
+  "samples": 120
+}

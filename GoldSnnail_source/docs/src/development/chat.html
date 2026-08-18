@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>GoldWorm SNN-LLM Chat</title>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #4fc3f7; font-size: 18px; margin-bottom: 10px; }
+        #container { display: flex; gap: 20px; }
+        #chat { width: 100%; max-width: 800px; }
+        #history { background: #15151a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; height: 400px; overflow-y: auto; }
+        .turn { margin: 8px 0; padding: 8px 12px; border-radius: 6px; }
+        .user { background: #1a237e; text-align: right; }
+        .assistant { background: #1b5e20; text-align: left; }
+        .role { font-size: 11px; color: #888; margin-bottom: 2px; }
+        .text { font-size: 14px; }
+        #input-area { display: flex; gap: 10px; margin-top: 10px; }
+        #user-input { flex: 1; padding: 10px; background: #1a1a2e; border: 1px solid #333; border-radius: 6px; color: #e0e0e0; font-size: 14px; }
+        #send-btn { padding: 10px 20px; background: #4fc3f7; border: none; border-radius: 6px; color: #000; font-weight: bold; cursor: pointer; }
+        #send-btn:hover { background: #29b6f6; }
+        #snn-viz { background: #15151a; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #333; }
+        #spike-canvas { width: 100%; height: 100px; background: #111; border-radius: 4px; }
+        .stats { display: flex; gap: 15px; margin-bottom: 15px; }
+        .stat { background: #15151a; padding: 10px 15px; border-radius: 6px; border: 1px solid #333; }
+        .stat-label { font-size: 11px; color: #888; }
+        .stat-value { font-size: 18px; color: #4fc3f7; font-weight: bold; }
+        .refresh-info { color: #666; font-size: 11px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🧠 GoldWorm SNN-LLM Chat — Live Visualization</h1>
+    
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-label">Turns</div>
+            <div class="stat-value" id="turn-count">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Learned Transitions</div>
+            <div class="stat-value" id="transition-count">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Spike Events</div>
+            <div class="stat-value" id="spike-count">0</div>
+        </div>
+    </div>
+
+    <div id="container">
+        <div id="chat">
+            <div id="history">
+                <div class="turn assistant">
+                    <div class="role">GoldWorm</div>
+                    <div class="text">Hallo! Ich bin GoldWorm. Sprich mit mir!</div>
+                </div>
+            </div>
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="Tippe eine Nachricht..." autocomplete="off">
+                <button id="send-btn">Senden</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="snn-viz">
+        <h3 style="margin-top: 0; color: #4fc3f7;">SNN Spike Activity</h3>
+        <canvas id="spike-canvas" width="800" height="100"></canvas>
+        <div class="refresh-info">Auto-reload alle 2 Sekunden. Starte <code>cargo run --example chat_cli</code> um zu chatten.</div>
+    </div>
+
+    <script>
+        let turnCount = 0;
+        let spikeCount = 0;
+        const canvas = document.getElementById('spike-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function drawSpikes() {
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            
+            // Draw random spikes (simulating SNN activity)
+            ctx.fillStyle = '#4fc3f7';
+            for (let i = 0; i < Math.min(spikeCount, 100); i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const r = Math.random() * 3 + 1;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Draw text
+            ctx.fillStyle = '#888';
+            ctx.font = '12px monospace';
+            ctx.fillText(`Spike events: ${spikeCount}`, 10, 20);
+        }
+        
+        function loadState() {
+            Promise.all([
+                fetch('chat_state.json?t=' + Date.now()).then(r => r.json()).catch(() => []),
+                fetch('chat_stats.json?t=' + Date.now()).then(r => r.json()).catch(() => ({})),
+            ]).then(([data, stats]) => {
+                const history = document.getElementById('history');
+                history.innerHTML = '';
+                
+                data.forEach(turn => {
+                    const div = document.createElement('div');
+                    div.className = 'turn ' + turn.role;
+                    div.innerHTML = `
+                        <div class="role">${turn.role === 'user' ? 'Du' : 'GoldWorm'}</div>
+                        <div class="text">${escapeHtml(turn.text)}</div>
+                    `;
+                    history.appendChild(div);
+                });
+                
+                history.scrollTop = history.scrollHeight;
+                
+                document.getElementById('turn-count').textContent = data.length;
+                document.getElementById('transition-count').textContent = stats.transitions || 0;
+                document.getElementById('spike-count').textContent = stats.spikes || 0;
+                spikeCount = stats.spikes || 0;
+                
+                drawSpikes();
+            });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            // Add to history
+            const history = document.getElementById('history');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'turn user';
+            userDiv.innerHTML = `
+                <div class="role">Du</div>
+                <div class="text">${escapeHtml(text)}</div>
+            `;
+            history.appendChild(userDiv);
+            input.value = '';
+            history.scrollTop = history.scrollHeight;
+            
+            // Simulate response (in real version, this would call the backend)
+            setTimeout(() => {
+                const responses = [
+                    "Ich bin GoldWorm, ein neuronales System.",
+                    "Das ist interessant!",
+                    "Erzähl mir mehr darüber.",
+                    "Ich lerne ständig dazu.",
+                    "Mein SNN-LLM Bridge verarbeitet gerade deine Eingabe.",
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                
+                const assistantDiv = document.createElement('div');
+                assistantDiv.className = 'turn assistant';
+                assistantDiv.innerHTML = `
+                    <div class="role">GoldWorm</div>
+                    <div class="text">${response}</div>
+                `;
+                history.appendChild(assistantDiv);
+                history.scrollTop = history.scrollHeight;
+                
+                spikeCount += 3;
+                document.getElementById('spike-count').textContent = spikeCount;
+                drawSpikes();
+            }, 500);
+        }
+        
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Auto-reload
+        loadState();
+        setInterval(loadState, 2000);
+    </script>
+</body>
+</html>

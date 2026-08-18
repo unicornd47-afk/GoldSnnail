@@ -1,0 +1,74 @@
+﻿[package]
+name = "goldworm"
+version = "0.3.0"
+edition = "2024"
+description = "Experimental Spiking Neural Network engine based on Sandboxed Emergence"
+license = "MIT OR Apache-2.0"
+rust-version = "1.85"
+
+[dependencies]
+ndarray = "0.16"
+rand = "0.8"
+rand_distr = "0.5"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+ash = { version = "0.38", optional = true }
+ash-window = { version = "0.13", optional = true }
+gpu-allocator = { version = "0.27", optional = true, features = ["vulkan"] }
+shaderc = { version = "0.8", optional = true }
+rayon = { version = "1.10", optional = true }
+reqwest = { version = "0.12", features = ["blocking", "gzip", "brotli", "deflate"], optional = true }
+zip = { version = "2.2", optional = true }
+
+[features]
+default = []
+vulkan = ["ash", "ash-window", "gpu-allocator"]
+cuda = []
+rayon = ["dep:rayon"]
+nmnis_t_download = ["reqwest", "zip"]
+
+[dev-dependencies]
+approx = "0.5"
+criterion = "0.5"
+proptest = "1.6"
+insta = { version = "1.40", features = ["yaml", "redactions", "json"] }
+ctrlc = "3.4"
+
+[[bench]]
+name = "dod_substrate"
+harness = false
+
+[[bench]]
+name = "hyperbolic_geometry"
+harness = false
+
+[[bench]]
+name = "neuron_dynamics"
+harness = false
+
+[[bench]]
+name = "agi_pipeline"
+harness = false
+
+[[bench]]
+name = "plasticity"
+harness = false
+
+[[bench]]
+name = "benchmark_arc_compositional"
+harness = false
+
+# [[bench]]
+# name = "shd_benchmark"
+# harness = false
+
+# [[bench]]
+# name = "avx2_impact"
+# harness = false
+
+[workspace]
+members = [
+    ".",
+    "tools/benchmark_runner",
+    "app/src-tauri",
+]

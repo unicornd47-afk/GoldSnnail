@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>GoldWorm CIFAR-10 Baby Agent — Live Visualization</title>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #4fc3f7; font-size: 18px; margin-bottom: 10px; }
+        #container { display: flex; gap: 20px; }
+        #viz { position: relative; width: 600px; height: 600px; }
+        svg { background: #111; border-radius: 8px; border: 1px solid #333; }
+        #sidebar { width: 300px; }
+        #stats { background: #15151a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; }
+        .stat-row { display: flex; justify-content: space-between; margin: 6px 0; font-size: 13px; }
+        .stat-label { color: #888; }
+        .stat-value { color: #4fc3f7; font-weight: bold; }
+        .correct { color: #66bb6a; }
+        .wrong { color: #ef5350; }
+        #legend { background: #15151a; padding: 15px; border-radius: 8px; border: 1px solid #333; }
+        .legend-item { display: flex; align-items: center; margin: 4px 0; font-size: 12px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+        .refresh-info { color: #666; font-size: 11px; margin-top: 10px; }
+        circle.token-node { cursor: pointer; }
+        circle.token-node:hover { stroke: #fff; stroke-width: 2px; }
+        line.assoc-line { opacity: 0.3; }
+        line.assoc-line.correct { stroke: #66bb6a; opacity: 0.6; }
+        line.assoc-line.wrong { stroke: #ef5350; opacity: 0.4; stroke-dasharray: 4,2; }
+    </style>
+</head>
+<body>
+    <h1>🧠 GoldWorm CIFAR-10 Baby Agent — Poincaré-Ball Visualization</h1>
+    <div id="container">
+        <div id="viz">
+            <svg id="hyperbolic-plane" width="600" height="600" viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="280" fill="none" stroke="#333" stroke-width="2"/>
+                <text x="300" y="20" text-anchor="middle" fill="#555" font-size="12">Hyperbolic Space (Poincaré Ball)</text>
+                <text id="loading-text" x="300" y="300" text-anchor="middle" fill="#555" font-size="14">
+                    Loading...
+                </text>
+            </svg>
+        </div>
+        <div id="sidebar">
+            <div id="stats">
+                <div class="stat-row"><span class="stat-label">Lexikon-Größe:</span><span class="stat-value" id="lex-size">-</span></div>
+                <div class="stat-row"><span class="stat-label">Test-Centroids:</span><span class="stat-value" id="cent-count">-</span></div>
+                <div class="stat-row"><span class="stat-label">Korrekte Assoziationen:</span><span class="stat-value" id="acc-count">-</span></div>
+                <div class="stat-row"><span class="stat-label">Accuracy:</span><span class="stat-value" id="acc-pct">-</span></div>
+                <div class="stat-row"><span class="stat-label">Concept-Graph Kanten:</span><span class="stat-value" id="edge-count">-</span></div>
+            </div>
+            <div id="legend">
+                <div style="color:#888; font-size:11px; margin-bottom:8px;">Legende</div>
+                <div class="legend-item"><div class="dot" style="background:#4fc3f7"></div>Lexikon-Wort (groß = hohe Salience)</div>
+                <div class="legend-item"><div class="dot" style="background:#ffa726; opacity:0.6"></div>Bild-Centroid (visuelles Embedding)</div>
+                <div class="legend-item"><div class="dot" style="background:#66bb6a; width:20px; height:2px; border-radius:0"></div>Korrekte Assoziation</div>
+                <div class="legend-item"><div class="dot" style="background:#ef5350; width:20px; height:2px; border-radius:0"></div>Falsche Assoziation</div>
+            </div>
+            <div class="refresh-info">Auto-reload alle 5 Sekunden. Einzelkommando: <code>cargo run --example cifar_baby</code></div>
+        </div>
+    </div>
+
+    <script>
+        const CX = 300, CY = 300, SCALE = 280;
+
+        async function loadState() {
+            try {
+                const resp = await fetch('cifar_baby_state.json?t=' + Date.now());
+                const data = await resp.json();
+                render(data);
+                updateStats(data);
+            } catch (e) {
+                console.log("Waiting for cifar_baby_state.json...", e);
+            }
+        }
+
+        function render(data) {
+            const loadingText = document.getElementById('loading-text');
+            if (loadingText) loadingText.remove();
+
+            const svg = document.getElementById('hyperbolic-plane');
+            svg.innerHTML = `
+                <circle cx="${CX}" cy="${CY}" r="${SCALE}" fill="none" stroke="#333" stroke-width="2"/>
+                <text x="${CX}" y="20" text-anchor="middle" fill="#555" font-size="12">Hyperbolic Space (Poincaré Ball)</text>
+            `;
+
+            [0.25, 0.5, 0.75].forEach(r => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", CX);
+                circle.setAttribute("cy", CY);
+                circle.setAttribute("r", r * SCALE);
+                circle.setAttribute("fill", "none");
+                circle.setAttribute("stroke", "#222");
+                circle.setAttribute("stroke-width", "1");
+                svg.appendChild(circle);
+            });
+
+            if (data.edges && data.lexicon) {
+                data.edges.forEach(e => {
+                    const from = data.lexicon.find(t => t.word === e.from);
+                    const to = data.lexicon.find(t => t.word === e.to);
+                    if (!from || !to) return;
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", CX + from.x * SCALE);
+                    line.setAttribute("y1", CY + from.y * SCALE);
+                    line.setAttribute("x2", CX + to.x * SCALE);
+                    line.setAttribute("y2", CY + to.y * SCALE);
+                    line.setAttribute("stroke", "#555");
+                    line.setAttribute("stroke-width", Math.max(0.5, e.weight * 2));
+                    line.setAttribute("opacity", "0.3");
+                    svg.appendChild(line);
+                });
+            }
+
+            if (data.associations && data.centroids && data.lexicon) {
+                data.associations.forEach(a => {
+                    const cent = data.centroids.find(c => c.id === a.centroid_id);
+                    const word = data.lexicon.find(t => t.word === a.predicted);
+                    if (!cent || !word) return;
+
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", CX + word.x * SCALE);
+                    line.setAttribute("y1", CY + word.y * SCALE);
+                    line.setAttribute("x2", CX + cent.x * SCALE);
+                    line.setAttribute("y2", CY + cent.y * SCALE);
+                    line.setAttribute("class", a.correct ? "assoc-line correct" : "assoc-line wrong");
+                    line.setAttribute("stroke-width", "1.5");
+                    svg.appendChild(line);
+                });
+            }
+
+            if (data.centroids) {
+                data.centroids.forEach(c => {
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", CX + c.x * SCALE);
+                    circle.setAttribute("cy", CY + c.y * SCALE);
+                    circle.setAttribute("r", "4");
+                    circle.setAttribute("fill", "#ffa726");
+                    circle.setAttribute("opacity", "0.5");
+                    const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                    title.textContent = `Centroid ${c.id}: ${c.label_word} (true: ${c.true_label})`;
+                    circle.appendChild(title);
+                    svg.appendChild(circle);
+                });
+            }
+
+            if (data.lexicon) {
+                data.lexicon.forEach(t => {
+                    const px = CX + t.x * SCALE;
+                    const py = CY + t.y * SCALE;
+                    const size = 6 + (t.salience || 0.5) * 10;
+
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", px);
+                    circle.setAttribute("cy", py);
+                    circle.setAttribute("r", size);
+                    circle.setAttribute("fill", classColor(t.class));
+                    circle.setAttribute("stroke", "#fff");
+                    circle.setAttribute("stroke-width", "1.5");
+                    circle.setAttribute("opacity", "0.9");
+                    circle.setAttribute("class", "token-node");
+
+                    const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                    title.textContent = `${t.word} (${t.class}) | salience: ${(t.salience || 0).toFixed(2)}`;
+                    circle.appendChild(title);
+                    svg.appendChild(circle);
+
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", px + size + 4);
+                    text.setAttribute("y", py + 4);
+                    text.setAttribute("font-size", "11");
+                    text.setAttribute("fill", "#ccc");
+                    text.setAttribute("font-weight", "bold");
+                    text.textContent = t.word;
+                    svg.appendChild(text);
+                });
+            }
+        }
+
+        function updateStats(data) {
+            document.getElementById('lex-size').textContent = (data.lexicon || []).length;
+            document.getElementById('cent-count').textContent = (data.centroids || []).length;
+            
+            const assoc = data.associations || [];
+            const correct = assoc.filter(a => a.correct).length;
+            document.getElementById('acc-count').textContent = `${correct}/${assoc.length}`;
+            document.getElementById('acc-pct').textContent = assoc.length > 0 
+                ? (100 * correct / assoc.length).toFixed(1) + '%' : '-';
+            document.getElementById('acc-pct').className = 'stat-value ' + (assoc.length > 0 && correct / assoc.length > 0.25 ? 'correct' : 'wrong');
+            document.getElementById('edge-count').textContent = (data.edges || []).length;
+        }
+
+        function classColor(cls) {
+            const map = {
+                'NounConcrete': '#4fc3f7',
+                'NounAbstract': '#7e57c2',
+                'VerbAction': '#66bb6a',
+                'VerbState': '#ffa726',
+                'Adjective': '#ef5350',
+                'Determiner': '#bdbdbd',
+                'SemanticRole': '#ffee58',
+                'Noise': '#555',
+            };
+            return map[cls] || '#fff';
+        }
+
+        loadState();
+        setInterval(loadState, 5000);
+    </script>
+</body>
+</html>

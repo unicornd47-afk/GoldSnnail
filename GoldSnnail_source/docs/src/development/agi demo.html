@@ -1,0 +1,760 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldWorm SNN-AGI — Live Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-bottom: 1px solid #00d4ff33;
+        }
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1.1em;
+        }
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .stage {
+            background: #12121a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .stage:hover {
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+        }
+        .stage.active {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px #00d4ff33;
+        }
+        .stage-name {
+            font-weight: bold;
+            color: #00d4ff;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stage-info {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .arrow {
+            display: flex;
+            align-items: center;
+            color: #444;
+            font-size: 1.5em;
+        }
+        .viz-container {
+            background: #12121a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        canvas, svg {
+            width: 100%;
+            height: 400px;
+            background: #0a0a0f;
+            border-radius: 8px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric {
+            background: #12121a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        .metric-label {
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #1a1a2e;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            padding: 10px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #00d4ff22;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .log {
+            background: #0a0a0f;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-entry {
+            padding: 3px 0;
+            border-bottom: 1px solid #111;
+        }
+        .log-time {
+            color: #666;
+        }
+        .log-stage {
+            color: #7b2ff7;
+        }
+        .hyperbolic-section {
+            margin-top: 40px;
+        }
+        .hyperbolic-section h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .hyperbolic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .hyperbolic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .distance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .distance-table th, .distance-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .distance-table th {
+            color: #00d4ff;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+        .distance-table td {
+            font-size: 0.9em;
+        }
+        .improved {
+            color: #66bb6a;
+        }
+        .worsened {
+            color: #ef5350;
+        }
+        .legend {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GoldWorm SNN-AGI</h1>
+        <p class="subtitle">Sandboxed Emergence — DOD Architecture — Vulkan Compute</p>
+    </header>
+
+    <div class="container">
+        <div class="pipeline">
+            <div class="stage" id="stage-sensor">
+                <div class="stage-name">Sensor</div>
+                <div class="stage-info">Quaternion Input</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage" id="stage-attention">
+                <div class="stage-name">Attention</div>
+                <div class="stage-info">Twistor Q⊗K*</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage" id="stage-memory">
+                <div class="stage-name">Memory</div>
+                <div class="stage-info">Sparse Recurrent</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage" id="stage-compression">
+                <div class="stage-name">Compression</div>
+                <div class="stage-info">Poincaré Delta</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage" id="stage-world">
+                <div class="stage-name">World Model</div>
+                <div class="stage-info">Predictive Coding</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage" id="stage-rl">
+                <div class="stage-name">RL Agent</div>
+                <div class="stage-info">TD-Learning</div>
+            </div>
+        </div>
+
+        <div class="viz-container">
+            <canvas id="networkCanvas"></canvas>
+        </div>
+
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value" id="metric-neurons">256</div>
+                <div class="metric-label">Neurons</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-spikes">0</div>
+                <div class="metric-label">Spikes / tick</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-synapses">0</div>
+                <div class="metric-label">Active Synapses</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-latent">0.000</div>
+                <div class="metric-label">Latent Norm</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-td">0.000</div>
+                <div class="metric-label">TD-Error</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="toggleSimulation()">Start / Pause</button>
+            <button onclick="resetSimulation()">Reset</button>
+            <button onclick="addNoise()">Add Noise</button>
+            <button onclick="injectSpike()">Inject Spike</button>
+        </div>
+
+        <div class="log" id="log">
+            <div class="log-entry"><span class="log-time">[00:00]</span> <span class="log-stage">System</span> GoldWorm SNN-AGI initialized. DOD substrate ready.</div>
+        </div>
+
+        <!-- Hyperbolic Semantic Space Visualization -->
+        <div class="hyperbolic-section">
+            <h2>Poincaré Ball — Learned Semantic Lexicon</h2>
+            <div class="viz-container">
+                <svg id="hyperbolic-plane" viewBox="0 0 800 800"></svg>
+                <div class="legend" id="poincare-legend"></div>
+            </div>
+            <div class="viz-container">
+                <canvas id="reward-chart" height="200"></canvas>
+            </div>
+            <div class="viz-container">
+                <h3 style="color:#00d4ff; margin-bottom:10px; font-size:1.1em;">Visual-Semantic Distances (Pre vs Post Training)</h3>
+                <table class="distance-table" id="distance-table">
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Label</th>
+                            <th>Pre-Training</th>
+                            <th>Post-Training</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Similarity Matrix Section -->
+        <div class="hyperbolic-section" id="similarity-matrix-section" style="display:none;">
+            <h2>Similarity Matrix — Encoder Space</h2>
+            <div id="sim-stats"></div>
+            <div class="viz-container">
+                <div id="similarity-matrix"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // 1. Network Simulation (existing)
+        // =============================================
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+        let running = false;
+        let tick = 0;
+        let neurons = [];
+        let synapses = [];
+        let spikes = [];
+        let animationId;
+
+        const CONFIG = {
+            neuronCount: 256,
+            connectionDensity: 0.02,
+            maxSpikes: 20,
+            colors: {
+                membrane: '#1a1a2e',
+                spike: '#00d4ff',
+                synapse: '#7b2ff7',
+                background: '#0a0a0f'
+            }
+        };
+
+        function init() {
+            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+            canvas.height = 400 * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.style.height = '400px';
+
+            neurons = [];
+            for (let i = 0; i < CONFIG.neuronCount; i++) {
+                neurons.push({
+                    x: Math.random() * canvas.offsetWidth,
+                    y: Math.random() * 400,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    membrane: 0,
+                    spiked: false,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+
+            synapses = [];
+            for (let i = 0; i < CONFIG.neuronCount; i++) {
+                for (let j = 0; j < CONFIG.neuronCount; j++) {
+                    if (Math.random() < CONFIG.connectionDensity) {
+                        synapses.push({ from: i, to: j, weight: Math.random() * 0.5 });
+                    }
+                }
+            }
+
+            document.getElementById('metric-neurons').textContent = CONFIG.neuronCount;
+            document.getElementById('metric-synapses').textContent = synapses.length;
+        }
+
+        function update() {
+            tick++;
+            let spikeCount = 0;
+
+            for (let n of neurons) {
+                n.x += n.vx;
+                n.y += n.vy;
+                if (n.x < 0 || n.x > canvas.offsetWidth) n.vx *= -1;
+                if (n.y < 0 || n.y > 400) n.vy *= -1;
+                n.x = Math.max(0, Math.min(canvas.offsetWidth, n.x));
+                n.y = Math.max(0, Math.min(400, n.y));
+
+                n.membrane += (Math.random() - 0.5) * 0.1;
+                if (n.membrane > 1) {
+                    n.membrane = 0;
+                    n.spiked = true;
+                    spikeCount++;
+                } else {
+                    n.spiked = false;
+                }
+                n.phase += 0.02;
+            }
+
+            document.getElementById('metric-spikes').textContent = spikeCount;
+            document.getElementById('metric-latent').textContent = (Math.random() * 0.5 + 0.1).toFixed(3);
+            document.getElementById('metric-td').textContent = (Math.random() * 0.2 - 0.1).toFixed(3);
+
+            const stages = ['sensor', 'attention', 'memory', 'compression', 'world', 'rl'];
+            const activeIdx = Math.floor((tick / 10) % stages.length);
+            stages.forEach((s, i) => {
+                document.getElementById('stage-' + s).classList.toggle('active', i === activeIdx);
+            });
+        }
+
+        function draw() {
+            ctx.fillStyle = CONFIG.colors.background;
+            ctx.fillRect(0, 0, canvas.offsetWidth, 400);
+
+            ctx.strokeStyle = '#7b2ff733';
+            ctx.lineWidth = 0.5;
+            for (let s of synapses) {
+                const from = neurons[s.from];
+                const to = neurons[s.to];
+                ctx.beginPath();
+                ctx.moveTo(from.x, from.y);
+                ctx.lineTo(to.x, to.y);
+                ctx.stroke();
+            }
+
+            for (let n of neurons) {
+                const radius = n.spiked ? 4 : 2;
+                const color = n.spiked ? CONFIG.colors.spike : CONFIG.colors.membrane;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+
+                if (n.spiked) {
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, 8, 0, Math.PI * 2);
+                    ctx.strokeStyle = '#00d4ff44';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function loop() {
+            if (running) {
+                update();
+                draw();
+            }
+            animationId = requestAnimationFrame(loop);
+        }
+
+        function toggleSimulation() {
+            running = !running;
+            addLog(running ? 'Simulation started' : 'Simulation paused');
+        }
+
+        function resetSimulation() {
+            tick = 0;
+            init();
+            addLog('Simulation reset');
+        }
+
+        function addNoise() {
+            for (let n of neurons) {
+                n.membrane += Math.random() * 0.3;
+                n.vx += (Math.random() - 0.5) * 2;
+                n.vy += (Math.random() - 0.5) * 2;
+            }
+            addLog('Noise injected into membrane potentials');
+        }
+
+        function injectSpike() {
+            const idx = Math.floor(Math.random() * neurons.length);
+            neurons[idx].membrane = 1.5;
+            addLog(`Spike injected into neuron ${idx}`);
+        }
+
+        function addLog(msg) {
+            const log = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-stage">Tick ${tick}</span> ${msg}`;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        // =============================================
+        // 2. Hyperbolic Lexicon Visualization
+        // =============================================
+        function loadTrainingState() {
+            try {
+                const resp = await fetch('training_state.json');
+                const data = await resp.json();
+                renderTokens(data.tokens);
+                renderEdges(data.edges, data.tokens);
+                renderHistory(data.epoch_history);
+                if (data.distances) {
+                    renderDistances(data.distances);
+                }
+                addLog('Loaded training_state.json — visualizing learned lexicon');
+            } catch (e) {
+                console.log("No training state found, rendering synthetic data");
+                renderSynthetic();
+            }
+            
+            let simData = null;
+            // Try to load similarity matrix
+            try {
+                const resp2 = await fetch('similarity_matrix.json');
+                simData = await resp2.json();
+                renderSimilarityMatrix(simData);
+            } catch (e) {
+                console.log("No similarity matrix found");
+            }
+            
+            if (simData && simData.similarity_matrix) {
+                document.getElementById('similarity-matrix-section').style.display = 'block';
+            }
+        }
+
+        function classColor(cls) {
+            const map = {
+                'NounConcrete': '#4fc3f7',
+                'NounAbstract': '#7e57c2',
+                'VerbAction': '#66bb6a',
+                'VerbState': '#ffa726',
+                'Adjective': '#ef5350',
+                'Determiner': '#bdbdbd',
+                'SemanticRole': '#ffee58',
+                'Noise': '#555',
+            };
+            return map[cls] || '#fff';
+        }
+
+        function renderTokens(tokens) {
+            const svg = document.getElementById('hyperbolic-plane');
+            const cx = 400, cy = 400, scale = 350;
+
+            // Poincaré-Ball Grenze
+            svg.innerHTML = `
+                <circle cx="${cx}" cy="${cy}" r="${scale}" fill="none" stroke="#333" stroke-width="2"/>
+                <circle cx="${cx}" cy="${cy}" r="${scale * 0.5}" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="5,5"/>
+                <text x="${cx - 10}" y="${cy - scale - 5}" fill="#555" font-size="12">Poincaré Ball</text>
+            `;
+
+            // Legend
+            const legend = document.getElementById('poincare-legend');
+            const classes = [...new Set(tokens.map(t => t.class))];
+            legend.innerHTML = classes.map(c =>
+                `<div class="legend-item"><div class="legend-color" style="background:${classColor(c)}"></div>${c}</div>`
+            ).join('');
+
+            tokens.forEach(t => {
+                const px = cx + t.x * scale;
+                const py = cy + t.y * scale;
+                const color = classColor(t.class);
+                const size = 4 + t.salience * 8;
+
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", px);
+                circle.setAttribute("cy", py);
+                circle.setAttribute("r", size);
+                circle.setAttribute("fill", color);
+                circle.setAttribute("opacity", "0.8");
+                circle.setAttribute("class", "token-node");
+                circle.setAttribute("data-word", t.word);
+
+                const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                title.textContent = `${t.word} (${t.class}) | salience: ${t.salience.toFixed(2)}`;
+                circle.appendChild(title);
+
+                svg.appendChild(circle);
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", px + size + 2);
+                text.setAttribute("y", py + 3);
+                text.setAttribute("font-size", "10");
+                text.setAttribute("fill", "#ccc");
+                text.textContent = t.word;
+                svg.appendChild(text);
+            });
+        }
+
+        function renderEdges(edges, tokens) {
+            const svg = document.getElementById('hyperbolic-plane');
+            const cx = 400, cy = 400, scale = 350;
+
+            // Build node lookup from tokens array
+            const nodeMap = new Map();
+            if (tokens) {
+                tokens.forEach(t => {
+                    const px = cx + t.x * scale;
+                    const py = cy + t.y * scale;
+                    nodeMap.set(t.word, { x: px, y: py, class: t.class });
+                });
+            }
+
+            edges.forEach(e => {
+                const fromNode = nodeMap.get(e.from);
+                const toNode = nodeMap.get(e.to);
+                if (!fromNode || !toNode) return;
+
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", fromNode.x);
+                line.setAttribute("y1", fromNode.y);
+                line.setAttribute("x2", toNode.x);
+                line.setAttribute("y2", toNode.y);
+                line.setAttribute("stroke", "#555");
+                line.setAttribute("stroke-width", Math.max(0.5, e.weight * 2));
+                line.setAttribute("opacity", "0.4");
+                svg.appendChild(line);
+            });
+        }
+
+        function renderHistory(history) {
+            const canvas = document.getElementById('reward-chart');
+            if (!canvas || !history || history.length === 0) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+            canvas.height = 200 * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.style.height = '200px';
+
+            const w = canvas.offsetWidth;
+            const h = 200;
+            ctx.clearRect(0, 0, w, h);
+
+            const maxReward = Math.max(...history.map(h => h.reward), 1.0);
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            history.forEach((pt, i) => {
+                const x = (i / Math.max(history.length - 1, 1)) * w;
+                const y = h - (pt.reward / maxReward) * h * 0.9;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, h - 1);
+            ctx.lineTo(w, h - 1);
+            ctx.stroke();
+        }
+
+        function renderDistances(distances) {
+            const tbody = document.querySelector('#distance-table tbody');
+            if (!tbody || !distances) return;
+
+            tbody.innerHTML = distances.map(d => {
+                const change = d.post - d.pre;
+                const cls = change < 0 ? 'improved' : 'worsened';
+                const sign = change < 0 ? '' : '+';
+                return `<tr>
+                    <td>${d.pattern}</td>
+                    <td>${d.label}</td>
+                    <td>${d.pre.toFixed(4)}</td>
+                    <td>${d.post.toFixed(4)}</td>
+                    <td class="${cls}">${sign}${change.toFixed(4)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderSimilarityMatrix(data) {
+            const container = document.getElementById('similarity-matrix');
+            if (!container || !data.similarity_matrix) return;
+            
+            const classes = data.classes || [];
+            let html = '<table class="distance-table"><thead><tr><th>Class</th>';
+            classes.forEach(c => { html += `<th>${c}</th>`; });
+            html += '</tr></thead><tbody>';
+            
+            data.similarity_matrix.forEach((row, i) => {
+                html += `<tr><td><strong>${classes[i] || i}</strong></td>`;
+                row.forEach((val, j) => {
+                    const maxDist = Math.max(...data.similarity_matrix.flat(), 0.001);
+                    const intensity = Math.min(255, Math.floor((val / maxDist) * 255));
+                    const bg = `rgb(${intensity}, ${255 - intensity}, ${255 - intensity})`;
+                    html += `<td style="background:${bg}; text-align:center;">${val.toFixed(3)}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            
+            // Show stats
+            const stats = document.getElementById('sim-stats');
+            if (stats) {
+                stats.innerHTML = `
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${(data.top1_accuracy || 0).toFixed(1)}%</div>
+                            <div class="metric-label">Top-1 Accuracy</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${(data.top5_accuracy || 0).toFixed(1)}%</div>
+                            <div class="metric-label">Top-5 Accuracy</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${(data.avg_intra_class || 0).toFixed(4)}</div>
+                            <div class="metric-label">Avg Intra-Class</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${(data.avg_inter_class || 0).toFixed(4)}</div>
+                            <div class="metric-label">Avg Inter-Class</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderSynthetic() {
+            const syntheticTokens = [
+                { word: 'hund', class: 'NounConcrete', x: 0.15, y: 0.05, salience: 0.6 },
+                { word: 'katze', class: 'NounConcrete', x: 0.15, y: 0.08, salience: 0.6 },
+                { word: 'vogel', class: 'NounConcrete', x: 0.14, y: 0.12, salience: 0.55 },
+                { word: 'fisch', class: 'NounConcrete', x: 0.16, y: 0.02, salience: 0.55 },
+                { word: 'tisch', class: 'NounConcrete', x: -0.10, y: 0.05, salience: 0.5 },
+                { word: 'haus', class: 'NounConcrete', x: -0.08, y: 0.10, salience: 0.55 },
+                { word: 'stein', class: 'NounConcrete', x: -0.12, y: -0.05, salience: 0.4 },
+                { word: 'liebe', class: 'NounAbstract', x: 0.40, y: 0.10, salience: 0.8 },
+            ];
+            renderTokens(syntheticTokens);
+            addLog('Rendered synthetic token positions');
+        }
+
+        // =============================================
+        // 3. Init
+        // =============================================
+        window.addEventListener('resize', () => {
+            init();
+            loadTrainingState();
+        });
+        init();
+        loop();
+        loadTrainingState();
+    </script>
+</body>
+</html>
