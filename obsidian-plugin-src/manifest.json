@@ -1,0 +1,9 @@
+{
+  "id": "architecture-mapper",
+  "name": "Architecture Mapper",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Crawl websites and repositories to map code architecture",
+  "author": "Your Name",
+  "isDesktopOnly": false
+}
