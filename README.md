@@ -93,15 +93,15 @@ The architecture follows **Data-Oriented Design (DoD)** principles: flat memory,
 
 ```bash
 # Clone
-git clone https://github.com/your-org/goldworm.git
-cd goldworm
+git clone https://github.com/unicornd47-afk/GoldSnnail.git
+cd GoldSnnail
 
 # Build library + tests
 cargo build --lib
 cargo test --lib
 
-# Run ARC benchmark
-cargo run --example arc_compositional_solver -- --benchmark data/arc-agi-repo/data/training 3
+# Run ARC benchmark (ARC-AGI dataset is not committed — download separately)
+cargo run --example arc_compositional_solver -- --benchmark path/to/arc-agi/training 3
 
 # Run Tauri desktop app
 cd app
@@ -140,6 +140,22 @@ cargo run --example eval_shd
 
 ---
 
+## Reproducible Results (SHD)
+
+The SHD (Spiking Heidelberg Digits) pipeline is a contrastive hyperbolic encoder + Poincaré k-NN — not yet a deep surrogate-gradient SNN. Measured on this clean tree (20 classes, 8156 train / 2264 test):
+
+| Method | Accuracy |
+|--------|----------|
+| Rate-coding → k-NN (baseline) | 42.7% |
+| Contrastive encoder → k-NN | 43.4% |
+| Softmax MLP (rate) | 46.5% |
+| TTFS (first-spike) | 5.4% (degenerate) |
+| Time-binned | 44.3% (underfit) |
+
+Datasets are intentionally not committed (SHD ≈ 1.8 GB). See `docs/` and the examples for the training pipeline.
+
+---
+
 ## Project Structure
 
 ```
@@ -156,12 +172,10 @@ goldworm/
 ├── app/                    # Tauri desktop shell
 │   ├── src/               # Frontend (HTML/CSS/JS + Three.js)
 │   └── src-tauri/         # Rust backend (commands, SNN, ARC)
-├── examples/               # ~55 runnable examples
-├── benches/                # Criterion benchmarks
+├── examples/               # Training + eval scripts (SHD, ARC, SNN)
+├── tools/                  # benchmark_runner crate (workspace member)
 ├── tests/                  # Integration tests
-├── data/                   # Datasets (SHD, N-MNIST, ARC)
-├── docs/                   # Architecture docs, ADRs, figures
-└── models/                 # Pre-trained model artifacts
+└── docs/                   # Architecture docs, ADRs, figures
 ```
 
 ---
