@@ -35,6 +35,10 @@ Untitled.md
 *.canvas
 *.log
 
+# ── SNN trainer (experimental, local-only WIP) ──
+src/trainer/
+examples/train_shd_snn.rs
+
 # ── Archives / uploads ──────────────────────────
 *.zip
 *.tar
