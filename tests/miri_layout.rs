@@ -1,4 +1,4 @@
-﻿use goldworm::substrate::{SpikeBuffer, StateArena, WeightMatrix, NeuronIdx, SpikeEvent};
+﻿use goldsnnail::substrate::{SpikeBuffer, StateArena, WeightMatrix, NeuronIdx, SpikeEvent};
 
 #[test]
 fn verify_repr_c_layout() {

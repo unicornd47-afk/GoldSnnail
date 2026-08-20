@@ -7,7 +7,7 @@
 //! This benchmark tests 4×4, 8×8, 16×16, and 32×32 resolutions to
 //! determine which gives the best classification accuracy.
 
-use goldworm::{
+use goldsnnail::{
     NmnistDataset, ProjectionLayer,
     project_dvs_to_histogram,
 };
@@ -50,7 +50,7 @@ fn main() {
         println!("Testing {}x{} histograms (input_dim={})...", bins, bins, input_dim);
 
         let mut layer = ProjectionLayer::new(input_dim, 0.1, dataset.available_digits.clone(), 8);
-        let class_centers = goldworm::init_class_centers(num_classes, 8, 0.7);
+        let class_centers = goldsnnail::init_class_centers(num_classes, 8, 0.7);
 
         let start = Instant::now();
         for _epoch in 0..10 {

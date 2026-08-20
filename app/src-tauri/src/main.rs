@@ -8,10 +8,10 @@ mod gpu;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let matches = Command::new("goldworm")
+    let matches = Command::new("goldsnnail")
         .version("0.3.0")
-        .author("GoldWorm Research Team")
-        .about("GoldWorm Desktop App")
+        .author("GoldSnnail Research Team")
+        .about("GoldSnnail Desktop App")
         .arg(
             Arg::new("cli")
                 .long("cli")

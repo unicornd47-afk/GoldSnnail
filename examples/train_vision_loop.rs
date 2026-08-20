@@ -1,4 +1,4 @@
-//! GoldWorm Vision-Semantic Infinite Training Loop
+//! GoldSnnail Vision-Semantic Infinite Training Loop
 //!
 //! Runs training indefinitely until Ctrl+C (SIGINT). Exports JSON state
 //! every N epochs for the HTML demo visualization.
@@ -8,7 +8,7 @@
 //!
 //! Press Ctrl+C to stop. The latest training_state.json is always available.
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates, EpochMetrics,
     generate_test_image, PoincareBall,
 };
@@ -21,7 +21,7 @@ use std::time::{Duration, Instant};
 static RUNNING: AtomicBool = AtomicBool::new(true);
 
 fn main() {
-    println!("=== GoldWorm Vision Loop (Ctrl+C to stop) ===\n");
+    println!("=== GoldSnnail Vision Loop (Ctrl+C to stop) ===\n");
 
     // Ctrl+C handler
     {

@@ -12,7 +12,7 @@ mkdir -p "$OUTPUT_DIR"
 # Meta-Info für ARC-Prize Evaluator
 cat > "$META_FILE" <<EOF
 {
-  "model": "GoldWorm-v0.2-phase2",
+  "model": "GoldSnnail-v0.2-phase2",
   "size_mb": 0.92,
   "latency_us": 72,
   "language": "rust",
@@ -20,9 +20,9 @@ cat > "$META_FILE" <<EOF
 }
 EOF
 
-echo "[GoldWorm] Starte ARC-AGI Evaluierung..."
-echo "[GoldWorm] Input:  $TASKS_FILE"
-echo "[GoldWorm] Output: $PREDICTIONS_FILE"
+echo "[GoldSnnail] Starte ARC-AGI Evaluierung..."
+echo "[GoldSnnail] Input:  $TASKS_FILE"
+echo "[GoldSnnail] Output: $PREDICTIONS_FILE"
 
 # Prüfe Input
 if [[ ! -f "$TASKS_FILE" ]]; then
@@ -31,20 +31,20 @@ if [[ ! -f "$TASKS_FILE" ]]; then
 fi
 
 # Führe Eval aus (passt Pfade via Env-Var an)
-export GOLDWORM_ARC_INPUT="$TASKS_FILE"
-export GOLDWORM_ARC_OUTPUT="$PREDICTIONS_FILE"
+export GOLDSNNAIL_ARC_INPUT="$TASKS_FILE"
+export GOLDSNNAIL_ARC_OUTPUT="$PREDICTIONS_FILE"
 
 eval_arc_prize
 
 # Abschluss-Meta
 cat > "$META_FILE" <<EOF
 {
-  "model": "GoldWorm-v0.2-phase2",
+  "model": "GoldSnnail-v0.2-phase2",
   "size_mb": 0.92,
   "latency_us": 72,
   "status": "completed"
 }
 EOF
 
-echo "[GoldWorm] Fertig. Ergebnis in $PREDICTIONS_FILE"
+echo "[GoldSnnail] Fertig. Ergebnis in $PREDICTIONS_FILE"
 

@@ -5,7 +5,7 @@
 //!
 //! # Safety Contract
 //!
-//! All `#[repr(C)]` structs in `goldworm` are guaranteed to have:
+//! All `#[repr(C)]` structs in `goldsnnail` are guaranteed to have:
 //! - No internal pointers
 //! - 4-byte alignment (f32/u32)
 //! - Contiguous heap allocation via `Vec<T>`

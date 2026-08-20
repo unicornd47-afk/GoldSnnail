@@ -4,8 +4,8 @@
 //! Wird von `tools/benchmark_runner/arc_entrypoint.sh` aufgerufen.
 //!
 //! Umgebungsvariablen:
-//!   GOLDWORM_ARC_INPUT  — Pfad zu tasks.json
-//!   GOLDWORM_ARC_OUTPUT — Pfad zu submission.json (Kaggle/ARC-Prize Format)
+//!   GOLDSNNAIL_ARC_INPUT  — Pfad zu tasks.json
+//!   GOLDSNNAIL_ARC_OUTPUT — Pfad zu submission.json (Kaggle/ARC-Prize Format)
 //!
 //! Ausgabeformat (ARC-Prize / Kaggle-kompatibel):
 //!   {
@@ -21,10 +21,10 @@ use std::fs;
 use serde_json;
 
 fn main() {
-    let input_path = env::var("GOLDWORM_ARC_INPUT")
+    let input_path = env::var("GOLDSNNAIL_ARC_INPUT")
         .unwrap_or_else(|_| "data/arc/arc-agi_evaluation_challenges.json".to_string());
 
-    let output_path = env::var("GOLDWORM_ARC_OUTPUT")
+    let output_path = env::var("GOLDSNNAIL_ARC_OUTPUT")
         .unwrap_or_else(|_| "submission.json".to_string());
 
     let data = fs::read_to_string(&input_path)

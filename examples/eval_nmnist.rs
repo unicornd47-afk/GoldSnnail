@@ -1,6 +1,6 @@
 //! N-MNIST Evaluation Stub für Benchmark-Runner
 //!
-//! Gibt den bekannten GoldWorm N-MNIST-Score aus.
+//! Gibt den bekannten GoldSnnail N-MNIST-Score aus.
 //! Output-Format wird von `benchmark_runner` geparst:
 //!   Accuracy: <wert>%
 //!   Latency: <wert> µs

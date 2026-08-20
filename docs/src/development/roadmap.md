@@ -1,8 +1,8 @@
-# GoldWorm Development Roadmap
+# GoldSnnail Development Roadmap
 
 > *"We build in layers, from substrate to telemetry. Each phase is independently testable."*
 
-**Project:** GoldWorm SNN  
+**Project:** GoldSnnail SNN  
 **Version:** v0.1.0-phase1  
 **Language:** Rust (Edition 2021)
 
@@ -40,11 +40,11 @@
 2. **Retrieval fails at 0% exact match.** Task similarity ≠ solution transferability.
 3. **Geometry alone does not prevent forgetting.** Replay is necessary (98.7% forgetting without replay).
 4. **Feature engineering is mandatory.** Raw pixels (ratio 1.28) → engineered features (ratio 3.66).
-5. **Efficiency leaderboard is viable.** 0.92 MB / 72 µs positions GoldWorm for cost-competitive submissions.
+5. **Efficiency leaderboard is viable.** 0.92 MB / 72 µs positions GoldSnnail for cost-competitive submissions.
 
 ### Success Criteria
 - `cargo test` passes for all substrate and vision tests.
-- All benchmarks reproduced and documented in `docs/GOLDWORM_REPORT.md`.
+- All benchmarks reproduced and documented in `docs/GOLDSNNAIL_REPORT.md`.
 - Identity baseline submission generated at `data/arc_submission/submission_identity.json`.
 
 ### Dependencies

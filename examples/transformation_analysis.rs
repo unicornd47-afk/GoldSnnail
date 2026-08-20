@@ -3,12 +3,12 @@
 //! Lädt ARC-Tasks, klassifiziert Transformationen und prüft,
 //! ob ähnliche Transformationen konsistente Vektoren erzeugen.
 
-use goldworm::ArcDataset;
-use goldworm::vision::grid_encoder::GridEncoder;
-use goldworm::vision::transformation_analyzer::{TransformationAnalyzer, TransformationVector};
+use goldsnnail::ArcDataset;
+use goldsnnail::vision::grid_encoder::GridEncoder;
+use goldsnnail::vision::transformation_analyzer::{TransformationAnalyzer, TransformationVector};
 
 fn main() {
-    println!("=== GoldWorm Transformation Analysis ===\n");
+    println!("=== GoldSnnail Transformation Analysis ===\n");
 
     // 1. Load dataset
     let dataset = match ArcDataset::load_from_directory("data/arc") {

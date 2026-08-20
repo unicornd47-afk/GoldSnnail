@@ -1,4 +1,4 @@
-use goldworm::ArcTask;
+use goldsnnail::ArcTask;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
@@ -56,34 +56,34 @@ fn load_training_set(dir: &str) -> Vec<ArcTask> {
     tasks
 }
 
-fn grid_equal(a: &goldworm::ArcGrid, b: &goldworm::ArcGrid) -> bool {
+fn grid_equal(a: &goldsnnail::ArcGrid, b: &goldsnnail::ArcGrid) -> bool {
     a == b
 }
 
-fn horizontal_flip(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn horizontal_flip(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     for row in &mut data {
         row.reverse();
     }
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn vertical_flip(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn vertical_flip(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     data.reverse();
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn rotate_180(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn rotate_180(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     for row in &mut data {
         row.reverse();
     }
     data.reverse();
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn most_common_color(grid: &goldworm::ArcGrid) -> u8 {
+fn most_common_color(grid: &goldsnnail::ArcGrid) -> u8 {
     let mut counts = [0usize; 10];
     for row in &grid.data {
         for &c in row {
@@ -101,13 +101,13 @@ fn most_common_color(grid: &goldworm::ArcGrid) -> u8 {
     max_color as u8
 }
 
-fn most_common_color_fill(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn most_common_color_fill(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let color = most_common_color(grid);
     let data = vec![vec![color; grid.width]; grid.height];
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn border_fill(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn border_fill(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     let border_color = most_common_color(grid);
     
@@ -124,7 +124,7 @@ fn border_fill(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
         data[r][grid.width - 1] = border_color;
     }
     
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
 fn main() {

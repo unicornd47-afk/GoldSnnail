@@ -1,4 +1,4 @@
-﻿# GoldWorm
+﻿# GoldSnnail
 
 **A multi-modal AGI substrate: spiking neural networks, hyperbolic geometry, compositional reasoning, and desktop interaction — unified in Rust.**
 
@@ -8,9 +8,9 @@
 
 ---
 
-## What is GoldWorm?
+## What is GoldSnnail?
 
-GoldWorm is a research codebase exploring the intersection of:
+GoldSnnail is a research codebase exploring the intersection of:
 
 - **Spiking Neural Networks (SNN)** — QLIF dynamics with 180 neurons, 6 stages, deterministic tick evolution
 - **Hyperbolic Geometry** — Poincaré-ball embeddings, quaternion rotations, elastic boundary enforcement
@@ -36,7 +36,7 @@ The architecture follows **Data-Oriented Design (DoD)** principles: flat memory,
         └───────────┴───────────┴───────────────┘
                     Tauri IPC
 ┌─────────────────────────────────────────────────────────────┐
-│  Rust Backend (goldworm crate)                               │
+│  Rust Backend (goldsnnail crate)                               │
 │                                                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
 │  │ ARC Solver  │  │ SNN Core    │  │ Universal DataType   │  │
@@ -161,7 +161,7 @@ Datasets are intentionally not committed (SHD ≈ 1.8 GB). See `docs/` and the e
 ## Project Structure
 
 ```
-goldworm/
+goldsnnail/
 ├── src/                    # Library source
 │   ├── arc_*.rs           # ARC solver (program, apply, search, parser)
 │   ├── swarm/             # SNN core (QLIF, noise, homeostasis)
@@ -194,7 +194,7 @@ goldworm/
 
 ## Companion: GoldCrawler
 
-[GoldCrawler](https://github.com/unicornd47-afk/GoldCrawler) is a recommended companion Obsidian plugin that crawls websites and code repositories to map architecture — handy for reverse-engineering and documenting the systems GoldWorm models. It is maintained as a separate, independent project.
+[GoldCrawler](https://github.com/unicornd47-afk/GoldCrawler) is a recommended companion Obsidian plugin that crawls websites and code repositories to map architecture — handy for reverse-engineering and documenting the systems GoldSnnail models. It is maintained as a separate, independent project.
 
 ## License
 

@@ -8,7 +8,7 @@
 //! Usage:
 //!   cargo run --example harness_plugins
 
-use goldworm::harness::*;
+use goldsnnail::harness::*;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 // ---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ impl StepMiddleware for AuditMiddleware {
 // ---------------------------------------------------------------------------
 
 fn main() {
-    println!("=== GoldWorm Harness — Plugin & Middleware Demo ===\n");
+    println!("=== GoldSnnail Harness — Plugin & Middleware Demo ===\n");
 
     // --- Build context with plugins ---
     let mut ctx = HarnessContext::new();

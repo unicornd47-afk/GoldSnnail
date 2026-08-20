@@ -1,4 +1,4 @@
-//! GoldWorm PatchEncoder Pre-Training
+//! GoldSnnail PatchEncoder Pre-Training
 //!
 //! Pre-trains the PatchEncoder weights using contrastive learning directly
 //! in hyperbolic space. Uses Poincaré distance instead of quaternion cosine.
@@ -6,7 +6,7 @@
 //! Usage:
 //!   cargo run --example pretrain_encoder
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, PoincareBall, HyperbolicPoint,
     EncoderTrainer, SeparationMetrics,
 };
@@ -14,7 +14,7 @@ use ndarray::Array1;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm PatchEncoder Pre-Training (Hyperbolic) ===\n");
+    println!("=== GoldSnnail PatchEncoder Pre-Training (Hyperbolic) ===\n");
 
     let encoder = PatchEncoder::new(8, 8, 1.0);
     let mut trainer = EncoderTrainer::new(encoder, 0.03, 0.3);
@@ -95,4 +95,4 @@ fn generate_distinct_image(pattern: &str, width: usize, height: usize) -> Vec<f6
 }
 
 // Re-export from vision module for convenience
-use goldworm::vision::generate_synthetic_cifar10_batch;
+use goldsnnail::vision::generate_synthetic_cifar10_batch;

@@ -10,7 +10,7 @@
 //!
 //! This is the first SNN-based multi-modal generator: spike trains → words.
 
-use goldworm::{
+use goldsnnail::{
     ConceptGraph, NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_combined_features, AvalancheGuidedSelector,
     build_response_from_selection,
@@ -22,7 +22,7 @@ const BINS: usize = 16;
 const TAU_US: f32 = 50000.0;
 
 fn main() {
-    println!("=== GoldWorm Multi-Modal Generation (Visual → Language) ===\n");
+    println!("=== GoldSnnail Multi-Modal Generation (Visual → Language) ===\n");
 
     // 1. Build multimodal ConceptGraph
     let graph = build_multimodal_graph();
@@ -59,9 +59,9 @@ fn main() {
 
     // 3. Build AvalancheGuidedSelector (text-only baseline)
     println!("\nBuilding AvalancheGuidedSelector...");
-    let mut trainer = goldworm::SemanticTrainer::new(1.0);
-    let mut encoder = goldworm::TokenSpikeEncoder::new(1.0, 5);
-    let mut decoder = goldworm::SpikeTokenDecoder::new(1);
+    let mut trainer = goldsnnail::SemanticTrainer::new(1.0);
+    let mut encoder = goldsnnail::TokenSpikeEncoder::new(1.0, 5);
+    let mut decoder = goldsnnail::SpikeTokenDecoder::new(1);
     encoder.register_lexicon(&trainer.lexicon);
     decoder.register_lexicon(&trainer.lexicon);
 
@@ -73,7 +73,7 @@ fn main() {
         decoder.register_word(word.to_string(), neuron_idx);
     }
 
-    let mut observer = goldworm::PowerLawObserver::new(100);
+    let mut observer = goldsnnail::PowerLawObserver::new(100);
     let mut selector = AvalancheGuidedSelector::new(
         &mut trainer, &mut encoder, &mut decoder, &mut observer,
     );
@@ -136,9 +136,9 @@ fn build_multimodal_graph() -> ConceptGraph {
 
     let digits = [3u8, 4, 9];
     let visual_embeddings = vec![
-        goldworm::HyperbolicPoint::new(ndarray::array![0.60, 0.10]).unwrap(),
-        goldworm::HyperbolicPoint::new(ndarray::array![0.55, 0.50]).unwrap(),
-        goldworm::HyperbolicPoint::new(ndarray::array![0.10, 0.60]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.60, 0.10]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.55, 0.50]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.10, 0.60]).unwrap(),
     ];
 
     for (i, emb) in visual_embeddings.iter().enumerate() {
@@ -147,9 +147,9 @@ fn build_multimodal_graph() -> ConceptGraph {
 
     let lang_words = ["drei", "vier", "neun"];
     let lang_embeddings = vec![
-        goldworm::HyperbolicPoint::new(ndarray::array![0.20, 0.03]).unwrap(),
-        goldworm::HyperbolicPoint::new(ndarray::array![0.18, 0.16]).unwrap(),
-        goldworm::HyperbolicPoint::new(ndarray::array![0.03, 0.20]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.20, 0.03]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.18, 0.16]).unwrap(),
+        goldsnnail::HyperbolicPoint::new(ndarray::array![0.03, 0.20]).unwrap(),
     ];
 
     for (i, emb) in lang_embeddings.iter().enumerate() {
@@ -157,12 +157,12 @@ fn build_multimodal_graph() -> ConceptGraph {
     }
 
     // Intra-modal edges
-    let _ = graph.add_edge("digit_3", "digit_4", goldworm::RelationType::RelatedTo, 0.3);
-    let _ = graph.add_edge("digit_4", "digit_9", goldworm::RelationType::RelatedTo, 0.3);
-    let _ = graph.add_edge("digit_9", "digit_3", goldworm::RelationType::RelatedTo, 0.3);
-    let _ = graph.add_edge("drei", "vier", goldworm::RelationType::RelatedTo, 0.3);
-    let _ = graph.add_edge("vier", "neun", goldworm::RelationType::RelatedTo, 0.3);
-    let _ = graph.add_edge("neun", "drei", goldworm::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("digit_3", "digit_4", goldsnnail::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("digit_4", "digit_9", goldsnnail::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("digit_9", "digit_3", goldsnnail::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("drei", "vier", goldsnnail::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("vier", "neun", goldsnnail::RelationType::RelatedTo, 0.3);
+    let _ = graph.add_edge("neun", "drei", goldsnnail::RelationType::RelatedTo, 0.3);
 
     // Bridge edges
     let visual_ids: Vec<usize> = digits.iter()
@@ -180,7 +180,7 @@ fn build_multimodal_graph() -> ConceptGraph {
 }
 
 /// Creates train/test split from dataset.
-fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldworm::NmnistSample>, Vec<goldworm::NmnistSample>) {
+fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldsnnail::NmnistSample>, Vec<goldsnnail::NmnistSample>) {
     if dataset.test.is_empty() {
         let mut train = dataset.train.clone();
         let mut rng = rand::thread_rng();

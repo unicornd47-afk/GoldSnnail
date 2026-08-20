@@ -1,6 +1,6 @@
 ﻿# Efficiency Guide
 
-This document describes the performance characteristics, optimization strategies, and known bottlenecks in GoldWorm. It is intended for contributors who want to maintain or improve the 0.92 MB / 72 µs efficiency target.
+This document describes the performance characteristics, optimization strategies, and known bottlenecks in GoldSnnail. It is intended for contributors who want to maintain or improve the 0.92 MB / 72 µs efficiency target.
 
 ## Verified Performance Targets
 

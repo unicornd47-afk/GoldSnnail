@@ -1,13 +1,13 @@
-﻿use goldworm::{
+﻿use goldsnnail::{
     vision::dsl_solver::find_solving_program,
     vision::{ArcGrid, ArcTask, ArcDataset},
     arc_apply::apply_arc_op,
     arc_program::ArcOpToken,
     arc_search::{search_program, SearchConfig},
 };
-use goldworm::swarm::snn_core::{SnnCore, TOTAL_NEURONS};
+use goldsnnail::swarm::snn_core::{SnnCore, TOTAL_NEURONS};
 use rand::Rng;
-use goldworm::routing::datatype_universal::{DataType, encode_datatype, decode_datatype, data_type_tag, type_tag_name};
+use goldsnnail::routing::datatype_universal::{DataType, encode_datatype, decode_datatype, data_type_tag, type_tag_name};
 use serde::{Serialize, Deserialize};
 use std::time::{Instant, Duration};
 
@@ -16,13 +16,13 @@ use std::time::{Instant, Duration};
 // ============================================================================
 
 #[tauri::command]
-pub fn init_snn_core(density: f64) -> Result<goldworm::swarm::snn_core::SnnStateDto, String> {
+pub fn init_snn_core(density: f64) -> Result<goldsnnail::swarm::snn_core::SnnStateDto, String> {
     let core = SnnCore::new(density);
-    Ok(goldworm::swarm::snn_core::SnnStateDto::from(&core))
+    Ok(goldsnnail::swarm::snn_core::SnnStateDto::from(&core))
 }
 
 #[tauri::command]
-pub fn step_snn(state: goldworm::swarm::snn_core::SnnStateDto, input_spikes: Vec<u32>) -> Result<goldworm::swarm::snn_core::SnnStateDto, String> {
+pub fn step_snn(state: goldsnnail::swarm::snn_core::SnnStateDto, input_spikes: Vec<u32>) -> Result<goldsnnail::swarm::snn_core::SnnStateDto, String> {
     let mut core = SnnCore::new(state.density);
     for n in &state.neurons {
         if n.id < TOTAL_NEURONS {
@@ -33,7 +33,7 @@ pub fn step_snn(state: goldworm::swarm::snn_core::SnnStateDto, input_spikes: Vec
     core.tick = state.tick;
     let input_spikes_usize: Vec<usize> = input_spikes.into_iter().map(|x| x as usize).collect();
     core.step(&input_spikes_usize);
-    Ok(goldworm::swarm::snn_core::SnnStateDto::from(&core))
+    Ok(goldsnnail::swarm::snn_core::SnnStateDto::from(&core))
 }
 
 // ============================================================================
@@ -310,7 +310,7 @@ pub fn get_monster_points() -> Vec<[f64; 3]> {
 
 #[tauri::command]
 pub fn get_status() -> Result<String, String> {
-    Ok("GoldWorm engine ready".to_string())
+    Ok("GoldSnnail engine ready".to_string())
 }
 
 // ============================================================================
@@ -426,10 +426,10 @@ pub fn list_supported_types() -> Vec<TypeInfo> {
 
 #[tauri::command]
 pub fn encode_spike_stream(events: Vec<SpikeEventDto>) -> EncodedPayload {
-    let spikes: Vec<goldworm::substrate::SpikeEvent> = events.into_iter().map(|e| {
-        goldworm::substrate::SpikeEvent {
-            src: goldworm::substrate::NeuronIdx(e.src),
-            dst: goldworm::substrate::NeuronIdx(e.dst),
+    let spikes: Vec<goldsnnail::substrate::SpikeEvent> = events.into_iter().map(|e| {
+        goldsnnail::substrate::SpikeEvent {
+            src: goldsnnail::substrate::NeuronIdx(e.src),
+            dst: goldsnnail::substrate::NeuronIdx(e.dst),
             delay_ticks: e.delay_ticks,
             amplitude_u8: e.amplitude_u8,
             flags: e.flags,
@@ -441,7 +441,7 @@ pub fn encode_spike_stream(events: Vec<SpikeEventDto>) -> EncodedPayload {
 
 #[tauri::command]
 pub fn encode_arc_grid(grid: ArcGridDto) -> EncodedPayload {
-    let dt = DataType::ArcGrid(goldworm::vision::ArcGrid {
+    let dt = DataType::ArcGrid(goldsnnail::vision::ArcGrid {
         data: grid.data,
         width: grid.width,
         height: grid.height,
@@ -451,13 +451,13 @@ pub fn encode_arc_grid(grid: ArcGridDto) -> EncodedPayload {
 
 #[tauri::command]
 pub fn encode_hyperbolic_point(dto: HyperbolicPointDto) -> EncodedPayload {
-    let dt = DataType::HyperbolicPoint(goldworm::geometry::HyperbolicPoint { coords: dto.coords });
+    let dt = DataType::HyperbolicPoint(goldsnnail::geometry::HyperbolicPoint { coords: dto.coords });
     encode_and_wrap(dt)
 }
 
 #[tauri::command]
 pub fn encode_quaternion(dto: QuaternionDto) -> EncodedPayload {
-    let dt = DataType::Quaternion(goldworm::geometry::Quaternion {
+    let dt = DataType::Quaternion(goldsnnail::geometry::Quaternion {
         w: dto.w, x: dto.x, y: dto.y, z: dto.z,
     });
     encode_and_wrap(dt)
@@ -465,13 +465,13 @@ pub fn encode_quaternion(dto: QuaternionDto) -> EncodedPayload {
 
 #[tauri::command]
 pub fn encode_state_arena(dto: StateArenaDto) -> EncodedPayload {
-    let dt = DataType::StateArena(goldworm::substrate::StateArena { membrane: dto.membrane, recovery: dto.recovery, threshold: dto.threshold, refractory: dto.refractory });
+    let dt = DataType::StateArena(goldsnnail::substrate::StateArena { membrane: dto.membrane, recovery: dto.recovery, threshold: dto.threshold, refractory: dto.refractory });
     encode_and_wrap(dt)
 }
 
 #[tauri::command]
 pub fn encode_weight_matrix(dto: WeightMatrixDto) -> EncodedPayload {
-    let dt = DataType::WeightMatrix(goldworm::substrate::WeightMatrix {
+    let dt = DataType::WeightMatrix(goldsnnail::substrate::WeightMatrix {
         data: dto.data,
         rows: dto.rows,
         cols: dto.cols,
@@ -481,8 +481,8 @@ pub fn encode_weight_matrix(dto: WeightMatrixDto) -> EncodedPayload {
 
 #[tauri::command]
 pub fn encode_dvs_batch(events: Vec<DvsEventDto>) -> EncodedPayload {
-    let evts: Vec<goldworm::chat::dvs_encoder::DvsEvent> = events.into_iter().map(|e| {
-        goldworm::chat::dvs_encoder::DvsEvent::new(e.x, e.y, e.polarity, e.timestamp_us)
+    let evts: Vec<goldsnnail::chat::dvs_encoder::DvsEvent> = events.into_iter().map(|e| {
+        goldsnnail::chat::dvs_encoder::DvsEvent::new(e.x, e.y, e.polarity, e.timestamp_us)
     }).collect();
     let dt = DataType::DvsEventBatch(evts);
     encode_and_wrap(dt)
@@ -490,17 +490,17 @@ pub fn encode_dvs_batch(events: Vec<DvsEventDto>) -> EncodedPayload {
 
 #[tauri::command]
 pub fn encode_lexicon_token(dto: LexiconTokenDto) -> EncodedPayload {
-    let dt = DataType::LexiconToken(goldworm::semantics::token_engine::LexiconToken {
+    let dt = DataType::LexiconToken(goldsnnail::semantics::token_engine::LexiconToken {
         id: dto.id,
         surface: dto.surface,
         class: class_from_str(&dto.class),
-        embedding: goldworm::geometry::Quaternion {
+        embedding: goldsnnail::geometry::Quaternion {
             w: dto.embedding.w,
             x: dto.embedding.x,
             y: dto.embedding.y,
             z: dto.embedding.z,
         },
-        hyperbolic: goldworm::geometry::HyperbolicPoint { coords: dto.hyperbolic.coords },
+        hyperbolic: goldsnnail::geometry::HyperbolicPoint { coords: dto.hyperbolic.coords },
         salience: dto.salience,
     });
     encode_and_wrap(dt)
@@ -559,8 +559,8 @@ fn base64_encode(bytes: &[u8]) -> String {
     general_purpose::STANDARD.encode(bytes)
 }
 
-fn class_from_str(s: &str) -> goldworm::semantics::token_engine::TokenClass {
-    use goldworm::semantics::token_engine::TokenClass;
+fn class_from_str(s: &str) -> goldsnnail::semantics::token_engine::TokenClass {
+    use goldsnnail::semantics::token_engine::TokenClass;
     match s {
         "Determiner" => TokenClass::Determiner,
         "NounConcrete" => TokenClass::NounConcrete,

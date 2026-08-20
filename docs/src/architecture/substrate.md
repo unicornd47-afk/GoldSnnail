@@ -1,6 +1,6 @@
 ﻿# Substrate Layer
 
-The substrate is the foundation of GoldWorm's Data-Oriented Design (DoD) philosophy. It provides flat, contiguous, index-addressed memory structures that map directly to CPU cache lines and GPU device memory without serialization overhead.
+The substrate is the foundation of GoldSnnail's Data-Oriented Design (DoD) philosophy. It provides flat, contiguous, index-addressed memory structures that map directly to CPU cache lines and GPU device memory without serialization overhead.
 
 ## Core Types
 

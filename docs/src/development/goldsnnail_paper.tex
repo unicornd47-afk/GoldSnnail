@@ -8,14 +8,14 @@
 \usepackage{hyperref}
 \usepackage{cite}
 
-\title{GoldWorm: A Hyperbolic Spiking Neural Network\\for Efficient Multi-Modal Cognition}
+\title{GoldSnnail: A Hyperbolic Spiking Neural Network\\for Efficient Multi-Modal Cognition}
 
 \author{
-    \IEEEauthorblockN{GoldWorm Team}
+    \IEEEauthorblockN{GoldSnnail Team}
     \IEEEauthorblockA{
         Department of Computer Science\\
         University Name\\
-        Email: goldworm@example.com
+        Email: goldsnnail@example.com
     }
 }
 
@@ -24,7 +24,7 @@
 \maketitle
 
 \begin{abstract}
-Edge AI systems require multimodal cognition---the ability to understand, learn from, and react to sensory inputs---without the luxury of GPUs or cloud connectivity. Current solutions are either too large and slow (Deep Learning), too specialized and offline-trained (static SNNs), or fundamentally unsuitable for edge hardware (Transformers). We present GoldWorm, a cognitive system based on spiking neural networks with a hyperbolic concept graph and critical avalanche dynamics. GoldWorm achieves 58.6\% accuracy on the 10-digit N-MNIST benchmark with only 0.92~MB memory and 45.4~µs inference latency---making it the smallest and fastest multimodal SNN system to date. Furthermore, it demonstrates genuine multimodal generation (76.7\% semantic relevance) and online continual learning (81.2\% average accuracy across 3 sequential tasks). Our key insight is that cognitive multi-modality does not require billions of parameters, but rather the right geometry and dynamics.
+Edge AI systems require multimodal cognition---the ability to understand, learn from, and react to sensory inputs---without the luxury of GPUs or cloud connectivity. Current solutions are either too large and slow (Deep Learning), too specialized and offline-trained (static SNNs), or fundamentally unsuitable for edge hardware (Transformers). We present GoldSnnail, a cognitive system based on spiking neural networks with a hyperbolic concept graph and critical avalanche dynamics. GoldSnnail achieves 58.6\% accuracy on the 10-digit N-MNIST benchmark with only 0.92~MB memory and 45.4~µs inference latency---making it the smallest and fastest multimodal SNN system to date. Furthermore, it demonstrates genuine multimodal generation (76.7\% semantic relevance) and online continual learning (81.2\% average accuracy across 3 sequential tasks). Our key insight is that cognitive multi-modality does not require billions of parameters, but rather the right geometry and dynamics.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -35,7 +35,7 @@ spiking neural networks, hyperbolic embeddings, continual learning, multimodal c
 
 Edge-AI systems---robots, IoT devices, wearables---require multimodal cognition: the ability to understand, learn from, and react to sensory inputs without the luxury of GPUs or cloud connectivity. Current solutions have fundamental weaknesses: Deep Learning models are too large and too slow for embedded deployment; static SNNs are precise but specialized and trained offline; Transformers are powerful but fundamentally unsuitable for edge hardware due to their quadratic complexity and massive parameter counts.
 
-\textbf{GoldWorm} is a multimodal cognitive system built on spiking neural networks (SNNs) with a hyperbolic concept graph and critical avalanche dynamics. Our core claim is not the highest classification accuracy, but the best efficiency while supporting genuine multi-modality and online learning.
+\textbf{GoldSnnail} is a multimodal cognitive system built on spiking neural networks (SNNs) with a hyperbolic concept graph and critical avalanche dynamics. Our core claim is not the highest classification accuracy, but the best efficiency while supporting genuine multi-modality and online learning.
 
 The contributions of this paper are:
 \begin{itemize}
@@ -51,7 +51,7 @@ The contributions of this paper are:
 SpykeTorch \cite{spiketorch} and SLAYER \cite{slayer} pioneered gradient-based SNN training for neuromorphic vision. SpikingJelly \cite{spikingjelly} provides a comprehensive PyTorch-based framework. While these systems achieve high accuracy on N-MNIST (>95\%), they require euklidean feature spaces and lack inherent multi-modal capabilities.
 
 \subsection{Hyperbolic Neural Networks}
-Hyperbolic spaces have gained attention for hierarchical data \cite{hyperbolic_nn}. Recent work applies hyperbolic embeddings to graph neural networks \cite{hyperbolic_gnn} and contrastive learning \cite{hyperbolic_cl}. GoldWorm is the first to use hyperbolic geometry as the native space for SNN class centers and concept graphs.
+Hyperbolic spaces have gained attention for hierarchical data \cite{hyperbolic_nn}. Recent work applies hyperbolic embeddings to graph neural networks \cite{hyperbolic_gnn} and contrastive learning \cite{hyperbolic_cl}. GoldSnnail is the first to use hyperbolic geometry as the native space for SNN class centers and concept graphs.
 
 \subsection{Continual Learning in SNNs}
 Continual learning for SNNs has been explored with replay buffers \cite{snn_replay} and regularization methods \cite{snn_ewc}. However, most approaches focus on preventing forgetting in isolation, not on multimodal generation during sequential task acquisition.
@@ -109,7 +109,7 @@ Metrics are measured on CPU-only hardware in Release mode:
 \label{tab:efficiency}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Metric} & \textbf{GoldWorm} & \textbf{SpykeTorch} & \textbf{SpikingJelly} \\
+\textbf{Metric} & \textbf{GoldSnnail} & \textbf{SpykeTorch} & \textbf{SpikingJelly} \\
 \midrule
 Parameters & 240K & 1.2M & 800K \\
 Memory & \textbf{0.92 MB} & 18 MB & 12 MB \\
@@ -120,7 +120,7 @@ N-MNIST 10-Digit & 58.6\% & 98.5\% & 95.2\% \\
 \end{tabular}
 \end{table}
 
-GoldWorm is the fastest and smallest system, uniquely supporting multimodal generation and continual learning.
+GoldSnnail is the fastest and smallest system, uniquely supporting multimodal generation and continual learning.
 
 \section{Continual Learning}
 
@@ -150,7 +150,7 @@ Visual input (N-MNIST digit) is projected to the 16D space, matched to class cen
     \item \textbf{Bridge Fidelity:} Visual information reliably reaches language clusters.
 \end{itemize}
 
-GoldWorm is the first SNN-based system to demonstrate genuine multi-modal generation---not just classification, but visually guided language production with semantic relevance.
+GoldSnnail is the first SNN-based system to demonstrate genuine multi-modal generation---not just classification, but visually guided language production with semantic relevance.
 
 \section{Critical Avalanche Dynamics}
 
@@ -161,11 +161,11 @@ Concept propagation in the ConceptGraph follows scale-free avalanche statistics:
     \item \textbf{R\textsuperscript{2}:} $> 0.8$
 \end{itemize}
 
-This confirms that GoldWorm operates at the critical point between order and chaos---the regime where information processing is optimal in both biological and artificial neural systems \cite{criticality_brain}.
+This confirms that GoldSnnail operates at the critical point between order and chaos---the regime where information processing is optimal in both biological and artificial neural systems \cite{criticality_brain}.
 
 \section{Discussion}
 
-\subsection{What Distinguishes GoldWorm?}
+\subsection{What Distinguishes GoldSnnail?}
 
 \begin{table}[h]
 \centering
@@ -173,7 +173,7 @@ This confirms that GoldWorm operates at the critical point between order and cha
 \label{tab:comparison}
 \begin{tabular}{lll}
 \toprule
-\textbf{Property} & \textbf{Other SNNs} & \textbf{GoldWorm} \\
+\textbf{Property} & \textbf{Other SNNs} & \textbf{GoldSnnail} \\
 \midrule
 Primary capability & Classification only & \textbf{Generates} language from vision \\
 Feature space & Euklidean & \textbf{Hyperbolic} with natural hierarchy \\
@@ -185,7 +185,7 @@ Modality & Mono-modal & \textbf{Multi-modal} via bridge edges \\
 \end{table}
 
 \subsection{The Tradeoff}
-GoldWorm sacrifices $\sim$40\% accuracy (58.6\% vs.\ 98.5\% in SpykeTorch) for a \textbf{100× smaller footprint} and \textbf{100× faster inference}. For embedded systems without GPUs, without cloud, with limited power, this tradeoff is often acceptable---and often preferable.
+GoldSnnail sacrifices $\sim$40\% accuracy (58.6\% vs.\ 98.5\% in SpykeTorch) for a \textbf{100× smaller footprint} and \textbf{100× faster inference}. For embedded systems without GPUs, without cloud, with limited power, this tradeoff is often acceptable---and often preferable.
 
 \subsection{Limitations}
 \begin{itemize}
@@ -217,7 +217,7 @@ GoldWorm sacrifices $\sim$40\% accuracy (58.6\% vs.\ 98.5\% in SpykeTorch) for a
 
 \section{Conclusion}
 
-GoldWorm demonstrates that cognitive multi-modality does not require billions of parameters---but the right geometry and dynamics.
+GoldSnnail demonstrates that cognitive multi-modality does not require billions of parameters---but the right geometry and dynamics.
 
 With \textbf{0.92 MB memory}, \textbf{45 µs inference}, \textbf{58.6\% N-MNIST accuracy}, and \textbf{genuine visuolinguistic generation} (76.7\% semantic relevance), it is the first architecture to unite \textbf{critical dynamics, efficiency, and semantic generation} in a single system---without GPUs, without cloud, on a microcontroller.
 

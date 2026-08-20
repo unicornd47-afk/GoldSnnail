@@ -1,4 +1,4 @@
-//! GoldWorm Emergent Naming Game
+//! GoldSnnail Emergent Naming Game
 //!
 //! Two agents play a referential communication game with a TRAINABLE PatchEncoder.
 //! - Agent A (Speaker) sees an image and describes it with a single word
@@ -11,7 +11,7 @@
 //!
 //! Press Ctrl+C to stop. Training state is exported every 30s for the HTML demo.
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates, EpochMetrics,
     PoincareBall, HyperbolicPoint, LexiconToken, TokenClass, Quaternion,
 };
@@ -27,7 +27,7 @@ use std::time::{Duration, Instant};
 static RUNNING: AtomicBool = AtomicBool::new(true);
 
 fn main() {
-    println!("=== GoldWorm Emergent Naming Game (Trainable Encoder) ===\n");
+    println!("=== GoldSnnail Emergent Naming Game (Trainable Encoder) ===\n");
     println!("Agent A (Speaker)  → sees image → says ONE word");
     println!("Agent B (Listener) → hears word  → guesses image");
     println!("PatchEncoder LEARNS from reward via BACKPROP.");
@@ -139,7 +139,7 @@ fn main() {
                     q_comps[2] as f32, q_comps[3] as f32
                 ).normalize();
                 let h = HyperbolicPoint::new(Array1::from_vec(latent)).unwrap_or_else(|_| HyperbolicPoint { coords: vec![0.0; 2] });
-                visual.push(goldworm::VisualToken {
+                visual.push(goldsnnail::VisualToken {
                     patch: patch.clone(),
                     embedding: q,
                     hyperbolic: h,

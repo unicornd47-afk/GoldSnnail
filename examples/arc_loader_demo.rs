@@ -3,11 +3,11 @@
 //! Loads a single ARC-AGI task from JSON and prints grid information,
 //! including hyperbolic embedding norms and concept node generation.
 
-use goldworm::{ArcDataset, ConceptGraph, PoincareBall};
+use goldsnnail::{ArcDataset, ConceptGraph, PoincareBall};
 use std::path::Path;
 
 fn main() {
-    println!("=== GoldWorm ARC-AGI Loader Demo ===\n");
+    println!("=== GoldSnnail ARC-AGI Loader Demo ===\n");
 
     let data_dir = Path::new("data/arc");
     if !data_dir.exists() {

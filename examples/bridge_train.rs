@@ -6,7 +6,7 @@
 //! This is the first step toward multi-modal generation: visual input → bridge →
 //! language avalanche → response generation.
 
-use goldworm::{
+use goldsnnail::{
     ConceptGraph, RelationType,
     NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_combined_features,
@@ -20,7 +20,7 @@ const BINS: usize = 16;
 const TAU_US: f32 = 50000.0;
 
 fn main() {
-    println!("=== GoldWorm Bridge Edges — Visual ↔ Language ===\n");
+    println!("=== GoldSnnail Bridge Edges — Visual ↔ Language ===\n");
 
     // 1. Build ConceptGraph with visual and language nodes
     let mut graph = build_multimodal_graph();
@@ -206,7 +206,7 @@ fn add_digit_bridges(graph: &mut ConceptGraph) {
 }
 
 /// Creates train/test split from dataset.
-fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldworm::NmnistSample>, Vec<goldworm::NmnistSample>) {
+fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldsnnail::NmnistSample>, Vec<goldsnnail::NmnistSample>) {
     if dataset.test.is_empty() {
         let mut train = dataset.train.clone();
         let mut rng = rand::thread_rng();

@@ -1,6 +1,6 @@
 ﻿//! Universal DataType Interface — SHD-CCP Extended Wire Format
 //!
-//! Provides a unified encode/decode layer for ALL GoldWorm datatypes.
+//! Provides a unified encode/decode layer for ALL GoldSnnail datatypes.
 //! Each type gets a unique type tag in the extended SHD-CCP header:
 //!
 //! ```text

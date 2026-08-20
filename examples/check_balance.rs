@@ -1,4 +1,4 @@
-use goldworm::NmnistDataset;
+use goldsnnail::NmnistDataset;
 
 fn main() {
     let dataset = NmnistDataset::load(500);

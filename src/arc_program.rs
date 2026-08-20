@@ -139,7 +139,7 @@ impl ArcOpCode {
 /// # Example
 ///
 /// ```
-/// use goldworm::arc_program::ArcOpToken;
+/// use goldsnnail::arc_program::ArcOpToken;
 ///
 /// // Rotate 90°: [1, 0, 0, 0, 0, 0, 0, 0]
 /// let token = ArcOpToken::new(1, 0, 0, 0, 0, 0, 0, 0);
@@ -212,7 +212,7 @@ impl ArcOpToken {
 /// # Example
 ///
 /// ```
-/// use goldworm::arc_program::{ArcOpToken, ArcProgram};
+/// use goldsnnail::arc_program::{ArcOpToken, ArcProgram};
 ///
 /// // Rotate 90° then fill background with color 1
 /// let program = ArcProgram::from_tokens(vec![
@@ -302,7 +302,7 @@ impl Default for ArcProgram {
 /// # Example
 ///
 /// ```
-/// use goldworm::arc_program::{ArcOpToken, ArcProgram, serialize_program};
+/// use goldsnnail::arc_program::{ArcOpToken, ArcProgram, serialize_program};
 ///
 /// let program = ArcProgram::from_tokens(vec![
 ///     ArcOpToken::new(1, 0, 0, 0, 0, 0, 0, 0),

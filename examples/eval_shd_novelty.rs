@@ -8,7 +8,7 @@
 //!
 //! Usage: cargo run --release --example eval_shd_novelty
 
-use goldworm::audio::shd_loader::{ShdDataset, ShdSample};
+use goldsnnail::audio::shd_loader::{ShdDataset, ShdSample};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::path::Path;

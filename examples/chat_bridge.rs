@@ -1,4 +1,4 @@
-//! GoldWorm Chat Bridge — Proof of Concept
+//! GoldSnnail Chat Bridge — Proof of Concept
 //!
 //! Demonstrates the SNN-LLM bridge:
 //! 1. Register lexicon words as neurons
@@ -9,14 +9,14 @@
 //! Usage:
 //!   cargo run --example chat_bridge --release
 
-use goldworm::{
+use goldsnnail::{
     Lexicon, TokenSpikeEncoder, SpikeTokenDecoder,
     ConversationBuffer, ConversationTurn,
 };
 use rand::Rng;
 
 fn main() {
-    println!("=== GoldWorm Chat Bridge ===\n");
+    println!("=== GoldSnnail Chat Bridge ===\n");
 
     // --- Setup ---
     let lexicon = Lexicon::new(1.0);
@@ -44,7 +44,7 @@ fn main() {
     // --- Test Spike Decoding ---
     println!("\n--- Spike Decoding ---");
     let test_spikes = vec![0u32, 0u32, 8u32, 8u32, 8u32, 18u32];
-    let spike_buffer = goldworm::SpikeBuffer {
+    let spike_buffer = goldsnnail::SpikeBuffer {
         indices: test_spikes.clone(),
         count: 100,
     };
@@ -56,8 +56,8 @@ fn main() {
     let mut conv = ConversationBuffer::new(10);
     conv.push(ConversationTurn::new_user("Hallo!".to_string()));
     conv.push(ConversationTurn::new_assistant(
-        "Ich bin GoldWorm.".to_string(),
-        vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+        "Ich bin GoldSnnail.".to_string(),
+        vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
     ));
     conv.push(ConversationTurn::new_user("Was bist du?".to_string()));
 
@@ -70,7 +70,7 @@ fn main() {
     let mut rng = rand::thread_rng();
     let greetings = vec!["hallo", "hi", "guten tag", "moin"];
     let responses = vec![
-        vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+        vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
         vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
         vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
         vec!["der".to_string(), "vogel".to_string(), "fliegt".to_string()],
@@ -82,10 +82,10 @@ fn main() {
         
         let response = &responses[rng.r#gen::<usize>() % responses.len()];
         let response_str = response.join(" ");
-        println!("  GoldWorm: {}", response_str);
+        println!("  GoldSnnail: {}", response_str);
         
         let spikes = encoder.encode_sentence(response);
-        let decoded = decoder.decode_spikes(&goldworm::SpikeBuffer {
+        let decoded = decoder.decode_spikes(&goldsnnail::SpikeBuffer {
             indices: spikes.iter().map(|e| e.src.0 as u32).collect(),
             count: 100,
         });

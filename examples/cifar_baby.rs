@@ -1,4 +1,4 @@
-//! GoldWorm CIFAR-10 Baby Agent — Integrated Vision + Semantic Learning
+//! GoldSnnail CIFAR-10 Baby Agent — Integrated Vision + Semantic Learning
 //!
 //! Complete pipeline demonstrating actual learning:
 //! 1. Load/generate CIFAR-10 images (32x32 RGB)
@@ -10,12 +10,12 @@
 //! Usage:
 //!   cargo run --example cifar_baby
 
-use goldworm::{
+use goldsnnail::{
      PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates, EpochMetrics,
      PoincareBall, HyperbolicPoint, LexiconToken, TokenClass, Quaternion, CifarImage,
      EncoderTrainer, map_cifar_label_to_lexicon, generate_synthetic_cifar10_batch, Cifar10Loader,
 };
-use goldworm::baby::{InfomaxReward, TransitionalLearner};
+use goldsnnail::baby::{InfomaxReward, TransitionalLearner};
 use ndarray::Array1;
 use rand::prelude::IteratorRandom;
 use rand::Rng;
@@ -28,7 +28,7 @@ use std::time::{Duration, Instant};
 static RUNNING: AtomicBool = AtomicBool::new(true);
 
 fn main() {
-    println!("=== GoldWorm CIFAR-10 Baby Agent ===\n");
+    println!("=== GoldSnnail CIFAR-10 Baby Agent ===\n");
     println!("1. Load CIFAR-10 images (synthetic for demo)");
     println!("2. Pre-train PatchEncoder with contrastive loss");
     println!("3. Map visuals to German lexicon");

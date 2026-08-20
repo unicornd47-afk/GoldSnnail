@@ -2,13 +2,13 @@
 
 **Version:** 0.3.0  
 **Status:** Accepted  
-**Crate:** `goldworm`
+**Crate:** `goldsnnail`
 
 ## 1. Introduction
 
-The GoldWorm SNN-AGI operates on large-scale spiking neural networks with strict latency and throughput requirements. Traditional object-oriented memory layouts introduce pointer indirection, cache line misses, and heap fragmentation that are incompatible with both CPU-side batch simulation and GPU-side kernel execution.
+The GoldSnnail SNN-AGI operates on large-scale spiking neural networks with strict latency and throughput requirements. Traditional object-oriented memory layouts introduce pointer indirection, cache line misses, and heap fragmentation that are incompatible with both CPU-side batch simulation and GPU-side kernel execution.
 
-This specification defines the Data-Oriented Design (DoD) memory model used throughout the `goldworm` crate. The model enforces flat, contiguous, index-addressed storage. There are no nested allocations. There are no pointer indirections in hot paths. There is no jagged memory.
+This specification defines the Data-Oriented Design (DoD) memory model used throughout the `goldsnnail` crate. The model enforces flat, contiguous, index-addressed storage. There are no nested allocations. There are no pointer indirections in hot paths. There is no jagged memory.
 
 ## 2. Core Principle: Structure of Arrays (SoA)
 
@@ -87,7 +87,7 @@ Pointer-free design is not an aesthetic choice. It is a hardware reality.
 
 ## 5. CUDA Bridge Specification
 
-All core data structures in `goldworm` use only heap-allocated flat vectors (`Vec<f32>`, `Vec<u32>`, `Vec<usize>`). These vectors satisfy the following properties required for zero-copy GPU transfer:
+All core data structures in `goldsnnail` use only heap-allocated flat vectors (`Vec<f32>`, `Vec<u32>`, `Vec<usize>`). These vectors satisfy the following properties required for zero-copy GPU transfer:
 
 1. **Contiguity:** Data is stored in a single heap allocation with no internal padding beyond natural alignment.
 2. **Alignment:** All vectors are aligned to 4 bytes (`f32`, `u32`) or 8 bytes (`f64`). No SIMD-required alignments (16/32 bytes) are mandated at the API level, allowing `cudaMemcpy` without pitch calculations.
@@ -119,7 +119,7 @@ The following rules are mandatory. Violation of these rules constitutes a breaki
 
 ## 7. Anti-Patterns
 
-The following patterns are explicitly forbidden in the `goldworm` codebase:
+The following patterns are explicitly forbidden in the `goldsnnail` codebase:
 
 ```rust
 // FORBIDDEN: Vec of objects

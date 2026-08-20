@@ -1,6 +1,6 @@
 ﻿# Elastic Poincaré Geometry
 
-This document specifies the mathematical foundations of GoldWorm's hyperbolic geometry layer. All operations use elastic boundary functions that asymptotically compress values into the valid domain.
+This document specifies the mathematical foundations of GoldSnnail's hyperbolic geometry layer. All operations use elastic boundary functions that asymptotically compress values into the valid domain.
 
 ## The Poincaré Ball Model
 
@@ -10,7 +10,7 @@ The Poincaré ball model `B^n_c` (curvature `c < 0`) maps hyperbolic space onto 
 B^n_c = { x ∈ ℝ^n : ||x|| < 1/√|c| }
 ```
 
-For GoldWorm, we use the unit disc (`c = -1`) with `f32` scalars for hot-path performance and `f64` for offline computations.
+For GoldSnnail, we use the unit disc (`c = -1`) with `f32` scalars for hot-path performance and `f64` for offline computations.
 
 ## Elastic Boundary Functions
 
@@ -111,7 +111,7 @@ Elastic: input is re-projected to `SAFE_LIMIT` before `atanh` to prevent `∞`.
 
 ## Quaternion Operations
 
-Unit quaternions represent rotations in 3D space. GoldWorm uses them for the Twistor attention mechanism.
+Unit quaternions represent rotations in 3D space. GoldSnnail uses them for the Twistor attention mechanism.
 
 ### Hamilton Product
 

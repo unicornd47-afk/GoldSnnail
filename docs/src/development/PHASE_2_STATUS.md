@@ -72,7 +72,7 @@ ARC-AGI-2 is the current active competition (ARC Prize 2025/2026):
 ### Next Steps
 
 1. Clone ARC-AGI-2 dataset from `github.com/arcprize/ARC-AGI-2`
-2. Set up ARC-AGI-2 data loader in goldworm
+2. Set up ARC-AGI-2 data loader in goldsnnail
 3. Run diagnostic on ARC-AGI-2 training set (1000 tasks)
 4. Benchmark DSL solver on ARC-AGI-2 public eval (120 tasks)
 5. Analyze ARC-AGI-2 task characteristics vs ARC-AGI-1
@@ -82,4 +82,4 @@ ARC-AGI-2 is the current active competition (ARC Prize 2025/2026):
 
 Phase 2 has produced a **working DSL solver pipeline** and **verified cost metrics**, but has confirmed that **brute-force DSL search cannot achieve meaningful accuracy on ARC-AGI-1 evaluation tasks**. The efficiency leaderboard requires both axes of the cost-vs-accuracy tradeoff; we excel at cost but need a fundamentally different approach for accuracy.
 
-This is not a failure. It is a calibrated baseline from which future GoldWorm ARC solvers can measure progress. We now pivot to ARC-AGI-2, where the benchmark has been specifically hardened against brute-force methods and requires genuine compositional reasoning.
+This is not a failure. It is a calibrated baseline from which future GoldSnnail ARC solvers can measure progress. We now pivot to ARC-AGI-2, where the benchmark has been specifically hardened against brute-force methods and requires genuine compositional reasoning.

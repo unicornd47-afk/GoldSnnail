@@ -1,11 +1,11 @@
-//! GoldWorm CLI Chat Interface
+//! GoldSnnail CLI Chat Interface
 //!
-//! Real-time conversation with the GoldWorm SNN-LLM engine.
+//! Real-time conversation with the GoldSnnail SNN-LLM engine.
 //!
 //! Usage:
 //!   cargo run --example chat_cli --release
 
-use goldworm::{
+use goldsnnail::{
     TokenSpikeEncoder, SpikeTokenDecoder,
     ConversationBuffer, ConversationTurn, SemanticTrainer,
     TransitionalLearner,
@@ -18,7 +18,7 @@ use rand::Rng;
 use std::io::Write;
 
 fn main() {
-    println!("=== GoldWorm SNN-LLM Chat Engine ===\n");
+    println!("=== GoldSnnail SNN-LLM Chat Engine ===\n");
     println!("Initializing neural substrate...\n");
 
     // --- Setup ---
@@ -48,19 +48,19 @@ fn main() {
 
     // Register some basic grammar patterns
     chat_arena.trainers[trainer_idx].reward_engine.learn_pattern(vec![
-        goldworm::TokenClass::Determiner,
-        goldworm::TokenClass::NounConcrete,
-        goldworm::TokenClass::VerbAction,
+        goldsnnail::TokenClass::Determiner,
+        goldsnnail::TokenClass::NounConcrete,
+        goldsnnail::TokenClass::VerbAction,
     ]);
     chat_arena.trainers[trainer_idx].reward_engine.learn_pattern(vec![
-        goldworm::TokenClass::Determiner,
-        goldworm::TokenClass::Adjective,
-        goldworm::TokenClass::NounConcrete,
-        goldworm::TokenClass::VerbAction,
+        goldsnnail::TokenClass::Determiner,
+        goldsnnail::TokenClass::Adjective,
+        goldsnnail::TokenClass::NounConcrete,
+        goldsnnail::TokenClass::VerbAction,
     ]);
 
     println!("{}", "=".repeat(50));
-    println!("GoldWorm: Hallo! Ich bin GoldWorm, ein neuronales System.");
+    println!("GoldSnnail: Hallo! Ich bin GoldSnnail, ein neuronales System.");
     println!("         Sprich mit mir. (Tippe 'quit' zum Beenden)");
     println!("{}\n", "=".repeat(50));
 
@@ -85,7 +85,7 @@ fn main() {
         }
 
         if input.eq_ignore_ascii_case("quit") || input.eq_ignore_ascii_case("exit") {
-            println!("\nGoldWorm: Auf Wiedersehen!");
+            println!("\nGoldSnnail: Auf Wiedersehen!");
             break;
         }
 
@@ -98,7 +98,7 @@ fn main() {
             let pixels_f64: Vec<f64> = img.pixels.iter().map(|&p| p as f64).collect();
             let tokens = patch_encoder.encode_image(&pixels_f64, 32, 32);
 
-            println!("GoldWorm: Ich sehe ein Bild. Es enthält {} visuelle Patches.", tokens.len());
+            println!("GoldSnnail: Ich sehe ein Bild. Es enthält {} visuelle Patches.", tokens.len());
             println!("         Das Bild scheint ein {} zu sein.", label);
 
             let _ = std::fs::write(
@@ -187,7 +187,7 @@ fn main() {
         let response_text = response.join(" ");
 
         // Display response
-        println!("GoldWorm: {}\n", response_text);
+        println!("GoldSnnail: {}\n", response_text);
 
         // Add to conversation buffer
         conv.push(ConversationTurn::new_assistant(response_text.clone(), response.clone()));
@@ -256,7 +256,7 @@ fn generate_response(
     // Check for greetings
     let greetings = ["hallo", "hi", "guten tag", "moin", "servus"];
     if user_input.iter().any(|w| greetings.contains(&w.as_str())) {
-        let sentence = vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldworm".to_string()];
+        let sentence = vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldsnnail".to_string()];
         let filtered: Vec<String> = sentence.into_iter().filter(|w| encoder.neuron_for_word(w).is_some()).collect();
         if !filtered.is_empty() { return filtered; }
     }
@@ -273,7 +273,7 @@ fn generate_response(
     let questions = ["wie", "was", "wer", "wo", "wann", "warum"];
     if user_input.iter().any(|w| questions.contains(&w.as_str())) {
         let answers = vec![
-            vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+            vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
             vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
             vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
             vec!["der".to_string(), "stern".to_string(), "scheint".to_string()],
@@ -350,7 +350,7 @@ fn generate_response(
                 for &(node_id, _) in &neighbors {
                     if let Some(node) = trainer.concept_graph.nodes.get(node_id) {
                         if let Some(lex_token) = trainer.lexicon.get(&node.label) {
-                            if matches!(lex_token.class, goldworm::TokenClass::NounConcrete) {
+                            if matches!(lex_token.class, goldsnnail::TokenClass::NounConcrete) {
                                 let verbs = ["läuft", "springt", "ist", "sieht", "schläft"];
                                 let verb = verbs[rng.r#gen::<usize>() % verbs.len()];
                                 let sentence = trainer.composer.build_sentence_simple(&lex_token.surface, verb);
@@ -367,7 +367,7 @@ fn generate_response(
 
     // Strategy 4: Random template (fallback)
     let templates = vec![
-        vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+        vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
         vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
         vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
         vec!["der".to_string(), "vogel".to_string(), "fliegt".to_string()],

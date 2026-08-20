@@ -1,4 +1,4 @@
-//! GoldWorm CIFAR-10 Training
+//! GoldSnnail CIFAR-10 Training
 //!
 //! Trains a SemanticLearner on CIFAR-10 images mapped to the existing
 //! German lexicon. Falls back to synthetic data if no CIFAR-10 binaries
@@ -11,7 +11,7 @@
 //!   $env:CIFAR10_DIR = ".\cifar-10-batches-bin"
 //!   cargo run --example train_cifar10
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates,
     Cifar10Loader, generate_synthetic_cifar10_batch, map_cifar_label_to_lexicon,
     PoincareBall,
@@ -20,7 +20,7 @@ use std::path::Path;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm CIFAR-10 Training ===\n");
+    println!("=== GoldSnnail CIFAR-10 Training ===\n");
 
     let mut trainer = SemanticTrainer::new(1.0);
     let mut learner = SemanticLearner::new(1.0, LearningRates::default());

@@ -1,6 +1,6 @@
 //! ARC-AGI Dataset Loader
 //!
-//! Parses ARC-AGI JSON tasks into GoldWorm-native structures:
+//! Parses ARC-AGI JSON tasks into GoldSnnail-native structures:
 //! - `ArcGrid`: flat `Vec<Vec<u8>>` memory layout (DOD pattern)
 //! - `ArcTask`: train pairs + test inputs/outputs
 //! - `ArcDataset`: collection of tasks loaded from a directory
@@ -662,7 +662,7 @@ mod tests {
 
     #[test]
     fn arc_dataset_load_from_directory() {
-        let dir = std::env::temp_dir().join("goldworm_arc_test");
+        let dir = std::env::temp_dir().join("goldsnnail_arc_test");
         fs::create_dir_all(&dir).unwrap();
 
         let task_json = serde_json::json!({
@@ -684,7 +684,7 @@ mod tests {
 
     #[test]
     fn arc_dataset_load_task() {
-        let dir = std::env::temp_dir().join("goldworm_arc_test2");
+        let dir = std::env::temp_dir().join("goldsnnail_arc_test2");
         fs::create_dir_all(&dir).unwrap();
 
         let task_json = serde_json::json!({

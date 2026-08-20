@@ -11,7 +11,7 @@ pub struct BenchmarkDef {
     pub metric: String,
     pub prize_pool: String,
     pub priority: u8,
-    pub eval_script: String, // Name des GoldWorm-Examples
+    pub eval_script: String, // Name des GoldSnnail-Examples
     pub output_format: OutputFormat,
     pub needs_model: bool,
 }
@@ -64,7 +64,7 @@ impl BenchmarkRegistry {
             "efficiency-baseline".into(),
             BenchmarkDef {
                 name: "efficiency-baseline".into(),
-                description: "GoldWorm Eigen-Metriken (Size, Latenz)".into(),
+                description: "GoldSnnail Eigen-Metriken (Size, Latenz)".into(),
                 metric: "size_mb / latency_us".into(),
                 prize_pool: "None".into(),
                 priority: 3,

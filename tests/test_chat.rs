@@ -1,4 +1,4 @@
-use goldworm::{
+use goldsnnail::{
     TokenSpikeEncoder, SpikeTokenDecoder, SpikeBuffer,
     ConversationBuffer, ConversationTurn, SemanticTrainer,
     TransitionalLearner, LexiconToken, TokenClass,

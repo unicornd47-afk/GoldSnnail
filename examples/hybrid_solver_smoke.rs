@@ -2,10 +2,10 @@
 //!
 //! Einschraenkungen: Nur 10x10 Grids, 3 Heuristiken (Identity, Rotate90, FlipHorizontal)
 
-use goldworm::{ArcDataset, GridEncoder, evaluate_hybrid_solver};
+use goldsnnail::{ArcDataset, GridEncoder, evaluate_hybrid_solver};
 
 fn main() {
-    println!("=== GoldWorm Hybrid Solver Smoke Test (Woche 1) ===\n");
+    println!("=== GoldSnnail Hybrid Solver Smoke Test (Woche 1) ===\n");
     println!("Einschraenkungen: Nur 10x10 Grids, 3 Heuristiken\n");
 
     let dataset = match ArcDataset::load_from_directory("data/arc") {

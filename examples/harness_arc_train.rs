@@ -11,7 +11,7 @@
 //! Usage:
 //!   cargo run --example harness_arc_train
 
-use goldworm::{
+use goldsnnail::{
     vision::{ArcDataset, ArcGrid, ArcTask},
     harness::*,
     swarm::snn_core::INPUT_NEURONS,
@@ -24,7 +24,7 @@ const REPLAY_CAPACITY: usize = 5_000;
 const BATCH_SIZE: usize = 16;
 
 fn main() {
-    println!("=== GoldWorm Self-Learning Harness — ARC Identity Training ===\n");
+    println!("=== GoldSnnail Self-Learning Harness — ARC Identity Training ===\n");
 
     // --- Load ARC dataset ---
     let dataset = match ArcDataset::load_from_directory("data/arc-agi-repo/data/training") {

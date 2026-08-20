@@ -1,4 +1,4 @@
-﻿use goldworm::substrate::WeightMatrix;
+﻿use goldsnnail::substrate::WeightMatrix;
 use proptest::prelude::*;
 
 proptest! {
@@ -25,7 +25,7 @@ proptest! {
 
     #[test]
     fn state_arena_extend_preserves_lengths(capacity in 1usize..1000, additional in 1usize..100) {
-        let mut arena = goldworm::substrate::StateArena::new(capacity);
+        let mut arena = goldsnnail::substrate::StateArena::new(capacity);
         arena.extend(additional);
         prop_assert_eq!(arena.membrane.len(), capacity + additional);
         prop_assert_eq!(arena.recovery.len(), capacity + additional);

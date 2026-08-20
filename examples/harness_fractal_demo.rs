@@ -9,7 +9,7 @@
 //! Usage:
 //!   cargo run --example harness_fractal_demo
 
-use goldworm::{
+use goldsnnail::{
     harness::*,
     vision::{ArcDataset, ArcGrid},
 };
@@ -19,7 +19,7 @@ const INPUT_DIM: usize = 32;
 const OUTPUT_DIM: usize = 32;
 
 fn main() {
-    println!("=== GoldWorm Fractal Harness — 3-1-4-1 Architecture Demo ===\n");
+    println!("=== GoldSnnail Fractal Harness — 3-1-4-1 Architecture Demo ===\n");
 
     // --- Step 1: Build the 3141 frozen core ---
     println!("--- Step 1: 3141 Frozen Core ---");

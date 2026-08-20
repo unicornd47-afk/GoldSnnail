@@ -5,7 +5,7 @@
 //! 2. Semantic projection accuracy (histogram -> hyperbolic -> nearest neighbor)
 //! 3. Integration with AvalancheGuidedSelector
 
-use goldworm::{
+use goldsnnail::{
     SemanticTrainer, TokenSpikeEncoder, SpikeTokenDecoder,
     build_extended_lexicon, DvsEvent, DvsEncoder, DvsEncoderConfig,
     project_dvs_to_histogram, histogram_to_hyperbolic,
@@ -13,7 +13,7 @@ use goldworm::{
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm DVS128 Benchmark ===\n");
+    println!("=== GoldSnnail DVS128 Benchmark ===\n");
     
     let mut trainer = SemanticTrainer::new(1.0);
     let mut encoder = TokenSpikeEncoder::new(3.0, 5);

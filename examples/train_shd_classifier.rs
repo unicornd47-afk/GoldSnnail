@@ -2,7 +2,7 @@
 //! MLP: features -> HIDDEN (ReLU) -> 20 softmax, trained with SGD + momentum,
 //! lr decay, L2 weight decay. Feature modes via SHD_FEAT: rate | ttfs | time.
 
-use goldworm::audio::shd_loader::{ShdDataset, ShdSample};
+use goldsnnail::audio::shd_loader::{ShdDataset, ShdSample};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::path::Path;

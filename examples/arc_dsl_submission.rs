@@ -5,7 +5,7 @@
 // 2. Wenn gefunden: Wende auf Test-Inputs an
 //! 3. Wenn nicht gefunden: Fallback = Identity (Input = Output)
 
-use goldworm::{ArcTask, find_solving_program};
+use goldsnnail::{ArcTask, find_solving_program};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;

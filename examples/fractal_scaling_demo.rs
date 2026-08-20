@@ -6,14 +6,14 @@
 //!   3. Equal fractal scaling up and down
 //!   4. Forward pass at each scale level
 
-use goldworm::harness::*;
+use goldsnnail::harness::*;
 use std::time::Instant;
 
 const INPUT_DIM: usize = 32;
 const OUTPUT_DIM: usize = 32;
 
 fn main() {
-    println!("=== GoldWorm 3-1-4-1 Fractal Scaling Demo ===\n");
+    println!("=== GoldSnnail 3-1-4-1 Fractal Scaling Demo ===\n");
 
     // --- Step 1: Build the 3141 frozen core ---
     println!("--- Step 1: 3141 Frozen Core ---");

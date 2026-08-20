@@ -1,4 +1,4 @@
-//! GoldWorm Vision-Language Generator
+//! GoldSnnail Vision-Language Generator
 //!
 //! Combines CIFAR-10 vision with scaled sentence generation:
 //! 1. Load CIFAR-10 images (real or synthetic)
@@ -10,13 +10,13 @@
 //! Usage:
 //!   cargo run --example vision_language_generator --release
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates,
     PoincareBall, HyperbolicPoint, LexiconToken, TokenClass, Quaternion,
     EncoderTrainer, map_cifar_label_to_lexicon, generate_synthetic_cifar10_batch,
     Cifar10Loader, CifarImage,
 };
-use goldworm::baby::{InfomaxReward, TransitionalLearner};
+use goldsnnail::baby::{InfomaxReward, TransitionalLearner};
 use ndarray::Array1;
 use rand::prelude::IteratorRandom;
 use rand::Rng;
@@ -25,7 +25,7 @@ use std::collections::{HashMap, HashSet};
 static RUNNING: bool = true;
 
 fn main() {
-    println!("=== GoldWorm Vision-Language Generator ===\n");
+    println!("=== GoldSnnail Vision-Language Generator ===\n");
     println!("Goal: Write a sentence it NEVER learned, conditioned on an image.\n");
 
     // --- Setup ---

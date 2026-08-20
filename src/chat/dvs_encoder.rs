@@ -1,7 +1,7 @@
 //! DVS128 Encoder — Event-based vision to spike trains
 //!
 //! Converts DVS128 event camera data into spike trains compatible with
-//! the GoldWorm SNN-LLM bridge. DVS events are asynchronous pixel-level
+//! the GoldSnnail SNN-LLM bridge. DVS events are asynchronous pixel-level
 //! brightness changes: (x, y, polarity, timestamp).
 //!
 //! # Architecture

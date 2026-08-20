@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "GoldWorm",
+  "productName": "GoldSnnail",
   "version": "0.3.0",
-  "identifier": "com.goldworm.app",
+  "identifier": "com.goldsnnail.app",
   "build": {
     "beforeDevCommand": "",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "GoldWorm",
+        "title": "GoldSnnail",
         "width": 1200,
         "height": 800,
         "resizable": true,

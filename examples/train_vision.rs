@@ -1,4 +1,4 @@
-//! GoldWorm Vision-Semantic Training Loop
+//! GoldSnnail Vision-Semantic Training Loop
 //!
 //! Trains a PatchEncoder on synthetic image-label pairs, verifying that
 //! visual tokens learn to cluster in the hyperbolic semantic space.
@@ -6,14 +6,14 @@
 //! Usage:
 //!   cargo run --example train_vision
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, ImagePatch, VisualToken, SemanticEncoder, PoincareBall,
     generate_test_image,
 };
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Vision-Semantic Training ===\n");
+    println!("=== GoldSnnail Vision-Semantic Training ===\n");
 
     // Labels: 3 semantic classes
     let vocab = vec!["bright".into(), "dark".into(), "noise".into()];

@@ -9,7 +9,7 @@
 //! Usage:
 //!   cargo run --example arc_tripartite_train
 
-use goldworm::harness::{
+use goldsnnail::harness::{
     ArcTripartiteEncoder, ArcPhase, ArcStreamingLoop, ArcGridDecoder, NoteCoreLayer, ScaleProfile,
 };
 

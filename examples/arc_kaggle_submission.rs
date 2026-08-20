@@ -1,4 +1,4 @@
-use goldworm::ArcTask;
+use goldsnnail::ArcTask;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
@@ -56,64 +56,64 @@ fn load_dataset(dir: &str) -> Vec<ArcTask> {
     tasks
 }
 
-fn grid_equal(a: &goldworm::ArcGrid, b: &goldworm::ArcGrid) -> bool {
+fn grid_equal(a: &goldsnnail::ArcGrid, b: &goldsnnail::ArcGrid) -> bool {
     a == b
 }
 
-fn horizontal_flip(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn horizontal_flip(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     for row in &mut data {
         row.reverse();
     }
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn vertical_flip(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn vertical_flip(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     data.reverse();
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn rotate_180(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn rotate_180(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = grid.data.clone();
     for row in &mut data {
         row.reverse();
     }
     data.reverse();
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn rotate_90_ccw(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn rotate_90_ccw(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = vec![vec![0u8; grid.height]; grid.width];
     for r in 0..grid.height {
         for c in 0..grid.width {
             data[grid.width - 1 - c][r] = grid.data[r][c];
         }
     }
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn rotate_90_cw(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn rotate_90_cw(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = vec![vec![0u8; grid.height]; grid.width];
     for r in 0..grid.height {
         for c in 0..grid.width {
             data[c][grid.height - 1 - r] = grid.data[r][c];
         }
     }
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn transpose(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn transpose(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let mut data = vec![vec![0u8; grid.height]; grid.width];
     for r in 0..grid.height {
         for c in 0..grid.width {
             data[c][r] = grid.data[r][c];
         }
     }
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn most_common_color(grid: &goldworm::ArcGrid) -> u8 {
+fn most_common_color(grid: &goldsnnail::ArcGrid) -> u8 {
     let mut counts = [0usize; 10];
     for row in &grid.data {
         for &c in row {
@@ -131,13 +131,13 @@ fn most_common_color(grid: &goldworm::ArcGrid) -> u8 {
     max_color as u8
 }
 
-fn most_common_color_fill(grid: &goldworm::ArcGrid) -> goldworm::ArcGrid {
+fn most_common_color_fill(grid: &goldsnnail::ArcGrid) -> goldsnnail::ArcGrid {
     let color = most_common_color(grid);
     let data = vec![vec![color; grid.width]; grid.height];
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
-fn infer_color_mapping(input: &goldworm::ArcGrid, output: &goldworm::ArcGrid) -> Option<Vec<u8>> {
+fn infer_color_mapping(input: &goldsnnail::ArcGrid, output: &goldsnnail::ArcGrid) -> Option<Vec<u8>> {
     if input.width != output.width || input.height != output.height {
         return None;
     }
@@ -160,11 +160,11 @@ fn infer_color_mapping(input: &goldworm::ArcGrid, output: &goldworm::ArcGrid) ->
     Some(mapping)
 }
 
-fn apply_color_mapping(grid: &goldworm::ArcGrid, mapping: &Vec<u8>) -> goldworm::ArcGrid {
+fn apply_color_mapping(grid: &goldsnnail::ArcGrid, mapping: &Vec<u8>) -> goldsnnail::ArcGrid {
     let data: Vec<Vec<u8>> = grid.data.iter()
         .map(|row| row.iter().map(|&c| mapping[c as usize]).collect())
         .collect();
-    goldworm::ArcGrid::from_data(data).unwrap()
+    goldsnnail::ArcGrid::from_data(data).unwrap()
 }
 
 fn infer_transformation(task: &ArcTask) -> (Option<String>, Option<Vec<u8>>) {
@@ -231,7 +231,7 @@ fn infer_transformation(task: &ArcTask) -> (Option<String>, Option<Vec<u8>>) {
     (best_transform, None)
 }
 
-fn apply_transformation(grid: &goldworm::ArcGrid, transform: &str, mapping: Option<&Vec<u8>>) -> goldworm::ArcGrid {
+fn apply_transformation(grid: &goldsnnail::ArcGrid, transform: &str, mapping: Option<&Vec<u8>>) -> goldsnnail::ArcGrid {
     match transform {
         "identity" => grid.clone(),
         "h_flip" => horizontal_flip(grid),

@@ -70,9 +70,9 @@ pub fn apply_arc_op(grid: &ArcGrid, token: &ArcOpToken) -> Option<ArcGrid> {
 /// # Example
 ///
 /// ```
-/// use goldworm::arc_program::{ArcOpToken, ArcProgram};
-/// use goldworm::arc_apply::apply_program;
-/// use goldworm::vision::ArcGrid;
+/// use goldsnnail::arc_program::{ArcOpToken, ArcProgram};
+/// use goldsnnail::arc_apply::apply_program;
+/// use goldsnnail::vision::ArcGrid;
 ///
 /// let grid = ArcGrid::from_data(vec![vec![0, 1], vec![0, 1]]).unwrap();
 /// let program = ArcProgram::from_tokens(vec![

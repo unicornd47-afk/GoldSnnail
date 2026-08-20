@@ -1,6 +1,6 @@
 //! Online Learning — Dynamic vocabulary expansion during conversation
 //!
-//! This module allows GoldWorm to learn new words on-the-fly:
+//! This module allows GoldSnnail to learn new words on-the-fly:
 //! - Detect unknown words in user input
 //! - Infer meaning from conversation context and concept graph
 //! - Add new words to the lexicon dynamically

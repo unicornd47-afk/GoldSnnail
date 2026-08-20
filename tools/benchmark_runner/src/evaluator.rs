@@ -40,7 +40,7 @@ pub fn run(bench: &BenchmarkDef, repo: &Path, out_dir: &Path) -> Result<EvalResu
     );
 
     // 2. Modell-Checksum (wenn vorhanden)
-    let model_path = repo.join("models").join("goldworm_v0.2.bin");
+    let model_path = repo.join("models").join("goldsnnail_v0.2.bin");
     let model_sha256 = if model_path.exists() {
         let bytes = fs::read(&model_path)?;
         hex::encode(Sha256::digest(&bytes))
@@ -48,7 +48,7 @@ pub fn run(bench: &BenchmarkDef, repo: &Path, out_dir: &Path) -> Result<EvalResu
         "no_model_found".into()
     };
 
-    // 3. GoldWorm-Build & Run
+    // 3. GoldSnnail-Build & Run
     let mut log = String::new();
     let score = if bench.eval_script.is_empty() {
         // Eigen-Metriken ohne externen Benchmark

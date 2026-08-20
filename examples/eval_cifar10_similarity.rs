@@ -1,4 +1,4 @@
-//! GoldWorm CIFAR-10 Similarity Evaluation
+//! GoldSnnail CIFAR-10 Similarity Evaluation
 //!
 //! Measures the discriminative power of the PatchEncoder by
 //! comparing test images against a training cache in hyperbolic space.
@@ -7,7 +7,7 @@
 //! Usage:
 //!   cargo run --example eval_cifar10_similarity
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, generate_synthetic_cifar10_batch, Cifar10Loader,
     map_cifar_label_to_lexicon, HyperbolicPoint, PoincareBall,
 };
@@ -29,7 +29,7 @@ struct EncodedSample {
 }
 
 fn main() {
-    println!("=== GoldWorm CIFAR-10 Similarity Evaluation ===\n");
+    println!("=== GoldSnnail CIFAR-10 Similarity Evaluation ===\n");
 
     let encoder = PatchEncoder::new(8, 8, 1.0); // 8×8 patches, latent_dim=8, curvature=1.0
     let ball = PoincareBall::new(1.0);

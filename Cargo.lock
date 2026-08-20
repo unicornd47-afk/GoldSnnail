@@ -1750,7 +1750,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "goldworm"
+name = "goldsnnail"
 version = "0.4.0"
 dependencies = [
  "approx",
@@ -1773,12 +1773,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "goldworm-app"
+name = "goldsnnail-app"
 version = "0.3.0"
 dependencies = [
  "base64 0.22.1",
  "clap",
- "goldworm",
+ "goldsnnail",
  "rand 0.8.7",
  "serde",
  "serde_json",
@@ -1789,7 +1789,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "goldworm-bench"
+name = "goldsnnail-bench"
 version = "0.1.0"
 dependencies = [
  "anyhow",

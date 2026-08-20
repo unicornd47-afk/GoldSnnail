@@ -3,7 +3,7 @@
 //! Tests the CIFAR-10 loader, synthetic generator, and PatchEncoder
 //! on 32×32 RGB images.
 
-use goldworm::{
+use goldsnnail::{
     generate_synthetic_cifar10_batch, PatchEncoder, map_cifar_label_to_lexicon,
 };
 

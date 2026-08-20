@@ -46,7 +46,7 @@ Multi-region routing for distributed SNN simulation across CPU/GPU boundaries.
 
 ## Design Rationale
 
-Sparse connectivity is central to GoldWorm's efficiency claim. A fully connected `WeightMatrix` of size `N x N` requires `N²` weights. For `N = 10,000`, this is 100M weights (~400 MB for `f32`). Sparse formats reduce this to `O(E)` where `E` is the number of actual synapses.
+Sparse connectivity is central to GoldSnnail's efficiency claim. A fully connected `WeightMatrix` of size `N x N` requires `N²` weights. For `N = 10,000`, this is 100M weights (~400 MB for `f32`). Sparse formats reduce this to `O(E)` where `E` is the number of actual synapses.
 
 The `SHDCCP` format mirrors CSR (Compressed Sparse Row) but is optimized for spike-event access patterns:
 

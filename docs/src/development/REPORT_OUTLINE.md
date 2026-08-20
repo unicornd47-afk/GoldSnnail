@@ -1,10 +1,10 @@
-# GoldWorm — Report Outline (Korrigiert)
+# GoldSnnail — Report Outline (Korrigiert)
 
 ## 1. Einleitung
 
 **Problem:** Edge-AI-Systeme (Roboter, IoT, Wearables) benötigen multimodale Kognition — also die Fähigkeit, sensorische Eingaben zu verstehen, zu lernen und darauf zu reagieren. Aktuelle Lösungen haben fundamentale Schwächen: Deep-Learning-Modelle sind zu groß und zu langsam für Embedded-Deployment; statische SNNs sind präzise, aber spezialisiert und offline trainiert; Transformer sind mächtig, aber für Edge-Hardware ungeeignet.
 
-**Lösungsansatz:** GoldWorm — ein multimodales kognitives System auf Basis spikender neuronaler Netzwerke mit hyperbolischem Konzeptgraphen und kritischer Avalanche-Dynamik.
+**Lösungsansatz:** GoldSnnail — ein multimodales kognitives System auf Basis spikender neuronaler Netzwerke mit hyperbolischem Konzeptgraphen und kritischer Avalanche-Dynamik.
 
 **Kernversprechen:** Nicht die höchste Klassifikationsgenauigkeit, sondern die beste Effizienz bei gleichzeitiger Multi-Modalität und Online-Learning-Fähigkeit.
 
@@ -60,7 +60,7 @@
 - **Bridge Fidelity:** 100.0% — visuelle Information erreicht zuverlässig Sprachcluster über Bridge Edges
 
 ### 4.2 Interpretation
-GoldWorm demonstriert **echte visuell gesteuerte Sprachproduktion** mit hoher semantischer Relevanz (83.3%) und perfekter grammatikalischer Struktur (100%). Die Bridge Edges leiten visuelle Aktivität zuverlässig in Sprachcluster weiter, und das Avalanche-Guided-System priorisiert die korrekten Zahlwörter in der Antwortgenerierung.
+GoldSnnail demonstriert **echte visuell gesteuerte Sprachproduktion** mit hoher semantischer Relevanz (83.3%) und perfekter grammatikalischer Struktur (100%). Die Bridge Edges leiten visuelle Aktivität zuverlässig in Sprachcluster weiter, und das Avalanche-Guided-System priorisiert die korrekten Zahlwörter in der Antwortgenerierung.
 
 **Wichtig:** Die ursprünglich gemessenen 3.8% Semantic Relevance waren auf einen **Benchmark-Bug** zurückzuführen: Das Dataset wurde nicht auf die im ConceptGraph vorhandenen Digits (3, 4, 9) gefiltert, sodass die Brücken-Aktivierung für 70% der Test-Samples fehlschlug. Nach Korrektur des Benchmarks liegt die Semantic Relevance bei 83.3% — das Multi-Modal-Versprechen ist damit bestätigt.
 
@@ -77,7 +77,7 @@ GoldWorm demonstriert **echte visuell gesteuerte Sprachproduktion** mit hoher se
 
 ### 5.2 Ergebnisse
 
-| Metrik | GoldWorm | SpykeTorch | SpikingJelly |
+| Metrik | GoldSnnail | SpykeTorch | SpikingJelly |
 |--------|----------|------------|--------------|
 | **Parameter** | 240K | 1.2M | 800K |
 | **Memory** | **0.92 MB** | 18 MB | 12 MB |
@@ -89,7 +89,7 @@ GoldWorm demonstriert **echte visuell gesteuerte Sprachproduktion** mit hoher se
 | **Kritische Dynamik** | ✅ **τ = −1.92** | ❌ | ❌ |
 
 ### 5.3 Interpretation
-GoldWorm ist nicht der genaueste Klassifikator — aber der **schnellste und kleinste**, der gleichzeitig Multi-Modalität und Online-Learning beherrscht. Für eingebettete Systeme (Edge AI, Roboter, IoT) ist 59.7% Accuracy bei 0.92 MB Memory und 72.2 µs Inferenz oft wertvoller als 98.5% bei 18 MB und 450 µs.
+GoldSnnail ist nicht der genaueste Klassifikator — aber der **schnellste und kleinste**, der gleichzeitig Multi-Modalität und Online-Learning beherrscht. Für eingebettete Systeme (Edge AI, Roboter, IoT) ist 59.7% Accuracy bei 0.92 MB Memory und 72.2 µs Inferenz oft wertvoller als 98.5% bei 18 MB und 450 µs.
 
 **Der Tradeoff:** Accuracy vs. Speed/Memory — eine bewusste architektonische Entscheidung für ressourcenbeschränkte Umgebungen.
 
@@ -151,7 +151,7 @@ Ob die Architektur allein (ohne Replay) inherent forgetting-reduziert, wurde sys
 - **Status:** Skalenfreie Avalanche-Statistik bestätigt (kritischer Bereich: τ ∈ [−2.0, −1.0])
 
 ### 7.2 Interpretation
-Konzeptausbreitung im ConceptGraph folgt einer skalierungsfreien Dynamik — ähnlich wie neuronale Avalanchen im Kortex oder Sandhaufen-Instabilitäten. Das bedeutet: GoldWorm befindet sich am **kritischen Punkt** zwischen Ordnung und Chaos, wo Informationsverarbeitung optimal ist.
+Konzeptausbreitung im ConceptGraph folgt einer skalierungsfreien Dynamik — ähnlich wie neuronale Avalanchen im Kortex oder Sandhaufen-Instabilitäten. Das bedeutet: GoldSnnail befindet sich am **kritischen Punkt** zwischen Ordnung und Chaos, wo Informationsverarbeitung optimal ist.
 
 **Messmethodik-Hinweis:** Der Tau-Wert wurde über Spike-Raster-Avalanchen (Power-Law-Fit via MLE) gemessen, nicht über ConceptGraph-Simulationen. Die Abweichung zum theoretischen Wert von −1.5 ist messmethodisch bedingt und wird in zukünftigen Arbeiten durch einheitliche Avalanche-Definitionen normalisiert.
 
@@ -159,9 +159,9 @@ Konzeptausbreitung im ConceptGraph folgt einer skalierungsfreien Dynamik — äh
 
 ## 8. Diskussion
 
-### 8.1 Was unterscheidet GoldWorm von anderen SNNs?
+### 8.1 Was unterscheidet GoldSnnail von anderen SNNs?
 
-| Andere SNNs | GoldWorm |
+| Andere SNNs | GoldSnnail |
 |-------------|----------|
 | Klassifizieren nur (N-MNIST, CIFAR-10) | **Generiert** Sprache aus Vision |
 | Euklidischer Feature-Raum | **Hyperbolischer** Raum mit natürlicher Hierarchie |
@@ -171,7 +171,7 @@ Konzeptausbreitung im ConceptGraph folgt einer skalierungsfreien Dynamik — äh
 
 ### 8.2 Der Tradeoff — Bestandsaufnahme nach Bugfix
 
-GoldWorm opfert ~40% Accuracy (59.7% vs. 98.5% bei SpykeTorch) für einen **100× kleineren Footprint** (0.92 MB vs. 18 MB) und **~6× schnellere Inferenz** (72.2 µs vs. 450 µs). Gleichzeitig beherrscht es als eines der wenigen SNN-Systeme **echte Multi-Modal-Generierung** (83.3% Semantic Relevance, 100% Grammatical Rate). Für eingebettete Systeme ohne GPU, ohne Cloud, mit begrenztem Strom ist dieser Tradeoff oft akzeptabel — sogar bevorzugt.
+GoldSnnail opfert ~40% Accuracy (59.7% vs. 98.5% bei SpykeTorch) für einen **100× kleineren Footprint** (0.92 MB vs. 18 MB) und **~6× schnellere Inferenz** (72.2 µs vs. 450 µs). Gleichzeitig beherrscht es als eines der wenigen SNN-Systeme **echte Multi-Modal-Generierung** (83.3% Semantic Relevance, 100% Grammatical Rate). Für eingebettete Systeme ohne GPU, ohne Cloud, mit begrenztem Strom ist dieser Tradeoff oft akzeptabel — sogar bevorzugt.
 
 **Verbleibende Gaps:**
 
@@ -206,11 +206,11 @@ Die Evaluierung auf ARC-AGI-1 (811 Tasks, 2,676 Train-Paare) liefert drei klare 
 
 **Die wissenschaftliche Bedeutung:** Diese Ergebnisse widerlegen die Hypothese, dass rein geometrisches Reasoning im Poincaré-Ball für ARC-AGI-1 ausreicht. Der Space erfasst Task-Identität, nicht Task-Mechanismus. Transformationen sind nicht als additive Vektoren kodierbar, und nearest-neighbor Retrieval scheitert an Größen-Invarianz und Pixel-Genauigkeit.
 
-**Warum das wertvoll ist:** Ein negativer Befund ist kein Fehler — er ist ein Beitrag. Die ARC-Community hat über 50+ Solvent-Ansätze getestet; GoldWorm liefert den ersten systematischen Beweis, dass **hyperbolische Embedding-Räume allein nicht für ARC-Reasoning geeignet sind**. Dies spart anderen Forschungsgruppen Zeit und Ressourcen.
+**Warum das wertvoll ist:** Ein negativer Befund ist kein Fehler — er ist ein Beitrag. Die ARC-Community hat über 50+ Solvent-Ansätze getestet; GoldSnnail liefert den ersten systematischen Beweis, dass **hyperbolische Embedding-Räume allein nicht für ARC-Reasoning geeignet sind**. Dies spart anderen Forschungsgruppen Zeit und Ressourcen.
 
 ### 8.5 Abgrenzung zu anderen SNNs
 
-| Kriterium | GoldWorm | SpykeTorch | SpikingJelly |
+| Kriterium | GoldSnnail | SpykeTorch | SpikingJelly |
 |-----------|----------|------------|--------------|
 | **Accuracy** | 59.7% | 98.5% | 95.2% |
 | **Memory** | 0.92 MB | 18 MB | 12 MB |
@@ -221,7 +221,7 @@ Die Evaluierung auf ARC-AGI-1 (811 Tasks, 2,676 Train-Paare) liefert drei klare 
 | **ARC-AGI-1** | ⚠️ Retrieval 0%, Ratio 3.66 | ❌ | ❌ |
 | **Zielgruppe** | Edge AI, Roboter, IoT | Server, Cloud | Server, Cloud |
 
-**Fazit:** GoldWorm ist kein Accuracy-Champion und kein ARC-Reasoning-Champion. Es ist ein **Effizienz-Champion mit experimentellem Multi-Modal-Ansatz und dokumentierten Grenzen**. Die Stärken liegen in Größe, Latenz und Online-Learning-Fähigkeit — nicht in reiner Klassifikationsgenauigkeit oder ARC-Reasoning.
+**Fazit:** GoldSnnail ist kein Accuracy-Champion und kein ARC-Reasoning-Champion. Es ist ein **Effizienz-Champion mit experimentellem Multi-Modal-Ansatz und dokumentierten Grenzen**. Die Stärken liegen in Größe, Latenz und Online-Learning-Fähigkeit — nicht in reiner Klassifikationsgenauigkeit oder ARC-Reasoning.
 
 ---
 
@@ -232,13 +232,13 @@ Die Evaluierung auf ARC-AGI-1 (811 Tasks, 2,676 Train-Paare) liefert drei klare 
 Die negative Evaluation auf ARC-AGI-1 (Silhouette 0.189, Retrieval 0%) ist kein Fehlschlag, sondern ein **methodisch wertvoller Befund**. Die Ergebnisse zeigen, dass hyperbolische Embedding-Räume allein nicht für ARC-Reasoning ausreichen. Daraus ergeben sich zwei konkrete Pfade:
 
 **Pfad A: Hybrid-ARC-Solver (kurzfristig, 3–6 Monate)**
-- Nutzt GoldWorms Hyperbolic Space für **Task-Retrieval** (ähnliche Tasks finden)
+- Nutzt GoldSnnails Hyperbolic Space für **Task-Retrieval** (ähnliche Tasks finden)
 - Kombiniert mit expliziter **Programm-Synthese** (DSL + Suche + Evaluator) für die eigentliche Lösung
 - Der Hyperbolic Space dient als **heuristischer Pruner** für die Programmsuche, nicht als Reasoning-Engine
 
 **Pfad B: ARC-AGI-2 Interaktiv (mittelfristig, 6–12 Monate)**
 - ARC-AGI-2 wird interaktiv: Der Agent darf Fragen stellen, Beispiele anfordern, Aktionen ausführen
-- GoldWorms Architektur (Continual Learning, Online-Adaption, niedrige Latenz) ist besser für interaktive Tasks geeignet als für one-shot-Reasoning
+- GoldSnnails Architektur (Continual Learning, Online-Adaption, niedrige Latenz) ist besser für interaktive Tasks geeignet als für one-shot-Reasoning
 - **Kernidee:** Nutze das SNN als Online-Learner in der Interaktionsschleife — nicht als statischer Solver
 
 ### 9.2 No-Replay-Ablation (abgeschlossen)
@@ -261,7 +261,7 @@ Die negative Evaluation auf ARC-AGI-1 (Silhouette 0.189, Retrieval 0%) ist kein 
 
 ## 10. Fazit
 
-GoldWorm beweist, dass kognitive Multi-Modalität nicht Milliarden von Parametern braucht — sondern die richtige Geometrie und Dynamik.
+GoldSnnail beweist, dass kognitive Multi-Modalität nicht Milliarden von Parametern braucht — sondern die richtige Geometrie und Dynamik.
 
 Mit **0.92 MB Memory**, **72.2 µs Inferenz**, **59.7% N-MNIST Accuracy** und **83.3% Semantic Relevance** (visuell-linguistisch, Digits 3/4/9) ist es die erste Architektur, die **kritische Dynamik, Effizienz und semantische Generierung** in einem einzigen System vereint — ohne GPU, ohne Cloud, auf dem Microcontroller.
 

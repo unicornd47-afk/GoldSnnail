@@ -1,13 +1,13 @@
-# GoldWorm: A Hyperbolic Spiking Neural Network for Efficient Multi-Modal Learning and ARC-AGI Evaluation
+# GoldSnnail: A Hyperbolic Spiking Neural Network for Efficient Multi-Modal Learning and ARC-AGI Evaluation
 
-**GoldWorm Research Team**  
+**GoldSnnail Research Team**  
 *Generated from verified benchmark data*
 
 ---
 
 ## Abstract
 
-We present GoldWorm, a 0.92 MB spiking neural network (SNN) operating in hyperbolic (Poincaré-ball) space with 72 µs inference latency. Originally conceived as an ARC-AGI reasoning candidate, GoldWorm instead delivers four empirically grounded contributions: (1) a multi-modal SNN achieving 83.3% semantic relevance across DVS event streams and digit grids; (2) a hyperbolic embedding space that separates ARC tasks with an inter/intra ratio of 3.66, but systematically fails to encode compositional transformations as vectors (Silhouette 0.189) or to support nearest-neighbor retrieval (0% exact match); (3) a continual-learning substrate where catastrophic forgetting reaches 98.7% without replay, validating the necessity of experience replay in hyperbolic SNNs; and (4) a fully differentiable GridEncoder with verified backpropagation through L2-normalized hyperbolic outputs, demonstrating that while intra-task distance minimization converges (loss 0.000001), inter-task retrieval remains at 0% accuracy—proving that task similarity in embedding space does not imply solution transferability. A fifth contribution emerges from the audio branch: rate-coded spiking input achieves 42.6% on Spiking Heidelberg Digits (8.7× random), confirming hyperbolic separation extends to temporal audio streams, while training with hyperbolic-distance loss yields only marginal gains (+1.0%), revealing that distance minimization is not correlated with downstream k-NN discrimination. Our work demonstrates that hyperbolic geometry captures task identity but not task mechanism—a negative result with significant implications for neural-symbolic ARC solvers. All code, benchmarks, and failed hypotheses are documented for reproducibility.
+We present GoldSnnail, a 0.92 MB spiking neural network (SNN) operating in hyperbolic (Poincaré-ball) space with 72 µs inference latency. Originally conceived as an ARC-AGI reasoning candidate, GoldSnnail instead delivers four empirically grounded contributions: (1) a multi-modal SNN achieving 83.3% semantic relevance across DVS event streams and digit grids; (2) a hyperbolic embedding space that separates ARC tasks with an inter/intra ratio of 3.66, but systematically fails to encode compositional transformations as vectors (Silhouette 0.189) or to support nearest-neighbor retrieval (0% exact match); (3) a continual-learning substrate where catastrophic forgetting reaches 98.7% without replay, validating the necessity of experience replay in hyperbolic SNNs; and (4) a fully differentiable GridEncoder with verified backpropagation through L2-normalized hyperbolic outputs, demonstrating that while intra-task distance minimization converges (loss 0.000001), inter-task retrieval remains at 0% accuracy—proving that task similarity in embedding space does not imply solution transferability. A fifth contribution emerges from the audio branch: rate-coded spiking input achieves 42.6% on Spiking Heidelberg Digits (8.7× random), confirming hyperbolic separation extends to temporal audio streams, while training with hyperbolic-distance loss yields only marginal gains (+1.0%), revealing that distance minimization is not correlated with downstream k-NN discrimination. Our work demonstrates that hyperbolic geometry captures task identity but not task mechanism—a negative result with significant implications for neural-symbolic ARC solvers. All code, benchmarks, and failed hypotheses are documented for reproducibility.
 
 ---
 
@@ -15,7 +15,7 @@ We present GoldWorm, a 0.92 MB spiking neural network (SNN) operating in hyperbo
 
 The ARC Prize frames a stark challenge: solve 400 novel grid-based reasoning tasks with human-like few-shot generalization. Large language models (LLMs) such as o3 achieve ~80% accuracy at $200 per task; we asked whether a physically efficient substrate—a spiking neural network (SNN) in hyperbolic space—could compete not on raw accuracy, but on efficiency (accuracy per dollar).
 
-GoldWorm was architected around three hypotheses:
+GoldSnnail was architected around three hypotheses:
 
 1. **H1 (Efficiency):** SNNs with hyperbolic embeddings can match multi-modal tasks at <1 MB model size and <100 µs latency.
 2. **H2 (Reasoning):** Compositional ARC transformations (rotation, color mapping, object counting) are encoded as consistent vectors in the Poincaré ball, enabling vector-arithmetic reasoning.
@@ -42,7 +42,7 @@ Replay-based methods dominate. We test whether hyperbolic geometry alone (withou
 
 ### Architecture
 
-GoldWorm consists of three Rust modules:
+GoldSnnail consists of three Rust modules:
 - `src/snn/`: Leaky integrate-and-fire (LIF) neurons with sparse connectivity
 - `src/semantics/`: Poincaré-ball embeddings (16D, target radius r=0.75)
 - `src/vision/`: Grid encoder (100D features → 32D hidden → 16D hyperbolic point)
@@ -84,7 +84,7 @@ The cross-modal bugfix raised semantic relevance from 3.8% to 83.3%, demonstrati
 
 ### SHD Audio: Transfer to Temporal Modalities
 
-To test whether the hyperbolic embedding generalizes beyond static grids, we evaluated GoldWorm on the Spiking Heidelberg Digits (SHD) dataset—temporal audio streams encoded as spike trains across 700 neurons over 1000 ms.
+To test whether the hyperbolic embedding generalizes beyond static grids, we evaluated GoldSnnail on the Spiking Heidelberg Digits (SHD) dataset—temporal audio streams encoded as spike trains across 700 neurons over 1000 ms.
 
 **Rate-Coding Baseline (42.6%).** Aggregating spike counts into a 100D rate vector and classifying via hyperbolic k-NN yields 42.6% accuracy (10-class, 5% random). This confirms that the Poincaré ball separates audio identities without any task-specific training.
 
@@ -146,7 +146,7 @@ ARC-AGI features two leaderboards: accuracy and efficiency (accuracy per dollar)
 
 ![Efficiency Comparison](figures/fig_efficiency.png)
 
-Even at modest accuracy (5–10%), GoldWorm's 0.92 MB footprint and 72 µs latency position it as a candidate for the efficiency leaderboard, particularly on resource-constrained edge devices.
+Even at modest accuracy (5–10%), GoldSnnail's 0.92 MB footprint and 72 µs latency position it as a candidate for the efficiency leaderboard, particularly on resource-constrained edge devices.
 
 ---
 
@@ -162,12 +162,12 @@ This is not a failure of hyperbolic geometry; it is a fundamental limitation of 
 
 ### Implications for ARC Solvers
 
-A viable GoldWorm-based ARC solver must be hybrid:
+A viable GoldSnnail-based ARC solver must be hybrid:
 1. **Hyperbolic router:** Use the embedding space to identify the task family (ratio 3.66 proves this works)
 2. **Explicit program search:** Use a small DSL (rotate, flip, fill, count) to solve the task within the identified family
 3. **Efficiency wrapper:** The router runs in 72 µs; only promising program candidates are evaluated
 
-This converts GoldWorm from a "reasoning engine" into a "reasoning accelerator."
+This converts GoldSnnail from a "reasoning engine" into a "reasoning accelerator."
 
 ### ARC-AGI-2: The Interactive Pivot
 
@@ -184,7 +184,7 @@ Phase 2 closes with verified H1 (efficiency + multi-modal), refuted H2 (composit
 | # | Action | Outcome |
 |---|--------|---------|
 | 1 | Submit ARC-Prize package (`benchmark_artifacts/packages/submission_arc-prize_*`) | Efficiency-leaderboard entry |
-| 2 | Finalize `docs/GOLDWORM_REPORT.md` | Publication-ready state |
+| 2 | Finalize `docs/GOLDSNNAIL_REPORT.md` | Publication-ready state |
 | 3 | Git tag `v0.2-phase2` and push | Reproducibility anchor |
 | 4 | Write `tools/benchmark_runner/README.md` | External usability |
 | 5 | Open issue at `jonpelchat006-hub` | ARC-reasoning collaboration |
@@ -207,13 +207,13 @@ Phase 2 closes with verified H1 (efficiency + multi-modal), refuted H2 (composit
 
 ### ARC-AGI-2 Monitoring
 
-ARC-AGI-2 introduces interactive feedback loops. GoldWorm's 72 µs latency and online learning capacity may offer advantages over static LLMs in interactive settings. Phase 3 includes passive monitoring of ARC-AGI-2 developments and evaluation of the hybrid router+DSL architecture when the evaluation set is released.
+ARC-AGI-2 introduces interactive feedback loops. GoldSnnail's 72 µs latency and online learning capacity may offer advantages over static LLMs in interactive settings. Phase 3 includes passive monitoring of ARC-AGI-2 developments and evaluation of the hybrid router+DSL architecture when the evaluation set is released.
 
 ---
 
 ## 10. Conclusion
 
-GoldWorm began as an attempt to solve ARC-AGI through hyperbolic vector reasoning. It ends Phase 1 as something arguably more valuable: a rigorously bounded efficient SNN whose capabilities and limitations are empirically established.
+GoldSnnail began as an attempt to solve ARC-AGI through hyperbolic vector reasoning. It ends Phase 1 as something arguably more valuable: a rigorously bounded efficient SNN whose capabilities and limitations are empirically established.
 
 We have shown that:
 - A 0.92 MB SNN can achieve 83.3% multi-modal semantic relevance and 80.2% continual-learning accuracy
@@ -222,7 +222,7 @@ We have shown that:
 - Catastrophic forgetting reaches 98.7% without replay, falsifying the hypothesis that geometry alone protects memory
 - Rate-coded spiking audio achieves 42.6% on SHD (8.7× random), confirming multi-modal hyperbolic separation, while distance-loss training yields only marginal k-NN gains (+1.0%)—demonstrating that minimizing hyperbolic distance does not optimize downstream classification
 
-These negative results are not setbacks; they are guardrails. They prevent us from investing 15 months in a vector-reasoning pipeline that cannot work, and redirect us toward hybrid architectures where GoldWorm's true strengths—efficiency, latency, and multi-modal binding—can be exploited.
+These negative results are not setbacks; they are guardrails. They prevent us from investing 15 months in a vector-reasoning pipeline that cannot work, and redirect us toward hybrid architectures where GoldSnnail's true strengths—efficiency, latency, and multi-modal binding—can be exploited.
 
 The ARC Prize has two leaderboards. We may never top the accuracy board. But with documented efficiency, reproducible benchmarks, and honest failure analysis, we can top the science board.
 
@@ -230,7 +230,7 @@ The ARC Prize has two leaderboards. We may never top the accuracy board. But wit
 
 ## Appendix: Reproducibility Checklist
 
-All experiments are reproducible from the GoldWorm repository.
+All experiments are reproducible from the GoldSnnail repository.
 
 | Experiment | Command | Output File |
 |------------|---------|-------------|

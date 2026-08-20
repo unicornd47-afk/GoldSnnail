@@ -1,7 +1,7 @@
 //! SNN Core — 180-Neuron QLIF Swarm with 6×30 Stages
 //!
 //! This is the concrete instantiation of the `Swarm` abstraction for the
-//! GoldWorm desktop simulator. It fixes:
+//! GoldSnnail desktop simulator. It fixes:
 //!   - 180 neurons total
 //!   - 6 stages × 30 neurons per stage
 //!   - Stage-wise connectivity bias (feed-forward + lateral)

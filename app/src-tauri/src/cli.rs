@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
-use goldworm::vision::dsl_solver::find_solving_program;
-use goldworm::vision::{ArcGrid, ArcTask};
+use goldsnnail::vision::dsl_solver::find_solving_program;
+use goldsnnail::vision::{ArcGrid, ArcTask};
 use serde_json::Value;
 use std::fs;
 

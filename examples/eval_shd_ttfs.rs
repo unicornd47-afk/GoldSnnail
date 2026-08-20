@@ -1,6 +1,6 @@
-use goldworm::geometry::HyperbolicPoint;
-use goldworm::audio::hyperbolic_knn::HyperbolicKnn;
-use goldworm::audio::shd_loader::ShdDataset;
+use goldsnnail::geometry::HyperbolicPoint;
+use goldsnnail::audio::hyperbolic_knn::HyperbolicKnn;
+use goldsnnail::audio::shd_loader::ShdDataset;
 use std::path::Path;
 
 fn main() {

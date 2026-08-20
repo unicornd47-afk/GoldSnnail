@@ -3,8 +3,8 @@
 //! Loads all 400 training tasks, runs the DSL solver (max_length=3),
 //! and collects statistics on which operations are used in solving programs.
 
-use goldworm::ArcTask;
-use goldworm::vision::dsl_solver::{find_solving_program, Op};
+use goldsnnail::ArcTask;
+use goldsnnail::vision::dsl_solver::{find_solving_program, Op};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;

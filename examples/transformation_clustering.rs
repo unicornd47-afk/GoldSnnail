@@ -4,9 +4,9 @@
 //! projects them to tangent space at origin, and runs k-Means clustering
 //! with silhouette scoring to find the optimal number of clusters.
 
-use goldworm::ArcDataset;
-use goldworm::vision::grid_encoder::GridEncoder;
-use goldworm::vision::transformation_analyzer::{TransformationAnalyzer, TransformationVector};
+use goldsnnail::ArcDataset;
+use goldsnnail::vision::grid_encoder::GridEncoder;
+use goldsnnail::vision::transformation_analyzer::{TransformationAnalyzer, TransformationVector};
 
 // ============================================================================
 // Distance & Clustering Primitives
@@ -256,7 +256,7 @@ fn compute_cluster_stats(
 // ============================================================================
 
 fn main() {
-    println!("=== GoldWorm Transformation Clustering ===\n");
+    println!("=== GoldSnnail Transformation Clustering ===\n");
 
     let dataset = match ArcDataset::load_from_directory("data/arc") {
         Ok(ds) => ds,

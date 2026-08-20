@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>GoldWorm SNN-LLM Chat</title>
+    <title>GoldSnnail SNN-LLM Chat</title>
     <style>
         body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         h1 { color: #4fc3f7; font-size: 18px; margin-bottom: 10px; }
@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-    <h1>🧠 GoldWorm SNN-LLM Chat — Live Visualization</h1>
+    <h1>🧠 GoldSnnail SNN-LLM Chat — Live Visualization</h1>
     
     <div class="stats">
         <div class="stat">
@@ -49,8 +49,8 @@
         <div id="chat">
             <div id="history">
                 <div class="turn assistant">
-                    <div class="role">GoldWorm</div>
-                    <div class="text">Hallo! Ich bin GoldWorm. Sprich mit mir!</div>
+                    <div class="role">GoldSnnail</div>
+                    <div class="text">Hallo! Ich bin GoldSnnail. Sprich mit mir!</div>
                 </div>
             </div>
             <div id="input-area">
@@ -115,7 +115,7 @@
                     const div = document.createElement('div');
                     div.className = 'turn ' + turn.role;
                     div.innerHTML = `
-                        <div class="role">${turn.role === 'user' ? 'Du' : 'GoldWorm'}</div>
+                        <div class="role">${turn.role === 'user' ? 'Du' : 'GoldSnnail'}</div>
                         <div class="text">${escapeHtml(turn.text)}</div>
                     `;
                     history.appendChild(div);
@@ -158,7 +158,7 @@
             // Simulate response (in real version, this would call the backend)
             setTimeout(() => {
                 const responses = [
-                    "Ich bin GoldWorm, ein neuronales System.",
+                    "Ich bin GoldSnnail, ein neuronales System.",
                     "Das ist interessant!",
                     "Erzähl mir mehr darüber.",
                     "Ich lerne ständig dazu.",
@@ -169,7 +169,7 @@
                 const assistantDiv = document.createElement('div');
                 assistantDiv.className = 'turn assistant';
                 assistantDiv.innerHTML = `
-                    <div class="role">GoldWorm</div>
+                    <div class="role">GoldSnnail</div>
                     <div class="text">${response}</div>
                 `;
                 history.appendChild(assistantDiv);

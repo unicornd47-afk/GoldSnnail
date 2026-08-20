@@ -70,7 +70,7 @@ The observer maintains a bounded ring buffer of metrics. When `history.len() >= 
 
 ## Criticality Measurement
 
-GoldWorm measures criticality via avalanche distributions. A branching ratio τ ≈ -1.92 indicates the network operates at the edge of chaos — the regime where information processing capacity is maximized.
+GoldSnnail measures criticality via avalanche distributions. A branching ratio τ ≈ -1.92 indicates the network operates at the edge of chaos — the regime where information processing capacity is maximized.
 
 The `PowerLawObserver` fits a power law `P(s) ∝ s^(-τ)` to avalanche sizes. Values of τ near -1.5 to -2.0 are associated with critical dynamics in cortical tissue.
 

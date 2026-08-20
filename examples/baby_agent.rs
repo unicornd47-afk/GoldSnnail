@@ -1,4 +1,4 @@
-//! GoldWorm Baby Agent — All 6 Learning Mechanisms
+//! GoldSnnail Baby Agent — All 6 Learning Mechanisms
 //!
 //! Orchestrates the complete learning framework:
 //! 1. Hebb + Gradient (existing: RSTDP, SemanticLearner)
@@ -11,11 +11,11 @@
 //! Usage:
 //!   cargo run --example baby_agent
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates, EpochMetrics,
     generate_test_image, PoincareBall, HyperbolicPoint, LexiconToken, TokenClass, Quaternion,
 };
-use goldworm::baby::{InfomaxReward, UCBExplorer, TransitionalLearner};
+use goldsnnail::baby::{InfomaxReward, UCBExplorer, TransitionalLearner};
 use ndarray::Array1;
 use rand::Rng;
 use std::collections::HashMap;
@@ -28,7 +28,7 @@ use std::time::{Duration, Instant};
 static RUNNING: AtomicBool = AtomicBool::new(true);
 
 fn main() {
-    println!("=== GoldWorm Baby Agent — All 6 Learning Mechanisms ===\n");
+    println!("=== GoldSnnail Baby Agent — All 6 Learning Mechanisms ===\n");
     println!("1. Hebb + Gradient     → RSTDP + SemanticLearner");
     println!("2. Dynamical Systems   → WorkingMemory attractors");
     println!("3. Statistical Learning → TransitionalLearner (NEW)");

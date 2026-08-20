@@ -1,4 +1,4 @@
-//! GoldWorm Chat Benchmark Suite
+//! GoldSnnail Chat Benchmark Suite
 //!
 //! Measures SNN-LLM chat engine performance across 6 dimensions:
 //! 1. SNN Encoding Efficiency
@@ -11,7 +11,7 @@
 //! Usage:
 //!   cargo run --example benchmark --release
 
-use goldworm::{
+use goldsnnail::{
     LexiconToken, TokenClass, SemanticTrainer, TransitionalLearner,
     TokenSpikeEncoder, SpikeTokenDecoder, ConversationBuffer, ConversationTurn,
     ReasoningEngine, OnlineLearner, WorldChat, SpikeBuffer, ChatArena,
@@ -25,7 +25,7 @@ use std::fs;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Chat Benchmark Suite ===\n");
+    println!("=== GoldSnnail Chat Benchmark Suite ===\n");
 
     let mut results = HashMap::new();
 
@@ -85,7 +85,7 @@ fn bench_snn_encoding() -> HashMap<String, f64> {
     let mut decoder = SpikeTokenDecoder::new(1);
 
     // Build 20-word lexicon
-    let words = ["hallo", "ich", "bin", "goldworm", "der", "die", "das", "hund", "katze", "vogel",
+    let words = ["hallo", "ich", "bin", "goldsnnail", "der", "die", "das", "hund", "katze", "vogel",
                  "läuft", "springt", "ist", "gut", "schlecht", "danke", "bitte", "wie", "was", "stern"];
     for (i, &word) in words.iter().enumerate() {
         let id = trainer.lexicon.tokens.len();
@@ -176,7 +176,7 @@ fn bench_response_quality() -> HashMap<String, f64> {
     ];
 
     let templates = vec![
-        vec!["ich", "bin", "goldworm"],
+        vec!["ich", "bin", "goldsnnail"],
         vec!["der", "hund", "läuft"],
         vec!["die", "katze", "schläft"],
         vec!["der", "vogel", "fliegt"],
@@ -331,7 +331,7 @@ fn bench_reasoning() -> HashMap<String, f64> {
     let trainer_idx = chat_arena.push(trainer, encoder, decoder);
 
     let queries = [
-        "hallo goldworm",
+        "hallo goldsnnail",
         "wie ist das wetter",
         "was denkst du über hunde",
         "erzähl mir etwas",
@@ -474,7 +474,7 @@ fn bench_world_model() -> HashMap<String, f64> {
     let mut world_chat = WorldChat::from_config(geom);
 
     let test_sentences = [
-        vec!["hallo".to_string(), "goldworm".to_string()],
+        vec!["hallo".to_string(), "goldsnnail".to_string()],
         vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
         vec!["die".to_string(), "katze".to_string()],
         vec!["wie".to_string(), "geht".to_string(), "es".to_string()],
@@ -535,8 +535,8 @@ fn bench_criticality() -> HashMap<String, f64> {
     observer.record_graph_avalanches(&trainer.concept_graph, 1000);
 
     let test_sentences = vec![
-        vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldworm".to_string()],
-        vec!["hello".to_string(), "I".to_string(), "am".to_string(), "goldworm".to_string()],
+        vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
+        vec!["hello".to_string(), "I".to_string(), "am".to_string(), "goldsnnail".to_string()],
         vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
         vec!["the".to_string(), "dog".to_string(), "run".to_string()],
         vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
@@ -749,7 +749,7 @@ fn generate_response(
 
     let greetings = ["hallo", "hi", "guten tag", "moin", "servus"];
     if user_input.iter().any(|w| greetings.contains(&w.as_str())) {
-        let sentence = vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldworm".to_string()];
+        let sentence = vec!["hallo".to_string(), "ich".to_string(), "bin".to_string(), "goldsnnail".to_string()];
         let filtered: Vec<String> = sentence.into_iter().filter(|w| encoder.neuron_for_word(w).is_some()).collect();
         if !filtered.is_empty() { return filtered; }
     }
@@ -762,7 +762,7 @@ fn generate_response(
     let questions = ["wie", "was", "wer", "wo", "wann", "warum"];
     if user_input.iter().any(|w| questions.contains(&w.as_str())) {
         let answers = vec![
-            vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+            vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
             vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
             vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
             vec!["der".to_string(), "stern".to_string(), "scheint".to_string()],
@@ -796,7 +796,7 @@ fn generate_response(
     }
 
     let templates = vec![
-        vec!["ich".to_string(), "bin".to_string(), "goldworm".to_string()],
+        vec!["ich".to_string(), "bin".to_string(), "goldsnnail".to_string()],
         vec!["der".to_string(), "hund".to_string(), "läuft".to_string()],
         vec!["die".to_string(), "katze".to_string(), "schläft".to_string()],
         vec!["der".to_string(), "vogel".to_string(), "fliegt".to_string()],

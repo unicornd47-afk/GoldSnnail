@@ -1,13 +1,13 @@
 //! Simple Agent Demo
 //!
-//! Runs a single timestep through the full GoldWorm AGI pipeline:
+//! Runs a single timestep through the full GoldSnnail AGI pipeline:
 //!
 //! Sensor → Attention → Working Memory → Compression → World Model → RL Agent → R-STDP
 //!
 //! Usage:
 //!   cargo run --example simple_agent
 
-use goldworm::{
+use goldsnnail::{
     GeometricBottleneck, HyperbolicPoint,
     Quaternion, QuaternionAttention, RLAgent, RSTDP,
     SpikeBuffer, StateVector, Transition, WorldModel, WorkingMemory,
@@ -15,7 +15,7 @@ use goldworm::{
 use ndarray::array;
 
 fn main() {
-    println!("=== GoldWorm Simple Agent Demo ===\n");
+    println!("=== GoldSnnail Simple Agent Demo ===\n");
 
     // 1. Sensor input (self-attention)
     let sensor = vec![Quaternion::new(1.0, 0.0, 0.0, 0.0)];

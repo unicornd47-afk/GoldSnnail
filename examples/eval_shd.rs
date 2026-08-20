@@ -8,9 +8,9 @@
 //! Umgebungsvariablen:
 //!   SHD_DATA — Pfad zu shd.json (konvertiert aus HDF5)
 
-use goldworm::audio::hyperbolic_knn::HyperbolicKnn;
-use goldworm::audio::shd_loader::ShdDataset;
-use goldworm::geometry::HyperbolicPoint;
+use goldsnnail::audio::hyperbolic_knn::HyperbolicKnn;
+use goldsnnail::audio::shd_loader::ShdDataset;
+use goldsnnail::geometry::HyperbolicPoint;
 use std::env;
 use std::path::Path;
 

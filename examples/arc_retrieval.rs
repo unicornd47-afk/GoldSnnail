@@ -6,8 +6,8 @@
 //!
 //! Answers: "Does the most similar training input help predict the test output?"
 
-use goldworm::ArcDataset;
-use goldworm::vision::grid_encoder::{GridEncoder, train_grid_encoder};
+use goldsnnail::ArcDataset;
+use goldsnnail::vision::grid_encoder::{GridEncoder, train_grid_encoder};
 
 fn euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
     a.iter()
@@ -17,7 +17,7 @@ fn euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
         .sqrt()
 }
 
-fn grids_equal(a: &goldworm::ArcGrid, b: &goldworm::ArcGrid) -> bool {
+fn grids_equal(a: &goldsnnail::ArcGrid, b: &goldsnnail::ArcGrid) -> bool {
     if a.width != b.width || a.height != b.height {
         return false;
     }
@@ -25,7 +25,7 @@ fn grids_equal(a: &goldworm::ArcGrid, b: &goldworm::ArcGrid) -> bool {
 }
 
 fn main() {
-    println!("=== GoldWorm ARC Retrieval Baseline ===\n");
+    println!("=== GoldSnnail ARC Retrieval Baseline ===\n");
 
     // 1. Load ARC tasks
     let dataset = match ArcDataset::load_from_directory("data/arc") {
@@ -55,7 +55,7 @@ fn main() {
     // 3. Build flat index of all training pairs
     let mut train_input_embeddings: Vec<Vec<f64>> = Vec::new();
     let mut train_output_embeddings: Vec<Vec<f64>> = Vec::new();
-    let mut train_output_grids: Vec<goldworm::ArcGrid> = Vec::new();
+    let mut train_output_grids: Vec<goldsnnail::ArcGrid> = Vec::new();
 
     for task in &dataset.tasks {
         for (input_grid, output_grid) in &task.train_pairs {

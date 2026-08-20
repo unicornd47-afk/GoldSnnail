@@ -8,7 +8,7 @@
 use std::f64::consts::PI;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-/// Goldener Schnitt φ — bereits in GoldWorms Golden-Angle-Spiral genutzt
+/// Goldener Schnitt φ — bereits in GoldSnnails Golden-Angle-Spiral genutzt
 const PHI: f64 = 1.618_033_988_749_895;
 
 /// 12-byte Seed: 4 Frequenz-Bänder × 3 Parameter (Amplitude, Phase, Decay)

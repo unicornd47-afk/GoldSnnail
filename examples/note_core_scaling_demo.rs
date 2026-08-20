@@ -6,14 +6,14 @@
 //!   3. Equal fractal scaling up/down
 //!   4. Forward pass metrics at each scale level
 
-use goldworm::harness::*;
+use goldsnnail::harness::*;
 use std::time::Instant;
 
 const INPUT_DIM: usize = 32;
 const OUTPUT_DIM: usize = 32;
 
 fn main() {
-    println!("=== GoldWorm 3-1-4-1 NoteCoreLayer + Equal Scaling ===\n");
+    println!("=== GoldSnnail 3-1-4-1 NoteCoreLayer + Equal Scaling ===\n");
 
     // --- Step 1: 3141 frozen core ---
     println!("--- Step 1: 3141 Frozen Core ---");

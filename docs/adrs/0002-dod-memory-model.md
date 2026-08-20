@@ -6,7 +6,7 @@
 
 ## Context
 
-GoldWorm targets 0.92 MB model size and 72 µs inference latency. Traditional object-oriented memory layouts (`Vec<Neuron>`, `Box<dyn State>`, `HashMap<usize, f32>`) introduce pointer indirection, cache line misses, and heap fragmentation that are incompatible with these constraints.
+GoldSnnail targets 0.92 MB model size and 72 µs inference latency. Traditional object-oriented memory layouts (`Vec<Neuron>`, `Box<dyn State>`, `HashMap<usize, f32>`) introduce pointer indirection, cache line misses, and heap fragmentation that are incompatible with these constraints.
 
 Neural network simulation is fundamentally a numerical linear algebra problem. The natural representation is a set of parallel flat arrays (Structure of Arrays), not a collection of heap-allocated objects (Array of Structures).
 

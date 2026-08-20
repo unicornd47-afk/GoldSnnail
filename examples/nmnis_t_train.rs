@@ -3,7 +3,7 @@
 //! Trains an 8D MLP projection layer with L2-normalization and radial
 //! cross-entropy loss for direction-only learning.
 
-use goldworm::{
+use goldsnnail::{
     NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_combined_features,
 };
@@ -13,12 +13,12 @@ use std::time::Instant;
 const BINS: usize = 16;  // Higher resolution for time-surface
 const TAU_US: f32 = 50000.0;
 
-fn features(events: &[goldworm::DvsEvent]) -> Vec<f32> {
+fn features(events: &[goldsnnail::DvsEvent]) -> Vec<f32> {
     project_dvs_to_combined_features(events, BINS, TAU_US)
 }
 
 fn main() {
-    println!("=== GoldWorm N-MNIST 8D MLP Training (3 digits) ===\n");
+    println!("=== GoldSnnail N-MNIST 8D MLP Training (3 digits) ===\n");
     println!("Encoding: spatial histogram + time-surface ({}x{} bins, tau={}us)\n", BINS, BINS, TAU_US);
 
     // Load dataset

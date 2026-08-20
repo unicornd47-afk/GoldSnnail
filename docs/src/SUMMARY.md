@@ -1,8 +1,8 @@
-# GoldWorm Documentation
+# GoldSnnail Documentation
 
 ## Phase 1 Report
 
-- **[GOLDWORM_REPORT.md](../GOLDWORM_REPORT.md)** — Complete research report with verified benchmarks, negative results, and Phase 1 findings
+- **[GOLDSNNAIL_REPORT.md](../GOLDSNNAIL_REPORT.md)** — Complete research report with verified benchmarks, negative results, and Phase 1 findings
 
 ## Architecture Philosophy
 

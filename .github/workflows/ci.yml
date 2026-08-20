@@ -16,6 +16,6 @@ jobs:
           components: rustfmt
       - uses: Swatinem/rust-cache@v2
       - name: Build library
-        run: cargo build --lib -p goldworm
+        run: cargo build --lib -p goldsnnail
       - name: Test library
-        run: cargo test --lib -p goldworm
+        run: cargo test --lib -p goldsnnail

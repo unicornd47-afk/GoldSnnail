@@ -1,4 +1,4 @@
-//! GoldWorm Vision-Semantic Long-Run Training
+//! GoldSnnail Vision-Semantic Long-Run Training
 //!
 //! Trains a SemanticLearner on word sequences while measuring how visual
 //! patches map to the evolving semantic lexicon. Exports JSON for the HTML demo.
@@ -6,7 +6,7 @@
 //! Usage:
 //!   cargo run --example train_vision_long
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, SemanticTrainer, SemanticLearner, LearningRates, EpochMetrics,
     SemanticEncoder, PoincareBall, generate_test_image,
 };
@@ -15,7 +15,7 @@ use std::io::Write;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Vision Long-Run v0.3.0 ===\n");
+    println!("=== GoldSnnail Vision Long-Run v0.3.0 ===\n");
 
     // --- Setup ---
     let mut trainer = SemanticTrainer::new(1.0);

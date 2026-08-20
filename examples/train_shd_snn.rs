@@ -7,9 +7,9 @@
 //!   SHD_DATA  data/shd/shd.json | N_IN 70 | N_HID 128 | T 25
 //!   EPOCHS 15 | LR 0.01 | N_TRAIN 500 | N_TEST 300 | SEED 42
 
-use goldworm::audio::shd_loader::ShdDataset;
-use goldworm::trainer::dataset::sample_to_tensor;
-use goldworm::trainer::model::{softmax_cross_entropy, RnnLif};
+use goldsnnail::audio::shd_loader::ShdDataset;
+use goldsnnail::trainer::dataset::sample_to_tensor;
+use goldsnnail::trainer::model::{softmax_cross_entropy, RnnLif};
 use std::path::Path;
 use std::time::Instant;
 
@@ -59,7 +59,7 @@ fn main() {
     let n_test = n_test.min(ds.test.len());
 
     // Event → [T, n_in] → [T][n_in] steps.
-    let to_steps = |sample: &goldworm::audio::shd_loader::ShdSample| -> Vec<Vec<f32>> {
+    let to_steps = |sample: &goldsnnail::audio::shd_loader::ShdSample| -> Vec<Vec<f32>> {
         let flat = sample_to_tensor(sample, ds.num_neurons, ds.duration_ms, t_steps, n_in);
         (0..t_steps)
             .map(|t| flat[t * n_in..(t + 1) * n_in].to_vec())

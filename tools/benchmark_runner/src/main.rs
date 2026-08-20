@@ -11,13 +11,13 @@ mod tracker;
 use registry::BenchmarkRegistry;
 
 #[derive(Parser)]
-#[command(name = "goldworm-bench")]
-#[command(about = "Lokaler Benchmark-Runner & Leaderboard-Tracker für GoldWorm")]
+#[command(name = "goldsnnail-bench")]
+#[command(about = "Lokaler Benchmark-Runner & Leaderboard-Tracker für GoldSnnail")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
 
-    /// Pfad zum GoldWorm-Repo-Root
+    /// Pfad zum GoldSnnail-Repo-Root
     #[arg(short, long, default_value = "../..")]
     repo: PathBuf,
 
@@ -54,7 +54,7 @@ fn main() -> Result<()> {
 
     match cli.command {
         Commands::Scan => {
-            println!("{}", "🔍 Scanne GoldWorm-Repo...".bold().cyan());
+            println!("{}", "🔍 Scanne GoldSnnail-Repo...".bold().cyan());
             let candidates = registry.discover(&cli.repo)?;
             println!("{} Kandidaten gefunden:\n", candidates.len());
             for c in &candidates {

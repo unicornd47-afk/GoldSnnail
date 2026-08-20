@@ -12,7 +12,7 @@ SHD ist ein neuromorpher Audio-Datensatz: 10.000+ Samples von gesprochenen Ziffe
 | Input-Neuronen | 700 (Cochlea-Frequenzkanäle) |
 | Klassen | 20 (0–9 EN + 0–9 DE) |
 | Dauer | ~0.4–1.4s pro Sample |
-| Format | HDF5 (Original) → JSON (GoldWorm) |
+| Format | HDF5 (Original) → JSON (GoldSnnail) |
 
 ## Datenvorbereitung
 
@@ -40,7 +40,7 @@ Das Skript:
 cargo run --example eval_shd --release
 
 # Via Benchmark-Runner
-cargo run -p goldworm-bench -- --repo . eval shd
+cargo run -p goldsnnail-bench -- --repo . eval shd
 ```
 
 ## Architektur

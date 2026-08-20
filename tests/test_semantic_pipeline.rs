@@ -1,5 +1,5 @@
-use goldworm::{HyperbolicContrastive, SemanticEncoder};
-use goldworm::semantics::curriculum::SemanticCurriculum;
+use goldsnnail::{HyperbolicContrastive, SemanticEncoder};
+use goldsnnail::semantics::curriculum::SemanticCurriculum;
 
 #[test]
 fn semantic_taxonomy_learning() {

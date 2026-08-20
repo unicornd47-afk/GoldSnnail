@@ -7,7 +7,7 @@
 //! # Mathematical Background
 //!
 //! The Poincaré ball model B^n_c (curvature c < 0) maps hyperbolic space onto the
-//! open unit ball { x ∈ ℝ^n : ‖x‖ < 1/√c }. For GoldWorm we use the unit disc
+//! open unit ball { x ∈ ℝ^n : ‖x‖ < 1/√c }. For GoldSnnail we use the unit disc
 //! (c = -1, n = 1 for per-neuron scalars) but the 2-D extension is trivial.
 //!
 //! Key invariant: all radial coordinates satisfy `|r| < SAFE_LIMIT` after every

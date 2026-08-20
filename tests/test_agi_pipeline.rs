@@ -3,7 +3,7 @@
 //! Runs a minimal pass through Attention → Working Memory → Compression → World Model → R-STDP → RL
 //! to verify that the modules compose correctly.
 
-use goldworm::{
+use goldsnnail::{
     Quaternion, QuaternionAttention, WorkingMemory, RSTDP,
     GeometricBottleneck, SpikeBuffer, WorldModel, HyperbolicPoint,
     RLAgent, StateVector,
@@ -62,7 +62,7 @@ fn agi_pipeline_smoke_test() {
     // Observe and train online
     let next_latent = HyperbolicPoint::new(array![0.11, 0.01]).unwrap();
     let next_state = StateVector::new(next_latent, &[false, true, false]);
-    let transition = goldworm::Transition {
+    let transition = goldsnnail::Transition {
         state: state.clone(),
         action,
         reward: 1.0,

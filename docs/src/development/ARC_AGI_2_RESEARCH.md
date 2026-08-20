@@ -2,9 +2,9 @@
 
 ## Why ARC-AGI-2?
 
-Phase 1 demonstrated that GoldWorm's hyperbolic SNN cannot solve ARC-AGI-1 through pure embedding-based retrieval (0% exact match, Silhouette 0.189). However, ARC-AGI-2 introduces **interactive feedback loops**—the agent may ask questions, request examples, or execute actions.
+Phase 1 demonstrated that GoldSnnail's hyperbolic SNN cannot solve ARC-AGI-1 through pure embedding-based retrieval (0% exact match, Silhouette 0.189). However, ARC-AGI-2 introduces **interactive feedback loops**—the agent may ask questions, request examples, or execute actions.
 
-This interactive paradigm aligns with GoldWorm's architectural strengths:
+This interactive paradigm aligns with GoldSnnail's architectural strengths:
 - **72 µs latency**: Real-time interaction without queueing
 - **Online continual learning**: The SNN can update from feedback without full retraining
 - **Multi-modal binding**: 83.3% semantic relevance enables cross-modal question answering
@@ -23,10 +23,10 @@ Begin active research when **any** of the following are announced:
 ## Research Questions
 
 ### R1: Can hyperbolic routing reduce question space?
-GoldWorm's task-family router (ratio 3.66) could pre-filter candidate solutions, reducing the number of questions needed to solve a task.
+GoldSnnail's task-family router (ratio 3.66) could pre-filter candidate solutions, reducing the number of questions needed to solve a task.
 
 ### R2: Does online learning from feedback exploit SNN substrate?
-Traditional LLMs require full fine-tuning or in-context learning. GoldWorm's SNN can update synaptic weights from feedback in milliseconds.
+Traditional LLMs require full fine-tuning or in-context learning. GoldSnnail's SNN can update synaptic weights from feedback in milliseconds.
 
 ### R3: Can multi-modal queries disambiguate tasks?
 The 83.3% semantic relevance suggests that natural-language + grid queries could resolve ambiguities that pure grid inputs cannot.
@@ -36,7 +36,7 @@ The 83.3% semantic relevance suggests that natural-language + grid queries could
 ### Phase 1: Specification Analysis (Trigger → 2 weeks)
 - Parse ARC-AGI-2 task format and interaction grammar
 - Identify latency constraints and question budgets
-- Map interaction types to GoldWorm capabilities
+- Map interaction types to GoldSnnail capabilities
 
 ### Phase 2: Prototype Router (2–4 weeks)
 - Implement question-generation heuristics based on task-family clustering
@@ -73,6 +73,6 @@ Then pivot to **pure efficiency leaderboard** and archive ARC-AGI-2 as a researc
 
 ## References
 
-- Phase 1 Report: `docs/GOLDWORM_REPORT.md`
+- Phase 1 Report: `docs/GOLDSNNAIL_REPORT.md`
 - Architecture: `docs/src/architecture/`
 - Identity Baseline: `examples/arc_identity_baseline.rs`

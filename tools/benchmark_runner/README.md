@@ -1,6 +1,6 @@
-# goldworm-bench
+# goldsnnail-bench
 
-`goldworm-bench` is a CLI tool for running, tracking, and packaging benchmark results for the GoldWorm spiking neural network (SNN) project. It wraps evaluation examples, records scores with hardware/software context, maintains a leaderboard tracker, and produces submission-ready artifacts.
+`goldsnnail-bench` is a CLI tool for running, tracking, and packaging benchmark results for the GoldSnnail spiking neural network (SNN) project. It wraps evaluation examples, records scores with hardware/software context, maintains a leaderboard tracker, and produces submission-ready artifacts.
 
 ## Installation
 
@@ -8,13 +8,13 @@
 cargo run --manifest-path tools/benchmark_runner/Cargo.toml -- <command>
 ```
 
-The tool resolves the GoldWorm repo root relative to the runner by default (`../..`). Output artifacts are written to `tools/benchmark_runner/benchmark_artifacts/` by default.
+The tool resolves the GoldSnnail repo root relative to the runner by default (`../..`). Output artifacts are written to `tools/benchmark_runner/benchmark_artifacts/` by default.
 
 ## Commands
 
 ### `scan`
 
-Discovers which benchmarks have matching evaluation examples in the GoldWorm repo.
+Discovers which benchmarks have matching evaluation examples in the GoldSnnail repo.
 
 ```bash
 cargo run --manifest-path tools/benchmark_runner/Cargo.toml -- scan
@@ -23,7 +23,7 @@ cargo run --manifest-path tools/benchmark_runner/Cargo.toml -- scan
 Example output:
 
 ```
-🔍 Scanne GoldWorm-Repo...
+🔍 Scanne GoldSnnail-Repo...
 5 Kandidaten gefunden:
 
   • arc-prize — ARC-AGI Efficiency Leaderboard (Prio: 1)
@@ -35,7 +35,7 @@ Example output:
 
 ### `eval <name>`
 
-Runs a single benchmark locally by invoking the corresponding GoldWorm example (`cargo run --release --example <eval_script>`), captures hardware/Rust version, computes the model SHA-256, and writes a timestamped result.
+Runs a single benchmark locally by invoking the corresponding GoldSnnail example (`cargo run --release --example <eval_script>`), captures hardware/Rust version, computes the model SHA-256, and writes a timestamped result.
 
 ```bash
 cargo run --manifest-path tools/benchmark_runner/Cargo.toml -- eval n-mnist
@@ -148,7 +148,7 @@ The registry contains five built-in benchmarks. Each entry specifies the evaluat
 | `n-mnist` | N-MNIST 10-Digit Classification | `accuracy` | Prestige | `CsvLabels` | true |
 | `shd` | Spiking Heidelberg Digits (Audio) | `accuracy` | Prestige | `CsvLabels` | true |
 | `shd-trained` | SHD with trained Hyperbolic Encoder | `accuracy` | Prestige | `CsvLabels` | true |
-| `efficiency-baseline` | GoldWorm internal metrics (Size, Latency) | `size_mb / latency_us` | None | `TextLog` | false |
+| `efficiency-baseline` | GoldSnnail internal metrics (Size, Latency) | `size_mb / latency_us` | None | `TextLog` | false |
 
 ### Registry behavior
 

@@ -1,4 +1,4 @@
-//! SHD-Daten-Generator für GoldWorm
+//! SHD-Daten-Generator für GoldSnnail
 //!
 //! Generiert synthetische SHD-ähnliche Spike-Trains und schreibt sie nach
 //! `data/shd/shd.json` im erwarteten Format:

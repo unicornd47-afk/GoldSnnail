@@ -16,7 +16,7 @@
 //! Replay buffer: 200 samples/class (empirically sufficient to reduce
 //! catastrophic forgetting from ~70% to <30% on Split N-MNIST).
 
-use goldworm::{
+use goldsnnail::{
     NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_multiscale_features, normalize_timestamps, DvsEvent, NmnistSample,
 };

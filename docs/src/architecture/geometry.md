@@ -68,7 +68,7 @@ Operations: `conjugate`, `mul` (Hamilton product), `normalize` (elastic, falls b
 
 ## Elastic Boundary Philosophy
 
-Every numerical boundary in GoldWorm is soft. Where conventional code would `panic!` or return `Err`, GoldWorm uses asymptotic clamping:
+Every numerical boundary in GoldSnnail is soft. Where conventional code would `panic!` or return `Err`, GoldSnnail uses asymptotic clamping:
 
 ```rust
 // Wrong: abort on boundary violation

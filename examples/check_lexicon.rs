@@ -1,4 +1,4 @@
-use goldworm::{SemanticTrainer, TokenSpikeEncoder, SpikeTokenDecoder, build_extended_lexicon};
+use goldsnnail::{SemanticTrainer, TokenSpikeEncoder, SpikeTokenDecoder, build_extended_lexicon};
 
 fn main() {
     let mut trainer = SemanticTrainer::new(1.0);

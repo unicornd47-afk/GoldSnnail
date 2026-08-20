@@ -3,7 +3,7 @@
 //! Measures: Parameter Count, Memory Footprint, Inference Latency, Throughput,
 //! End-to-End Latency (incl. feature extraction), and Accuracy (sanity check).
 
-use goldworm::{
+use goldsnnail::{
     NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_multiscale_features, normalize_timestamps, DvsEvent,
 };

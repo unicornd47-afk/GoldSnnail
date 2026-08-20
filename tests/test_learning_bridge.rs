@@ -2,7 +2,7 @@
 //!
 //! Proves that RewardSignal → concrete weight changes in Lexicon, ConceptGraph.
 
-use goldworm::{
+use goldsnnail::{
     Lexicon, SemanticLearner, SemanticTrainer, LearningRates,
     HyperbolicPoint, PoincareBall,
 };

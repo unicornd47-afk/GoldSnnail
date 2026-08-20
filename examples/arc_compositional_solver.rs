@@ -8,10 +8,10 @@
 //!   cargo run --example arc_compositional_solver -- --benchmark <dir> [max_depth]
 //!   cargo run --example arc_compositional_solver -- --list <dir>
 
-use goldworm::arc_apply::apply_program;
-use goldworm::arc_program::{ArcOpCode, ArcOpToken, ArcProgram};
-use goldworm::arc_search::{search_program, SearchConfig, SearchResult};
-use goldworm::vision::{ArcDataset, ArcTask};
+use goldsnnail::arc_apply::apply_program;
+use goldsnnail::arc_program::{ArcOpCode, ArcOpToken, ArcProgram};
+use goldsnnail::arc_search::{search_program, SearchConfig, SearchResult};
+use goldsnnail::vision::{ArcDataset, ArcTask};
 
 use std::path::PathBuf;
 use std::time::{Duration, Instant};

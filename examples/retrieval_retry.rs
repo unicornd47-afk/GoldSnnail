@@ -5,13 +5,13 @@
 //!
 //! Hypothese: Trainierter Encoder → bessere Task-Router-Embeddings → höhere Accuracy
 
-use goldworm::vision::{ArcDataset, GridEncoder};
-use goldworm::vision::grid_encoder::train_grid_encoder;
-use goldworm::vision::hybrid_solver::evaluate_hybrid_solver;
+use goldsnnail::vision::{ArcDataset, GridEncoder};
+use goldsnnail::vision::grid_encoder::train_grid_encoder;
+use goldsnnail::vision::hybrid_solver::evaluate_hybrid_solver;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Retrieval-Retry Test (Woche 2) ===\n");
+    println!("=== GoldSnnail Retrieval-Retry Test (Woche 2) ===\n");
 
     // Lade Trainingsdaten für den Encoder
     println!("Loading ARC training dataset for encoder training...");
@@ -87,7 +87,7 @@ fn main() {
     }
 }
 
-fn print_result(result: &goldworm::vision::hybrid_solver::EvaluationResult, label: &str) {
+fn print_result(result: &goldsnnail::vision::hybrid_solver::EvaluationResult, label: &str) {
     println!("\n--- {} ---", label);
     println!("Gesamt:        {}", result.total);
     println!(

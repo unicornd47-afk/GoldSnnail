@@ -1,8 +1,8 @@
-# GoldWorm System Architecture
+# GoldSnnail System Architecture
 
 ## Overview
 
-GoldWorm is a multi-modal AGI substrate that unifies spiking neural networks (SNN), hyperbolic geometry, compositional reasoning, and desktop interaction in a single Rust codebase. The architecture is organized in five horizontal layers, each with strict data-oriented design (DoD) and zero-allocation hot paths.
+GoldSnnail is a multi-modal AGI substrate that unifies spiking neural networks (SNN), hyperbolic geometry, compositional reasoning, and desktop interaction in a single Rust codebase. The architecture is organized in five horizontal layers, each with strict data-oriented design (DoD) and zero-allocation hot paths.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐

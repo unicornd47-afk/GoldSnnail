@@ -3,11 +3,11 @@
 //! Trivially submits each test input as its own output.
 //! This is a calibration baseline with efficiency cost tracking.
 
-use goldworm::ArcDataset;
+use goldsnnail::ArcDataset;
 use serde_json::json;
 
 fn main() {
-    println!("=== GoldWorm ARC-AGI-1 Identity Baseline ===\n");
+    println!("=== GoldSnnail ARC-AGI-1 Identity Baseline ===\n");
 
     let dataset = match ArcDataset::load_from_directory("data/arc") {
         Ok(ds) => ds,
@@ -83,7 +83,7 @@ fn main() {
     let efficiency_ratio = llm_total_cost / estimated_cost_usd;
     println!("\nComparison with LLM baseline:");
     println!("  LLM estimated cost: ${:.2} USD", llm_total_cost);
-    println!("  GoldWorm efficiency ratio: {:.0}x cheaper", efficiency_ratio);
+    println!("  GoldSnnail efficiency ratio: {:.0}x cheaper", efficiency_ratio);
 
     println!("\nExpected accuracy: ~5-10% (tasks where input == output)");
     println!("This is a baseline measurement, not a competitive entry.");

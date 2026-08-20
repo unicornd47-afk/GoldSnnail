@@ -3,7 +3,7 @@
 //! Tests bridge visual patches to the existing semantic hyperbolic space,
 //! verifying that visual tokens learn meaningful bindings to labels.
 
-use goldworm::{
+use goldsnnail::{
     PatchEncoder, ImagePatch, VisualToken, SemanticEncoder, PoincareBall,
     generate_test_image, HyperbolicPoint, Quaternion,
 };

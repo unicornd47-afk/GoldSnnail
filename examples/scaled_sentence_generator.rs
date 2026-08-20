@@ -1,4 +1,4 @@
-//! GoldWorm Scaled Sentence Generator
+//! GoldSnnail Scaled Sentence Generator
 //!
 //! Demonstrates the system generating sentences it NEVER learned during training.
 //!
@@ -12,7 +12,7 @@
 //! Usage:
 //!   cargo run --example scaled_sentence_generator --release
 
-use goldworm::{
+use goldsnnail::{
     Lexicon, LexiconToken, TokenClass, SemanticTrainer, SemanticLearner, LearningRates,
     TransitionalLearner, PoincareBall, HyperbolicPoint, Quaternion,
     SemanticRewardEngine,
@@ -267,7 +267,7 @@ static TRAIN_SENTENCES: &[&str] = &[
 ];
 
 fn main() {
-    println!("=== GoldWorm Scaled Sentence Generator ===\n");
+    println!("=== GoldSnnail Scaled Sentence Generator ===\n");
     println!("Goal: Write a sentence it NEVER learned.\n");
 
     // --- Setup ---

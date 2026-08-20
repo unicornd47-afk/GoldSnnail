@@ -64,8 +64,8 @@ impl Component {
 /// # Example
 ///
 /// ```
-/// use goldworm::arc_parser::extract_components;
-/// use goldworm::vision::ArcGrid;
+/// use goldsnnail::arc_parser::extract_components;
+/// use goldsnnail::vision::ArcGrid;
 ///
 /// let grid = ArcGrid::from_data(vec![
 ///     vec![1, 1, 0],

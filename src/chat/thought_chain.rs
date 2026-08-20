@@ -1,4 +1,4 @@
-//! Reasoning Engine — Multi-step inference chain for GoldWorm
+//! Reasoning Engine — Multi-step inference chain for GoldSnnail
 //!
 //! Orchestrates decomposition, recall, association, and synthesis
 //! into an explicit chain of Thoughts for interpretability.

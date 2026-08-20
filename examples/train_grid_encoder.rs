@@ -1,4 +1,4 @@
-//! GoldWorm GridEncoder Training
+//! GoldSnnail GridEncoder Training
 //!
 //! Self-supervised training on ARC-AGI train pairs.
 //! Minimizes euklidically approximated hyperbolic distance between
@@ -10,11 +10,11 @@
 //! Output:
 //!   Loss curve over epochs on 50 ARC train tasks.
 
-use goldworm::vision::{ArcDataset, GridEncoder};
+use goldsnnail::vision::{ArcDataset, GridEncoder};
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm GridEncoder Training ===\n");
+    println!("=== GoldSnnail GridEncoder Training ===\n");
 
     // Dataset laden
     println!("Loading ARC-AGI training dataset...");

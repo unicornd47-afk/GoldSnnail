@@ -2,20 +2,20 @@
 //!
 //! Tests the full semantic stack: Lexicon → TokenComposer → SemanticRewardEngine → ConceptGraph.
 
-use goldworm::semantics::RelationType;
-use goldworm::{
+use goldsnnail::semantics::RelationType;
+use goldsnnail::{
     Lexicon, LexiconToken, TokenClass, NoiseInjector,
     SemanticRewardEngine, RewardWeights, RewardSignal,
     TokenComposer, SemanticTrainer,
     ConceptGraph, HyperbolicContrastive,
     WorkingMemory, WorldModel, RLAgent, StateVector,
 };
-use goldworm::semantics::curriculum::SemanticCurriculum;
+use goldsnnail::semantics::curriculum::SemanticCurriculum;
 
 #[test]
 fn semantic_taxonomy_learning() {
     let graph = SemanticCurriculum::level1_taxonomy();
-    let encoder = goldworm::SemanticEncoder::new(
+    let encoder = goldsnnail::SemanticEncoder::new(
         vec!["hund".into(), "katze".into(), "tier".into()],
         2,
     );
@@ -37,7 +37,7 @@ fn semantic_taxonomy_learning() {
 
 #[test]
 fn sentence_to_memory_pipeline() {
-    let encoder = goldworm::SemanticEncoder::new(
+    let encoder = goldsnnail::SemanticEncoder::new(
         vec!["der".into(), "hund".into(), "läuft".into()],
         2,
     );

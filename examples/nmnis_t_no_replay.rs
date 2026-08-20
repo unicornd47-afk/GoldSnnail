@@ -16,7 +16,7 @@
 //!
 //! Compare with nmnis_t_continual_learning.rs to see the effect of replay.
 
-use goldworm::{
+use goldsnnail::{
     NmnistDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_multiscale_features, normalize_timestamps, DvsEvent, NmnistSample,
 };
@@ -54,7 +54,7 @@ fn measure_memory_footprint(layer: &ProjectionLayer) -> usize {
 }
 
 fn main() {
-    println!("=== GoldWorm No-Replay Continual Learning ===\n");
+    println!("=== GoldSnnail No-Replay Continual Learning ===\n");
 
     let dataset = NmnistDataset::load(500);
     if dataset.available_digits.len() < 10 {

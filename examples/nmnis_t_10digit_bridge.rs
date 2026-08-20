@@ -8,7 +8,7 @@
 //!
 //! This is the full multi-modal SNN prototype: spike trains → 10-digit recognition → German number words → grammatical responses.
 
-use goldworm::{
+use goldsnnail::{
     ConceptGraph, BridgeEdge, RelationType,
     HyperbolicPoint,
     NmnistDataset, ProjectionLayer, init_class_centers,
@@ -23,7 +23,7 @@ const BINS: usize = 16;
 const TAU_US: f32 = 50000.0;
 
 fn main() {
-    println!("=== GoldWorm 10-Digit Bridge Edges ===\n");
+    println!("=== GoldSnnail 10-Digit Bridge Edges ===\n");
 
     // 1. Build multimodal ConceptGraph
     let mut graph = build_multimodal_graph();
@@ -167,7 +167,7 @@ fn add_all_digit_bridges(graph: &mut ConceptGraph) {
 }
 
 /// Train/test split
-fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldworm::NmnistSample>, Vec<goldworm::NmnistSample>) {
+fn split_dataset(dataset: &NmnistDataset) -> (Vec<goldsnnail::NmnistSample>, Vec<goldsnnail::NmnistSample>) {
     if dataset.test.is_empty() {
         let mut train = dataset.train.clone();
         let mut rng = rand::thread_rng();

@@ -3,7 +3,7 @@
 //! Misst den Rekonstruktionsfehler (L2-Norm) für zufällige Aktivierungsmuster.
 //! Ziel: <5% relativer Fehler bei 4.8:1 Kompression.
 
-use goldworm::memory_seed::{ActivationPattern, MemorySeed};
+use goldsnnail::memory_seed::{ActivationPattern, MemorySeed};
 
 fn main() {
     // 1. Generiere ein realistisches Aktivierungsmuster

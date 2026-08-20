@@ -1,11 +1,11 @@
-//! GoldWorm Semantic Training Run
+//! GoldSnnail Semantic Training Run
 //!
 //! Long-term experiment with a generated corpus + generalization test.
 //!
 //! Usage:
 //!   cargo run --example train_corpus
 
-use goldworm::{
+use goldsnnail::{
     PoincareBall, SemanticLearner, SemanticTrainer, LearningRates, EpochMetrics,
 };
 use std::fs;
@@ -13,7 +13,7 @@ use std::io::Write;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Semantic Training Run ===\n");
+    println!("=== GoldSnnail Semantic Training Run ===\n");
 
     let mut trainer = SemanticTrainer::new(1.0);
     let mut learner = SemanticLearner::new(1.0, LearningRates::default());

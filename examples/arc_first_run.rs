@@ -3,11 +3,11 @@
 //! Loads ARC tasks, encodes grids to hyperbolic embeddings,
 //! and prints distance stats for the first 3 tasks.
 
-use goldworm::ArcDataset;
-use goldworm::vision::grid_encoder::{GridEncoder, train_grid_encoder};
+use goldsnnail::ArcDataset;
+use goldsnnail::vision::grid_encoder::{GridEncoder, train_grid_encoder};
 
 fn main() {
-    println!("=== GoldWorm GridEncoder Smoke Test ===\n");
+    println!("=== GoldSnnail GridEncoder Smoke Test ===\n");
 
     // 1. Load ARC tasks
     let dataset = match ArcDataset::load_from_directory("data/arc") {

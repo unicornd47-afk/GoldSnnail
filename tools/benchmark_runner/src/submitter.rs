@@ -17,7 +17,7 @@ pub fn package(bench: &BenchmarkDef, repo: &Path, out_dir: &Path) -> Result<Path
         "# Submission Package: {}\n\
          \n\
          - Benchmark: {}\n\
-         - Model: GoldWorm v0.2-phase2\n\
+         - Model: GoldSnnail v0.2-phase2\n\
          - Size: 0.92 MB\n\
          - Latency: 72 µs\n\
          - Format: {:?}\n\
@@ -75,7 +75,7 @@ pub fn package(bench: &BenchmarkDef, repo: &Path, out_dir: &Path) -> Result<Path
     }
 
     // 3. Modell-Datei verlinken/kopieren (nur Metadaten, nicht das volle Modell)
-    let model_meta = repo.join("models").join("goldworm_v0.2.bin.metadata.json");
+    let model_meta = repo.join("models").join("goldsnnail_v0.2.bin.metadata.json");
     if model_meta.exists() {
         fs::copy(&model_meta, pkg_dir.join("model_metadata.json"))?;
     }

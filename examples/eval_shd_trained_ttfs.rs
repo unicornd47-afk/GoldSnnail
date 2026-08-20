@@ -1,6 +1,6 @@
-use goldworm::audio::shd_encoder::ShdEncoder;
-use goldworm::audio::shd_loader::ShdDataset;
-use goldworm::geometry::HyperbolicPoint;
+use goldsnnail::audio::shd_encoder::ShdEncoder;
+use goldsnnail::audio::shd_loader::ShdDataset;
+use goldsnnail::geometry::HyperbolicPoint;
 use std::collections::HashMap;
 use std::path::Path;
 

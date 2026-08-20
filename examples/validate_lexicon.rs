@@ -1,4 +1,4 @@
-//! GoldWorm Lexicon Validation Suite
+//! GoldSnnail Lexicon Validation Suite
 //!
 //! Three-stage validation of the 355-token extended lexicon:
 //! 1. Topological: Poincaré distance analysis (DE/EN equivalence, cluster cohesion)
@@ -8,7 +8,7 @@
 //! Usage:
 //!   cargo run --example validate_lexicon --release
 
-use goldworm::{
+use goldsnnail::{
     SemanticTrainer, TokenSpikeEncoder, SpikeTokenDecoder, SpikeBuffer, NeuronIdx,
     build_extended_lexicon, PoincareBall, HyperbolicPoint,
     TokenClass, PowerLawObserver,
@@ -18,7 +18,7 @@ use std::fs;
 use std::time::Instant;
 
 fn main() {
-    println!("=== GoldWorm Lexicon Validation Suite ===\n");
+    println!("=== GoldSnnail Lexicon Validation Suite ===\n");
     
     // --- Setup ---
     let mut trainer = SemanticTrainer::new(1.0);
@@ -104,8 +104,8 @@ fn validate_topology(trainer: &SemanticTrainer, ball: &PoincareBall, report: &mu
     let mut between_cluster = Vec::new();
     
     // Sample 20 tokens from different clusters
-    let cluster_samples: HashMap<usize, Vec<&goldworm::LexiconToken>> = HashMap::new();
-    let mut clusters: HashMap<usize, Vec<&goldworm::LexiconToken>> = HashMap::new();
+    let cluster_samples: HashMap<usize, Vec<&goldsnnail::LexiconToken>> = HashMap::new();
+    let mut clusters: HashMap<usize, Vec<&goldsnnail::LexiconToken>> = HashMap::new();
     
     for token in &trainer.lexicon.tokens {
         clusters.entry(token.class as usize).or_default().push(token);

@@ -2,7 +2,7 @@
 
 > *"The universe does not panic. Neither shall we."*
 
-This document defines the foundational philosophy of the GoldWorm project. It is not a suggestion. It is the operating system of our engineering culture.
+This document defines the foundational philosophy of the GoldSnnail project. It is not a suggestion. It is the operating system of our engineering culture.
 
 ---
 
@@ -69,7 +69,7 @@ Validation is not gatekeeping. Telemetry is not security.
 
 Traditional architectures place guards at layer boundaries: input validation, range checks, type assertions. These guards *interrupt* the data flow. They create discontinuities in time. They prevent the system from passing through critical states.
 
-GoldWorm replaces guards with observers. The telemetry layer records distributions, avalanche sizes, power-law exponents, and Lyapunov estimates in the background. It does not block. It does not return `Result`. It simply *knows*.
+GoldSnnail replaces guards with observers. The telemetry layer records distributions, avalanche sizes, power-law exponents, and Lyapunov estimates in the background. It does not block. It does not return `Result`. It simply *knows*.
 
 ```rust
 // Wrong: active gatekeeping
@@ -121,7 +121,7 @@ We are not building a neural network that runs safely. We are building a system 
 
 Safety is not the absence of error. Safety is the capacity to continue operating in the presence of error. We build elastic boundaries. We build flat memory. We build passive eyes. We build chaos into the substrate.
 
-**GoldWorm does not panic. GoldWorm evolves.**
+**GoldSnnail does not panic. GoldSnnail evolves.**
 
 ---
 
@@ -153,4 +153,4 @@ Safety is not the absence of error. Safety is the capacity to measure error with
 
 And we verify everything.
 
-**GoldWorm does not panic. GoldWorm does not lie. GoldWorm evolves.**
+**GoldSnnail does not panic. GoldSnnail does not lie. GoldSnnail evolves.**

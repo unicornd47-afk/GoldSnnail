@@ -6,7 +6,7 @@
 //! This demonstrates that the multi-scale encoder generalizes beyond static digits
 //! to dynamic temporal gestures (waving, swiping, circular motions).
 
-use goldworm::{
+use goldsnnail::{
     DvsGestureDataset, ProjectionLayer, init_class_centers,
     project_dvs_to_multiscale_features, normalize_timestamps, GESTURE_LABELS,
 };
@@ -16,7 +16,7 @@ use std::time::Instant;
 const BINS: usize = 16;
 const MULTISCALE_TAUS: [f32; 3] = [10_000.0, 50_000.0, 100_000.0];
 
-fn features(events: &[goldworm::DvsEvent]) -> Vec<f32> {
+fn features(events: &[goldsnnail::DvsEvent]) -> Vec<f32> {
     let normalized = normalize_timestamps(events);
     project_dvs_to_multiscale_features(&normalized, BINS, &MULTISCALE_TAUS)
 }
@@ -29,7 +29,7 @@ fn cosine_similarity(a: &[f64], b: &[f64]) -> f64 {
 }
 
 fn main() {
-    println!("=== GoldWorm DVS-Gesture Training ===\n");
+    println!("=== GoldSnnail DVS-Gesture Training ===\n");
     println!("Encoding: normalized timestamps + multi-scale time-surface");
     println!("  Bins: {}x{}", BINS, BINS);
     println!("  Taus: {:?} us (10ms, 50ms, 100ms)", MULTISCALE_TAUS);

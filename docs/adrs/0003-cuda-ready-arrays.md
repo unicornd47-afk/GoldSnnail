@@ -6,7 +6,7 @@
 
 ## Context
 
-GoldWorm targets GPU acceleration via CUDA and Vulkan backends. GPU kernels require device memory to be allocated and copied from host memory. The standard Rust memory model (heap-allocated structs with pointers, trait objects, and nested vectors) is incompatible with zero-copy GPU transfer.
+GoldSnnail targets GPU acceleration via CUDA and Vulkan backends. GPU kernels require device memory to be allocated and copied from host memory. The standard Rust memory model (heap-allocated structs with pointers, trait objects, and nested vectors) is incompatible with zero-copy GPU transfer.
 
 Specifically:
 - `Vec<Neuron>` where `Neuron` contains `Box<dyn State>` cannot be copied to GPU without pointer patching.

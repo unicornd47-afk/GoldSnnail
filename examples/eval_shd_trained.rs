@@ -1,5 +1,5 @@
-use goldworm::audio::shd_encoder::ShdEncoder;
-use goldworm::audio::shd_loader::ShdDataset;
+use goldsnnail::audio::shd_encoder::ShdEncoder;
+use goldsnnail::audio::shd_loader::ShdDataset;
 use std::collections::HashMap;
 use std::path::Path;
 
