@@ -69,8 +69,9 @@ fn init_weights(n: usize, m: usize, scale: f32, seed: u64) -> Vec<f32> {
         s = s
             .wrapping_mul(6364_1362_2384_6793_005)
             .wrapping_add(1_442_695_040_888_963_407);
-        let u = ((s >> 33) as u32) as f32 / (u32::MAX as f32);
-        *v = (u - 0.5) * 2.0 * scale;
+        // Top 32 bits / u32::MAX → uniform in [0, 1) → weights in [-scale, scale).
+        let u = ((s >> 32) as u32) as f64 / (u32::MAX as f64);
+        *v = ((u - 0.5) * 2.0) as f32 * scale;
     }
     out
 }
@@ -263,6 +264,13 @@ mod tests {
     fn smooth_loss(m: &RnnLif, x: &[Vec<f32>], label: usize) -> f32 {
         let f = m.forward(x, true);
         softmax_cross_entropy(&f.logits, label).0
+    }
+
+    #[test]
+    fn init_weights_has_both_signs() {
+        let w = init_weights(32, 64, 1.0, 42);
+        assert!(w.iter().any(|&x| x > 0.0), "no positive weights (init bug)");
+        assert!(w.iter().any(|&x| x < 0.0), "no negative weights (init bug)");
     }
 
     #[test]
