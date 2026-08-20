@@ -1,0 +1,72 @@
+#version 450
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+// DOD-Layout: Exakt das #[repr(C)] Struct aus Rust
+struct NeuronState {
+    float membrane_w;
+    float membrane_x;
+    float membrane_y;
+    float membrane_z;
+    float recovery;
+    float threshold;
+    uint refractory;
+};
+
+layout(std430, binding = 0) buffer StateBuffer {
+    NeuronState neurons[];
+};
+
+layout(std430, binding = 1) buffer InputBuffer {
+    vec4 inputs[]; // Quaternion-Input pro Neuron
+};
+
+layout(std430, binding = 2) buffer OutputBuffer {
+    uint spike_mask[]; // 1 = gefeuert, 0 = nicht
+};
+
+layout(push_constant) uniform Params {
+    float beta;
+    float dt;
+    float current_time;
+    uint neuron_count;
+};
+
+void main() {
+    uint idx = gl_GlobalInvocationID.x;
+    if (idx >= neuron_count) return;
+
+    NeuronState n = neurons[idx];
+
+    // Refractory-Check
+    if (n.refractory > 0) {
+        n.refractory--;
+        neurons[idx] = n;
+        spike_mask[idx] = 0;
+        return;
+    }
+
+    // Quaternion leaky integration
+    vec4 mem = vec4(n.membrane_w, n.membrane_x, n.membrane_y, n.membrane_z);
+    vec4 inp = inputs[idx];
+    mem = mem * beta + inp;
+
+    float norm = length(mem);
+
+    if (norm >= n.threshold) {
+        // Spike! Phase = normalisiertes Quaternion
+        mem = normalize(mem);
+        n.membrane_w = 0.0;
+        n.membrane_x = 0.0;
+        n.membrane_y = 0.0;
+        n.membrane_z = 0.0;
+        spike_mask[idx] = 1;
+    } else {
+        n.membrane_w = mem.x; // w
+        n.membrane_x = mem.y; // x
+        n.membrane_y = mem.z; // y
+        n.membrane_z = mem.w; // z — GLSL vec4 ist (x,y,z,w), Rust Quaternion ist (w,x,y,z)
+        spike_mask[idx] = 0;
+    }
+
+    neurons[idx] = n;
+}

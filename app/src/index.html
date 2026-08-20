@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoldWorm SNN-AGI × ARC-DSL</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>GoldWorm SNN-AGI × ARC-DSL</h1>
+    <p class="subtitle">Hybrid Architecture: Hyperbolic Router + DSL Operations</p>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" onclick="window.switchTab('arc')">ARC-AGI Solver</div>
+      <div class="tab" onclick="window.switchTab('arc-debug')">ARC Debugger</div>
+      <div class="tab" onclick="window.switchTab('snn')">SNN Simulator</div>
+      <div class="tab" onclick="window.switchTab('monster')">Monster Group 3D</div> <div class="tab" onclick="window.switchTab('datatype')">Universal DataType</div>
+    </div>
+
+    <!-- ARC-AGI Panel -->
+    <div class="tab-panel active" id="panel-arc">
+      <div class="monster-info" style="max-width: 800px; margin: 0 auto 30px auto; text-align: center;">
+        <b>Task: ExtractLargestComponent</b><br>
+        Isoliere die größte zusammenhängende Struktur aus dem Denoising-Feld. Die Ausführung von DSL-Operationen triggert direkt Avalanche-Bursts in der <i>SNN-Engine</i>.
+      </div>
+      
+      <div class="arc-grid-wrapper">
+        <div>
+          <div class="arc-title">Input Matrix (10x10)</div>
+          <div class="arc-board" id="arc-input"></div>
+        </div>
+        <div class="arrow-large">➔</div>
+        <div>
+          <div class="arc-title">Output Matrix</div>
+          <div class="arc-board" id="arc-output"></div>
+        </div>
+      </div>
+
+      <div class="dsl-controls">
+        <button class="dsl-btn" onclick="window.executeDsl('Identity')">Identity()</button>
+        <button class="dsl-btn" onclick="window.executeDsl('Scale2x')">Scale2x()</button>
+        <button class="dsl-btn" onclick="window.executeDsl('ExtractLargestComponent')" style="border-color: #a67cff; color: #a67cff;">ExtractLargestComponent()</button>
+        <button class="dsl-btn" onclick="window.executeDsl('RemoveIsolatedPixels')">RemoveIsolatedPixels()</button>
+      </div>
+    </div>
+
+    <!-- ARC Debugger Panel -->
+    <div class="tab-panel" id="panel-arc-debug">
+      <div class="arc-debug-container">
+        <div class="arc-debug-sidebar">
+          <div class="arc-debug-title">ARC Debugger</div>
+          <div class="arc-debug-section">
+            <div class="arc-debug-label">Task</div>
+            <select id="arc-debug-task" class="arc-debug-select" onchange="arcDebugLoadTask(this.value)"></select>
+          </div>
+          <div class="arc-debug-section">
+            <div class="arc-debug-label">Pair</div>
+            <select id="arc-debug-pair" class="arc-debug-select" onchange="arcDebugLoadPair()">
+              <option value="train-0">Train 0</option>
+              <option value="test-0">Test 0</option>
+            </select>
+          </div>
+          <div class="arc-debug-section">
+            <div class="arc-debug-label">Operation</div>
+            <select id="arc-debug-op" class="arc-debug-select" onchange="arcDebugUpdateParams()">
+              <option value="0">Identity</option>
+              <option value="1">Rotate 90°</option>
+              <option value="2">Rotate 180°</option>
+              <option value="3">Rotate 270°</option>
+              <option value="4">Flip Horizontal</option>
+              <option value="5">Flip Vertical</option>
+              <option value="6">Move</option>
+              <option value="7">Fill</option>
+              <option value="8">Copy</option>
+              <option value="9">Gravity Down</option>
+              <option value="10">Gravity Up</option>
+              <option value="11">Gravity Left</option>
+              <option value="12">Gravity Right</option>
+              <option value="13">Mirror</option>
+            </select>
+            <div id="arc-debug-params" class="arc-debug-params"></div>
+          </div>
+          <div class="arc-debug-section arc-debug-btns">
+            <button class="arc-debug-btn" onclick="arcDebugAddToken()">+ Add Token</button>
+            <button class="arc-debug-btn arc-debug-btn-secondary" onclick="arcDebugStep()">Step ▶</button>
+            <button class="arc-debug-btn arc-debug-btn-secondary" onclick="arcDebugReset()">Reset</button>
+            <button class="arc-debug-btn arc-debug-btn-secondary" onclick="arcDebugPlay()">▶ Play All</button>
+            <button class="arc-debug-btn arc-debug-btn-danger" onclick="arcDebugClear()">Clear</button>
+          </div>
+          <div class="arc-debug-section">
+            <div class="arc-debug-label">Program</div>
+            <div id="arc-debug-program" class="arc-debug-program"></div>
+          </div>
+          <div class="arc-debug-section arc-debug-benchmark">
+            <div class="arc-debug-label">Benchmark v2</div>
+            <div class="param-row">
+              <span class="param-label">path</span>
+              <input type="text" class="param-input" id="bench-path" value="data/arc-agi-2/data/training">
+            </div>
+            <div class="param-row">
+              <span class="param-label">depth</span>
+              <input type="number" class="param-input" id="bench-depth" value="3" min="1" max="5">
+            </div>
+            <button class="arc-debug-btn" onclick="arcDebugRunBenchmark()" style="margin-top:8px;">▶ Run Benchmark</button>
+            <div id="bench-result" class="bench-result" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="arc-debug-main">
+          <div class="arc-debug-grids">
+            <div class="arc-debug-grid-col">
+              <div class="arc-title">Input</div>
+              <div class="arc-board" id="arc-debug-input"></div>
+            </div>
+            <div class="arrow-large">➔</div>
+            <div class="arc-debug-grid-col">
+              <div class="arc-title">Current Output</div>
+              <div class="arc-board" id="arc-debug-output"></div>
+            </div>
+            <div class="arrow-large">➔</div>
+            <div class="arc-debug-grid-col">
+              <div class="arc-title">Expected</div>
+              <div class="arc-board" id="arc-debug-expected"></div>
+            </div>
+          </div>
+          <div class="arc-debug-accuracy">
+            <div class="accuracy-gauge">
+              <div class="accuracy-label">Accuracy</div>
+              <div class="accuracy-bar"><div id="accuracy-fill" class="accuracy-fill"></div></div>
+              <div class="accuracy-value" id="accuracy-value">0%</div>
+            </div>
+            <div class="arc-debug-log" id="arc-debug-log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNN Panel -->
+    <div class="tab-panel" id="panel-snn">
+      <div class="pipeline" id="pipeline"></div>
+
+      <div class="main-grid">
+        <div class="canvas-wrap">
+          <canvas id="snnCanvas"></canvas>
+          <div class="canvas-hint">click to spike · drag to pan · scroll to zoom</div>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+        <div class="controls">
+          <div class="ctrl-group">
+            <div class="ctrl-label"><span>Threshold</span><span class="ctrl-val" id="v-thresh">0.85</span></div>
+            <input type="range" id="thresh" min="0.3" max="1.5" step="0.05" value="0.85">
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label"><span>Leak decay</span><span class="ctrl-val" id="v-leak">0.92</span></div>
+            <input type="range" id="leak" min="0.80" max="0.99" step="0.01" value="0.92">
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label"><span>Noise</span><span class="ctrl-val" id="v-noise">0.04</span></div>
+            <input type="range" id="noise" min="0" max="0.15" step="0.01" value="0.04">
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label"><span>Density</span><span class="ctrl-val" id="v-density">0.06</span></div>
+            <input type="range" id="density" min="0.01" max="0.15" step="0.01" value="0.06">
+          </div>
+          <div class="btn-row">
+            <button id="btn-play" onclick="window.toggleSim()">▶ Start</button>
+            <button class="secondary" onclick="window.resetSim()">↻ Reset</button>
+          </div>
+          <button class="secondary" onclick="window.injectBurst()">⚡ Inject burst (Simulate ARC Pixel)</button>
+          <button class="secondary" onclick="window.pruneSynapses()">✂ Prune weak synapses</button>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-value" id="m-spikes" style="color:#00d4ff">0</div>
+          <div class="metric-label">Spikes / tick</div>
+          <svg class="sparkline" id="spark-spikes" viewBox="0 0 100 32" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="m-rate" style="color:#ff4d6d">0.0</div>
+          <div class="metric-label">Firing rate %</div>
+          <svg class="sparkline" id="spark-rate" viewBox="0 0 100 32" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="m-synapses" style="color:#2ecc71">0</div>
+          <div class="metric-label">Active synapses</div>
+          <svg class="sparkline" id="spark-syn" viewBox="0 0 100 32" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="m-plasticity" style="color:#a67cff">0.00</div>
+          <div class="metric-label">Mean weight</div>
+          <svg class="sparkline" id="spark-plastic" viewBox="0 0 100 32" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+
+      <div class="log" id="log"></div>
+    </div>
+
+    <!-- Universal DataType Panel -->
+<div class="tab-panel" id="panel-datatype">
+  <div class="datatype-container">
+    <div class="dt-sidebar">
+      <div class="dt-title">SHD-CCP Universal Interface</div>
+      <div class="dt-desc">Encode / decode any GoldWorm datatype to the extended SHD-CCP wire format.</div>
+      <div class="dt-section">
+        <div class="dt-section-title">Encode</div>
+        <select id="dt-encode-type" class="dt-select">
+          <option value="spike">SpikeStream</option>
+          <option value="arena">StateArena</option>
+          <option value="weight">WeightMatrix</option>
+          <option value="arc">ArcGrid</option>
+          <option value="hyperbolic">HyperbolicPoint</option>
+          <option value="quaternion">Quaternion</option>
+          <option value="dvs">DvsEventBatch</option>
+          <option value="lexicon">LexiconToken</option>
+        </select>
+        <div id="dt-encode-form" class="dt-form"></div>
+        <button class="dt-btn" onclick="window.dtEncode()">Encode to SHD-CCP</button>
+      </div>
+      <div class="dt-section">
+        <div class="dt-section-title">Decode</div>
+        <textarea id="dt-decode-input" class="dt-textarea" placeholder="Paste hex or base64 SHD-CCP payload here..."></textarea>
+        <button class="dt-btn" onclick="window.dtDecode()">Decode from SHD-CCP</button>
+      </div>
+      <div class="dt-section">
+        <div class="dt-section-title">Supported Types</div>
+        <div id="dt-type-list" class="dt-type-list"></div>
+      </div>
+    </div>
+    <div class="dt-main">
+      <div class="dt-result-header">
+        <span id="dt-result-type" class="dt-badge">--</span>
+        <span id="dt-result-size" class="dt-meta">0 bytes</span>
+      </div>
+      <div class="dt-tabs">
+        <div class="dt-tab active" onclick="window.dtSwitchTab('hex')">Hex</div>
+        <div class="dt-tab" onclick="window.dtSwitchTab('base64')">Base64</div>
+        <div class="dt-tab" onclick="window.dtSwitchTab('json')">JSON</div>
+        <div class="dt-tab" onclick="window.dtSwitchTab('raw')">Raw Bytes</div>
+      </div>
+      <div class="dt-panel active" id="dt-panel-hex">
+        <pre id="dt-hex-output" class="dt-pre"></pre>
+      </div>
+      <div class="dt-panel" id="dt-panel-base64">
+        <pre id="dt-base64-output" class="dt-pre"></pre>
+      </div>
+      <div class="dt-panel" id="dt-panel-json">
+        <pre id="dt-json-output" class="dt-pre"></pre>
+      </div>
+      <div class="dt-panel" id="dt-panel-raw">
+        <pre id="dt-raw-output" class="dt-pre"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Monster Panel -->
+    <div class="tab-panel" id="panel-monster">
+      <div class="monster-grid">
+        <div class="monster-canvas-wrap">
+          <div id="monster-container"></div>
+          <div class="canvas-hint">Left-click: Rotate · Right-click: Pan · Scroll: Zoom</div>
+        </div>
+        <div class="monster-controls">
+          <div class="monster-info">
+            <b>Monster Group M</b><br>
+            Largest sporadic simple group<br>
+            Order: ~8×10<sup>53</sup><br>
+            <span class="highlight">Dim: 196,883</span><br>
+            Points: 196
+          </div>
+          <div class="btn-row">
+            <button onclick="window.monsterResetView()">Reset View</button>
+            <button class="secondary" onclick="window.monsterToggleRotate()">Toggle Rotation</button>
+          </div>
+          <button class="secondary" onclick="window.monsterToggleConnections()">Toggle Connections</button>
+          <div class="ctrl-group">
+            <div class="ctrl-label"><span>Connection threshold</span><span class="ctrl-val" id="v-conn">0.50</span></div>
+            <input type="range" id="conn-thresh" min="0.2" max="1.0" step="0.05" value="0.50" oninput="document.getElementById('v-conn').textContent=this.value; window.monsterRebuildConnections && window.monsterRebuildConnections()">
+          </div>
+          <div class="monster-info">
+            <b>Projection</b><br>
+            196 points sampled from the 196,883-dimensional irreducible representation. Z is tightly bounded (~±1.2) while X/Y extend to ~±2.0, suggesting a curve-like orbit structure.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./three.module.js",
+      "three/addons/": "./three/addons/"
+    }
+  }
+  </script>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+
+

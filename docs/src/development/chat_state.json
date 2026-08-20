@@ -1,0 +1,8 @@
+[
+  {"role": "user", "text": "hallo", "tokens": [], "timestamp": 1786347970},
+  {"role": "assistant", "text": "der vogel fliegt", "tokens": ["der", "vogel", "fliegt"], "timestamp": 1786347970},
+  {"role": "user", "text": "wie gehts", "tokens": [], "timestamp": 1786347970},
+  {"role": "assistant", "text": "die katze schläft", "tokens": ["die", "katze", "schläft"], "timestamp": 1786347970},
+  {"role": "user", "text": "danke", "tokens": [], "timestamp": 1786347970},
+  {"role": "assistant", "text": "bitte gern geschehen", "tokens": ["bitte", "gern", "geschehen"], "timestamp": 1786347970}
+]

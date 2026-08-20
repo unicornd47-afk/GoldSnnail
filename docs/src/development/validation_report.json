@@ -1,0 +1,33 @@
+{
+  "lexicon_size": 355,
+  "topological_score": 1.0000,
+  "thermodynamic_score": 0.3000,
+  "dod_score": 1.0000,
+  "overall_score": 0.7667,
+  "topological": {
+    "avg_between_cluster": 0.3650,
+    "min_norm": 0,
+    "avg_de_en_distance": 0.0545,
+    "separation_ratio": 1.5882,
+    "max_norm": 0.5750,
+    "de_en_pairs_tested": 34,
+    "max_de_en_distance": 0.0932,
+    "all_inside_ball": 1,
+    "avg_within_cluster": 0.2298
+  },
+  "thermodynamic": {
+    "is_critical": 0,
+    "tau": -1.1804,
+    "r_squared": 0.0003
+  },
+  "dod": {
+    "token_count": 355,
+    "outside_ball": 0,
+    "no_dyn_trait_in_lexicon": 1,
+    "word_index_size": 341,
+    "lexicon_is_vec": 1,
+    "invalid_points": 0,
+    "class_count": 10,
+    "max_norm": 0.5750
+  }
+}

@@ -1,0 +1,57 @@
+#version 450
+#extension GL_KHR_shader_subgroup_arithmetic : enable  // RDNA3 Optimierung
+
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+// Poincaré-Ball Punkt
+layout(std430, binding = 0) readonly buffer InputA {
+    vec4 points_a[]; // xyz = coords, w = padding
+};
+
+layout(std430, binding = 1) readonly buffer InputB {
+    vec4 points_b[];
+};
+
+layout(std430, binding = 2) writeonly buffer OutputDist {
+    float distances[];
+};
+
+layout(push_constant) uniform Params {
+    uint count;
+    float curvature;
+};
+
+// Echte hyperbolische Distanz im Poincaré-Ball
+// d(x,y) = acosh(1 + 2 * ||x-y||² / ((1-||x||²)(1-||y||²)))
+float hyperbolic_distance(vec4 a, vec4 b) {
+    float norm_a_sq = dot(a.xyz, a.xyz);
+    float norm_b_sq = dot(b.xyz, b.xyz);
+    
+    vec3 diff = a.xyz - b.xyz;
+    float diff_norm_sq = dot(diff, diff);
+    
+    float denom = (1.0 - norm_a_sq) * (1.0 - norm_b_sq);
+    if (denom < 1e-12) return 0.0; // Numerischer Schutz
+    
+    float arg = 1.0 + 2.0 * diff_norm_sq / denom;
+    arg = max(arg, 1.0); // acosh(1) = 0, acosh(<1) = NaN
+    
+    return acosh(arg) / sqrt(curvature);
+}
+
+void main() {
+    uint idx = gl_GlobalInvocationID.x;
+    if (idx >= count) return;
+    
+    vec4 a = points_a[idx];
+    vec4 b = points_b[idx];
+    
+    float d = hyperbolic_distance(a, b);
+    
+    // RDNA3: subgroup_reduce für parallele Aggregation (optional)
+    #ifdef GL_KHR_shader_subgroup_arithmetic
+        // float min_d = subgroupMin(d); // Falls globale Min-Suche nötig
+    #endif
+    
+    distances[idx] = d;
+}

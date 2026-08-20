@@ -1,0 +1,58 @@
+{
+  "timestamp": "1786489278",
+  "suites": {
+    "snn_encoding": {
+      "avg_spikes_per_word": 3.3463,
+      "roundtrip_accuracy": 1,
+      "avg_encode_time_us": 0.6600
+},
+    "response_quality": {
+      "grammatical_rate": 0.3333,
+      "novelty_rate": 0.6667,
+      "avg_length": 2.4667,
+      "vocab_coverage": 1
+},
+    "learning_speed": {
+      "final_transitions": 7,
+      "lexicon_growth": 0,
+      "final_concepts": 400,
+      "transition_growth": 7,
+      "final_lexicon": 355,
+      "concept_growth": 0
+},
+    "reasoning": {
+      "synthesis_rate": 1,
+      "avg_confidence": 0.7627,
+      "avg_spikes_per_chain": 30,
+      "avg_chain_length": 4
+},
+    "online_learning": {
+      "words_learned": 15,
+      "lexicon_expansion": 15,
+      "words_presented": 15,
+      "learn_rate": 1
+},
+    "world_model": {
+      "stability_rate": 1,
+      "token_match_rate": 1
+},
+    "criticality": {
+      "is_critical": 1,
+      "tau": -1.9155,
+      "r_squared": 0.9331
+},
+    "avalanche_guided": {
+      "avg_length": 3.2900,
+      "grammatical_rate": 0.0500,
+      "vocab_coverage": 1,
+      "avg_avalanche_size": 0
+},
+    "template_vs_avalanche": {
+      "avalanche_grammatical_rate": 0.1000,
+      "template_avg_length": 2.3000,
+      "template_grammatical_rate": 0.2000,
+      "avalanche_avg_length": 3.1000,
+      "improvement": -0.1000
+}
+  }
+}

@@ -1,0 +1,52 @@
+# ── Build artifacts (any depth) ─────────────────
+target/
+target_ci/
+
+# ── Datasets (large, third-party licensed) ──────
+data/
+
+# ── Model / weight artifacts ────────────────────
+models/
+*.bin
+*.pt
+*.pth
+*.onnx
+*.h5
+*.gz
+
+# ── Benchmarks & results (any depth) ────────────
+benchmark_artifacts/
+benches/
+loss_curve.csv
+cifar_baby_state.json
+submission.json
+docs/src/development/harness_training_metrics.json
+
+# ── Duplicates / temp extracts ──────────────────
+temp_zip_check/
+
+# ── Personal / local tooling (any depth) ────────
+.kilo/
+.snapshots/
+.obsidian/
+PLAN.md
+Untitled.md
+*.base
+*.canvas
+*.log
+
+# ── Archives / uploads ──────────────────────────
+*.zip
+*.tar
+*.tar.gz
+
+# ── Misc local junk ─────────────────────────────
+r1html.html
+shaders/IDEA.md
+
+# ── Editor / OS ─────────────────────────────────
+*.swp
+*.swo
+.DS_Store
+*.tmp
+Thumbs.db
