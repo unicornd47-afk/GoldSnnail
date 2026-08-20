@@ -190,6 +190,10 @@ goldworm/
 
 ---
 
+## Companion: GoldCrawler
+
+[GoldCrawler](https://github.com/unicornd47-afk/GoldCrawler) is a recommended companion Obsidian plugin that crawls websites and code repositories to map architecture — handy for reverse-engineering and documenting the systems GoldWorm models. It is maintained as a separate, independent project.
+
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
