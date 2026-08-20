@@ -484,6 +484,7 @@ mod tests {
     }
     
     #[test]
+    #[ignore = "requires uncommitted N-MNIST data cache (data/ not in repo)"]
     fn large_dataset_loads() {
         let dataset = NmnistDataset::load(100);
         assert!(!dataset.train.is_empty(), "train set should not be empty");
