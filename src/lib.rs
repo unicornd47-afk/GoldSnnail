@@ -28,6 +28,7 @@ pub mod arc_apply;
 pub mod arc_parser;
 pub mod arc_search;
 pub mod harness;
+pub mod trainer;
 
 pub use telemetry::{PowerLawObserver, simulate_avalanche};
 pub use vision::{PatchEncoder, VisualToken, ImagePatch, generate_test_image, Cifar10Loader, CifarImage, CIFAR10_CLASSES, map_cifar_label_to_lexicon, generate_synthetic_cifar10_batch, EncoderTrainer, SeparationMetrics, load_pretrained_encoder, NmnistSample, NmnistDataset, DvsGestureSample, DvsGestureDataset, load_gesture_train_set, load_gesture_test_set, GESTURE_LABELS, ProjectionLayer, init_class_centers, load_train_set, load_test_set, ArcGrid, ArcTask, ArcDataset, GridEncoder, TransformationAnalyzer, TransformationAnalysis, TransformationVector};
