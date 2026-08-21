@@ -20,7 +20,8 @@ GoldSnnail is a research codebase exploring the intersection of:
 The architecture follows **Data-Oriented Design (DoD)** principles: flat memory, Structure of Arrays, zero-allocation hot paths, and AVX2 SIMD acceleration.
 
 ---
-<img width="2752" height="1536" alt="image" src="https://github.com/user-attachments/assets/d20f161c-27e0-443b-b633-965f7b6c0b99" />
+
+<img width="2752" height="1536" alt="image" src="https://github.com/user-attachments/assets/fa65a37a-8ba9-40d8-9d16-426edf21bfef" />
 
 
 ## Architecture
