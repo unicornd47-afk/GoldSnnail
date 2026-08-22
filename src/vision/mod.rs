@@ -14,6 +14,10 @@ pub mod dvs_gesture_loader;
 pub mod projection_layer;
 pub mod arc_loader;
 pub mod grid_encoder;
+pub mod object_descriptor;
+pub mod transform_codec;
+pub mod transform_memory;
+pub mod committee;
 pub mod transformation_analyzer;
 pub mod hybrid_solver;
 pub mod dsl_solver;
@@ -26,4 +30,11 @@ pub use dvs_gesture_loader::{DvsGestureSample, DvsGestureDataset, load_train_set
 pub use projection_layer::{ProjectionLayer, init_class_centers};
 pub use arc_loader::{ArcGrid, ArcTask, ArcDataset};
 pub use grid_encoder::GridEncoder;
+pub use object_descriptor::{hu_moments, ObjectDescriptor};
+pub use transform_codec::{
+    apply_d4, extract_transform, apply_transform, find_color_map, find_d4, find_tiling, similarity_fit, is_10x10,
+    SimilarityFit, TransformCode, TransformKind, TransformParams,
+};
+pub use transform_memory::{build_memory_from_tasks, TransformMemory};
+pub use committee::{Committee, VoterPrediction};
 pub use transformation_analyzer::{TransformationAnalyzer, TransformationAnalysis, TransformationVector};

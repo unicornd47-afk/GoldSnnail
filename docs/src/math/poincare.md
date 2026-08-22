@@ -1,4 +1,4 @@
-﻿# Elastic Poincaré Geometry
+# Elastic Poincaré Geometry
 
 This document specifies the mathematical foundations of GoldSnnail's hyperbolic geometry layer. All operations use elastic boundary functions that asymptotically compress values into the valid domain.
 

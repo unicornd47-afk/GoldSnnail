@@ -11,7 +11,9 @@
 //! - Encoder sollte trainiert sein fuer beste Router-Performance
 
 use crate::geometry::HyperbolicPoint;
-use crate::vision::{ArcGrid, ArcTask, ArcDataset, GridEncoder};
+use crate::vision::{
+    ArcGrid, ArcTask, ArcDataset, GridEncoder, transform_codec, transform_memory, committee,
+};
 
 /// Deterministische Grid-Operationen
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -19,6 +21,8 @@ pub enum Heuristic {
     Identity,
     Rotate90,
     FlipHorizontal,
+    // Transform-Codec heuristics (Dynamic, from training)
+    TransformCodec,
 }
 
 impl Heuristic {
@@ -34,6 +38,7 @@ impl Heuristic {
             Heuristic::Identity => grid_clone(grid),
             Heuristic::Rotate90 => rotate90(grid),
             Heuristic::FlipHorizontal => flip_horizontal(grid),
+            Heuristic::TransformCodec => grid_clone(grid), // Placeholder - real apply needs context
         }
     }
 }
@@ -85,17 +90,32 @@ fn flip_horizontal(grid: &ArcGrid) -> ArcGrid {
     }
 }
 
-/// Der Hybrid-Solver: Hyperbolic Router + explizite Heuristiken
+/// Der Hybrid-Solver: Hyperbolic Router + explizite Heuristiken + Transform-Codec
 pub struct HybridSolver<'a> {
     encoder: &'a GridEncoder,
     all_tasks: &'a [ArcTask],
     exclude_id: Option<String>,
     heuristics: Vec<Heuristic>,
     k: usize,
+    // Transform-Codec memory
+    transform_memory: transform_memory::TransformMemory,
 }
 
 impl<'a> HybridSolver<'a> {
     pub fn new(encoder: &'a GridEncoder, all_tasks: &'a [ArcTask], k: usize) -> Self {
+        // Build transform memory from all training tasks
+        let mut transform_memory = transform_memory::TransformMemory::new(5);
+        for task in all_tasks {
+            for (ex_idx, (input, output)) in task.train_pairs.iter().enumerate() {
+                if transform_codec::is_10x10(input) && transform_codec::is_10x10(output) {
+                    let code = transform_codec::extract_transform(input, output);
+                    if code.residual < 0.1 { // Only store high-confidence transforms
+                        transform_memory.add(code, task.id.clone(), ex_idx);
+                    }
+                }
+            }
+        }
+        
         Self {
             encoder,
             all_tasks,
@@ -106,6 +126,7 @@ impl<'a> HybridSolver<'a> {
                 Heuristic::FlipHorizontal,
             ],
             k,
+            transform_memory,
         }
     }
 
@@ -130,6 +151,21 @@ impl<'a> HybridSolver<'a> {
         None
     }
 
+    /// Findet den Transform-Codec, der auf einem Train-Paar funktioniert
+    fn find_working_transform(&self, task: &ArcTask) -> Option<transform_codec::TransformCode> {
+        for (input_grid, output_grid) in &task.train_pairs {
+            if !is_10x10(input_grid) || !is_10x10(output_grid) {
+                continue;
+            }
+            
+            let code = transform_codec::extract_transform(input_grid, output_grid);
+            if code.residual < 0.1 {
+                return Some(code);
+            }
+        }
+        None
+    }
+
     /// Loest einen neuen Task durch k-NN + Heuristik-Transfer
     pub fn solve(&self, task: &ArcTask) -> Option<ArcGrid> {
         let test_input = task.test_inputs.first()?;
@@ -141,10 +177,20 @@ impl<'a> HybridSolver<'a> {
         let test_point = self.encoder.encode(test_input).ok()?;
         let neighbors = self.find_nearest_train_tasks(&test_point);
 
-        for neighbor in neighbors {
+        // Try static heuristics first
+        for neighbor in &neighbors {
             if let Some(heuristic) = self.find_working_heuristic(neighbor) {
                 let result = heuristic.apply(test_input);
                 return Some(result);
+            }
+        }
+
+        // Try Transform-Codec from nearest neighbors
+        for neighbor in &neighbors {
+            if let Some(code) = self.find_working_transform(neighbor) {
+                if let Some(result) = transform_codec::apply_transform(test_input, &code) {
+                    return Some(result);
+                }
             }
         }
 

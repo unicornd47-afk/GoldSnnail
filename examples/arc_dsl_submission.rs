@@ -66,7 +66,7 @@ fn load_evaluation_set(dir: &str) -> Vec<ArcTask> {
 fn main() {
     println!("=== ARC Kaggle Submission (DSL Solver + Identity Fallback) ===\n");
 
-    let tasks = load_evaluation_set("data/arc/evaluation");
+    let tasks = load_evaluation_set("data/arc-agi-2/data/evaluation");
     if tasks.is_empty() {
         println!("No evaluation tasks loaded.");
         return;

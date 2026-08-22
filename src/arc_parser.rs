@@ -80,6 +80,16 @@ impl Component {
 /// assert_eq!(components[1].size(), 1);
 /// ```
 pub fn extract_components(grid: &ArcGrid) -> Vec<Component> {
+    extract_components_with(grid, false)
+}
+
+/// Extracts connected components with configurable connectivity.
+///
+/// `diag = true` enables 8-connectivity (diagonal neighbors connect) —
+/// needed for ARC object extraction, where diagonally touching cells of the
+/// same color are usually one object. The default via [`extract_components`]
+/// stays 4-connectivity, preserving existing callers' semantics.
+pub fn extract_components_with(grid: &ArcGrid, diag: bool) -> Vec<Component> {
     if grid.height == 0 || grid.width == 0 {
         return Vec::new();
     }
@@ -104,15 +114,35 @@ pub fn extract_components(grid: &ArcGrid) -> Vec<Component> {
                 visited[cr][cc] = true;
                 pixels.push((cr, cc));
 
-                let neighbors = [
-                    cr.checked_sub(1).map(|nr| (nr, cc)),
-                    Some((cr + 1, cc)).filter(|_| cr + 1 < grid.height),
-                    cc.checked_sub(1).map(|nc| (cr, nc)),
-                    Some((cr, cc + 1)).filter(|_| cc + 1 < grid.width),
-                ];
-                for n in neighbors.iter().flatten() {
+                let mut neighbors: Vec<(usize, usize)> = Vec::with_capacity(8);
+                if let Some(nr) = cr.checked_sub(1) {
+                    neighbors.push((nr, cc));
+                }
+                if cr + 1 < grid.height {
+                    neighbors.push((cr + 1, cc));
+                }
+                if let Some(nc) = cc.checked_sub(1) {
+                    neighbors.push((cr, nc));
+                }
+                if cc + 1 < grid.width {
+                    neighbors.push((cr, cc + 1));
+                }
+                if diag {
+                    for (dr, dc) in [(-1isize, -1isize), (-1, 1), (1, -1), (1, 1)] {
+                        let nr = cr as isize + dr;
+                        let nc = cc as isize + dc;
+                        if nr >= 0
+                            && nc >= 0
+                            && (nr as usize) < grid.height
+                            && (nc as usize) < grid.width
+                        {
+                            neighbors.push((nr as usize, nc as usize));
+                        }
+                    }
+                }
+                for n in neighbors {
                     if !visited[n.0][n.1] && grid.data[n.0][n.1] == color {
-                        stack.push(*n);
+                        stack.push(n);
                     }
                 }
             }

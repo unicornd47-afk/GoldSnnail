@@ -256,7 +256,7 @@ fn main() {
     println!("=== ARC Kaggle Submission (Expanded Heuristics) ===\n");
 
     // Load evaluation set for proper measurement
-    let eval_tasks = load_dataset("data/arc/evaluation");
+    let eval_tasks = load_dataset("data/arc-agi-2/data/evaluation");
     if eval_tasks.is_empty() {
         println!("No evaluation tasks loaded.");
         return;
