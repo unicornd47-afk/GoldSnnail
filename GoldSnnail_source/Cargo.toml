@@ -69,6 +69,5 @@ harness = false
 [workspace]
 members = [
     ".",
-    "tools/benchmark_runner",
     "app/src-tauri",
 ]

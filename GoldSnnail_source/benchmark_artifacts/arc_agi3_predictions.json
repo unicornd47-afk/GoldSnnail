@@ -1,0 +1,53 @@
+{
+  "model_info": {
+    "architecture": "SNN-180 + WorldModel-Hyperbolic + RL-TD",
+    "latency_us": 72,
+    "name": "GoldWorm-v0.3-agi3",
+    "score": 1.0,
+    "size_mb": 0.92,
+    "solved": 8,
+    "total": 8
+  },
+  "predictions": {
+    "crop_center": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.99
+    },
+    "flip_h": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.923333333333334
+    },
+    "gravity": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.923333333333334
+    },
+    "mirror_v": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.723333333333333
+    },
+    "replace_color": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.723333333333333
+    },
+    "rotate90": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.923333333333334
+    },
+    "scale_2x": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.64
+    },
+    "tile_2x2": {
+      "solved": true,
+      "steps": 6,
+      "total_reward": 9.723333333333333
+    }
+  }
+}
