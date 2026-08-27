@@ -117,6 +117,9 @@ class MemoryStore:
     # ------------------------------------------------------------------ #
 
     def _frame_to_json(self, frame: FrameData) -> dict[str, Any]:
+        action_input = frame.action_input
+        if action_input is not None and hasattr(action_input, "model_dump"):
+            action_input = action_input.model_dump(mode="json")
         return {
             "game_id": frame.game_id,
             "state": frame.state.value,
@@ -125,7 +128,7 @@ class MemoryStore:
             "available_actions": list(frame.available_actions),
             "full_reset": frame.full_reset,
             "guid": frame.guid,
-            "action_input": frame.action_input,
+            "action_input": action_input,
             "frame": frame.frame,  # list[list[int]] or None
             "step": frame.step,
             "score": frame.score,

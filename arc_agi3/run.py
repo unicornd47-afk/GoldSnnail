@@ -31,6 +31,7 @@ def _run_one(arcade: Arcade, game_id: str, args) -> dict:
         memory_dir=args.memory_dir,
         use_rust=not args.no_rust,
         verbose=args.verbose,
+        budget_override=args.budget,
     )
     entry = agent.run(max_steps=args.max_steps)
     return {
@@ -52,15 +53,21 @@ def main(argv=None) -> int:
     parser.add_argument("--all", action="store_true", help="Run every simulated game.")
     parser.add_argument("--max-steps", type=int, default=300)
     parser.add_argument("--budget-multiplier", type=float, default=2.0)
+    parser.add_argument("--budget", type=int, default=None, help="Absolute action budget override.")
     parser.add_argument("--no-rust", action="store_true", help="Disable the Rust solver bridge.")
     parser.add_argument("--save-recording", action="store_true")
     parser.add_argument("--recordings-dir", default="recordings")
     parser.add_argument("--memory-dir", default="memory")
     parser.add_argument("--operation-mode", default="OFFLINE", choices=[m.name for m in OperationMode])
+    parser.add_argument("--environments-dir", default="environment_files", help="Directory scanned for local game metadata.json files.")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args(argv)
 
-    arcade = Arcade(operation_mode=OperationMode[args.operation_mode], recordings_dir=args.recordings_dir)
+    arcade = Arcade(
+        operation_mode=OperationMode[args.operation_mode],
+        recordings_dir=args.recordings_dir,
+        environments_dir=args.environments_dir,
+    )
 
     if args.all:
         games = [info.game_id for info in arcade.get_environments() if info.is_simulated]

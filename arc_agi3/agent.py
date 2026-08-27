@@ -48,6 +48,7 @@ class ARCAgent:
         memory_dir: str = "memory",
         use_rust: bool = True,
         verbose: bool = False,
+        budget_override: Optional[int] = None,
     ) -> None:
         self.arcade = arcade
         self.game_id = game_id
@@ -60,9 +61,16 @@ class ARCAgent:
             save_recording=save_recording,
         )
         info = self.env.info()
-        self.baseline_actions = max(info.baseline_actions, 1)
+        raw_base = getattr(info, "baseline_actions", 0) or 0
+        if isinstance(raw_base, list):
+            raw_base = max(raw_base) if raw_base else 0
+        self.baseline_actions = max(raw_base, 1)
         n_levels = max(1, getattr(info, "n_levels", 1))
-        self.budget = int(self.baseline_actions * budget_multiplier * n_levels) + 1
+        computed = int(self.baseline_actions * budget_multiplier * n_levels) + 1
+        # Real games often don't expose a baseline; give a sane floor so the
+        # agent isn't starved of actions. An explicit override always wins.
+        floor = 60 if raw_base == 0 else computed
+        self.budget = budget_override if budget_override is not None else max(computed, floor)
 
         self.perception = Perception()
         self.memory = MemoryStore(game_id, seed, memory_dir=memory_dir)

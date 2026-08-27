@@ -121,8 +121,7 @@ class Environment:
 
         if _REAL_AVAILABLE:
             try:
-                tk_action = _to_toolkit_action(action)
-                raw = backend.step(tk_action)
+                raw = backend.step(action)
                 return _from_toolkit_frame(raw) if raw is not None else _empty_frame(self.game_id)
             except Exception as exc:
                 logger.warning("Real toolkit step failed: %s", exc)
@@ -315,9 +314,10 @@ class _RealToolkitWrapper:
 
     def info(self) -> EnvironmentInfo:
         if hasattr(self._real, "info"):
-            ri = self._real.info()
+            raw = self._real.info
+            ri = raw() if callable(raw) else raw
             return EnvironmentInfo(
-                game_id=getattr(ri, "game_id", "unknown"),
+                game_id=getattr(ri, "game_id", getattr(self._real, "game_id", "unknown")),
                 title=getattr(ri, "title", ""),
                 tags=getattr(ri, "tags", []),
                 n_levels=getattr(ri, "n_levels", 0),
@@ -343,7 +343,7 @@ def _to_toolkit_action(action: Action) -> Any:
     if not _REAL_AVAILABLE:
         raise RuntimeError("Real toolkit not installed.")
     from arcengine import GameAction as _TKAction  # type: ignore
-    tk = _TKAction(action.action.value)
+    tk = _TKAction[action.action.name]
     if action.data is not None:
         tk = tk.set_data(action.data)
     return tk
@@ -354,6 +354,10 @@ def _from_toolkit_frame(raw: Any) -> FrameData:
     if frame_list is None and hasattr(raw, "frame"):
         # Some toolkits expose .frame lazily
         frame_list = raw.frame  # type: ignore
+    if isinstance(frame_list, list) and frame_list and hasattr(frame_list[0], "tolist"):
+        frame_list = frame_list[0].tolist()
+    elif hasattr(frame_list, "tolist"):
+        frame_list = frame_list.tolist()
     return FrameData(
         game_id=getattr(raw, "game_id", ""),
         state=GameState(getattr(raw, "state", GameState.UNKNOWN.value)),

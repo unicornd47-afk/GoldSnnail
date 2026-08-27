@@ -79,12 +79,13 @@ def action_is_complex(a: GameAction) -> bool:
 class GameState(enum.Enum):
     """Possible states of an ARC-AGI-3 environment."""
 
-    NOT_PLAYED = "not_played"
-    PLAYING = "playing"
-    WIN = "win"
-    GAME_OVER = "game_over"
-    LOSE = "lose"
-    UNKNOWN = "unknown"
+    NOT_PLAYED = "NOT_PLAYED"
+    NOT_FINISHED = "NOT_FINISHED"
+    PLAYING = "PLAYING"
+    WIN = "WIN"
+    GAME_OVER = "GAME_OVER"
+    LOSE = "LOSE"
+    UNKNOWN = "UNKNOWN"
 
     def is_terminal(self) -> bool:
         return self in (GameState.WIN, GameState.GAME_OVER, GameState.LOSE)
