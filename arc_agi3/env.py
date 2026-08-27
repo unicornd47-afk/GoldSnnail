@@ -174,10 +174,14 @@ class Arcade:
         environments_dir: str = "environment_files",
         recordings_dir: str = "recordings",
         logger: Any = None,
+        arc_api_key: str = "",
     ) -> None:
         self.operation_mode = operation_mode
         self.environments_dir = environments_dir
         self.recordings_dir = recordings_dir
+        # Forward the key explicitly (env var / .env) so the toolkit never
+        # silently falls back to an anonymous key.
+        self.arc_api_key = arc_api_key or os.environ.get("ARC_API_KEY", "")
         self.logger = logger or logging.getLogger(__name__)
         self._entries: list[ScorecardEntry] = []
         self._real_arcade: Any = None
@@ -187,6 +191,7 @@ class Arcade:
                     operation_mode=_RealOM(operation_mode.value),
                     environments_dir=environments_dir,
                     recordings_dir=recordings_dir,
+                    arc_api_key=self.arc_api_key,
                 )
                 self.logger.info("Real arc_agi toolkit loaded (mode=%s).", operation_mode.value)
             except Exception as exc:
