@@ -6,9 +6,12 @@ key is present it proposes actions; otherwise ``available`` is ``False`` and the
 agent transparently falls back to the rule-based :class:`Planner`.
 
 Configuration (environment variables):
-    OPENAI_API_KEY / ARC_LLM_API_KEY : API key (required to enable).
-    ARC_LLM_MODEL                   : model id (default ``gpt-4o-mini``).
-    ARC_LLM_BASE_URL                : optional OpenAI-compatible base URL.
+    OPENROUTER_API_KEY / OPENAI_API_KEY / ARC_LLM_API_KEY : API key (enables).
+    ARC_LLM_BASE_URL / OPENROUTER_BASE_URL / OPENAI_BASE_URL : OpenAI-compatible base URL.
+    ARC_LLM_MODEL / OPENROUTER_MODEL                            : model id (default ``z-ai/glm-5.2``).
+
+OpenRouter is OpenAI-compatible: set ``OPENROUTER_API_KEY`` and use the slug
+``z-ai/glm-5.2`` with base ``https://openrouter.ai/api/v1``.
 
 The ``openai`` package is imported lazily, so this module never breaks the
 framework when the dependency or key is absent.
@@ -34,12 +37,27 @@ def render_frame(frame: FrameData) -> str:
 
 
 class LLMPlanner:
-    """Proposes the next action using an OpenAI-compatible Responses API."""
+    """Proposes the next action using an OpenAI-compatible API (e.g. OpenRouter)."""
 
     def __init__(self, model: Optional[str] = None) -> None:
-        self.api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("ARC_LLM_API_KEY") or ""
-        self.model = model or os.environ.get("ARC_LLM_MODEL") or "gpt-4o-mini"
-        self.base_url = os.environ.get("ARC_LLM_BASE_URL") or None
+        self.api_key = (
+            os.environ.get("OPENROUTER_API_KEY")
+            or os.environ.get("OPENAI_API_KEY")
+            or os.environ.get("ARC_LLM_API_KEY")
+            or ""
+        )
+        self.base_url = (
+            os.environ.get("ARC_LLM_BASE_URL")
+            or os.environ.get("OPENROUTER_BASE_URL")
+            or os.environ.get("OPENAI_BASE_URL")
+            or "https://openrouter.ai/api/v1"
+        )
+        self.model = (
+            model
+            or os.environ.get("ARC_LLM_MODEL")
+            or os.environ.get("OPENROUTER_MODEL")
+            or "z-ai/glm-5.2"
+        )
         self.available = bool(self.api_key)
         self._client: Any = None
         if self.available:
@@ -50,6 +68,27 @@ class LLMPlanner:
             except Exception:
                 self.available = False
                 self._client = None
+
+    def _call(self, prompt: str) -> Optional[str]:
+        """Call the model; prefer the Responses API, fall back to Chat Completions."""
+        if self._client is None:
+            return None
+        try:
+            resp = self._client.responses.create(model=self.model, input=prompt, timeout=30)
+            text = getattr(resp, "output_text", None)
+            if text:
+                return text
+        except Exception:
+            pass
+        try:
+            resp = self._client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                timeout=30,
+            )
+            return (resp.choices[0].message.content or "") if resp.choices else ""
+        except Exception:
+            return None
 
     def choose_action(
         self, frame: FrameData, history: list[str], available_actions: list[int]
@@ -72,14 +111,13 @@ class LLMPlanner:
             "Respond with ONLY a JSON object of the form "
             '{"action": <int>, "data": {"x": int, "y": int} or null, "reason": "..."}.'
         )
+        text = self._call(prompt)
+        if not text:
+            return None
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        if not m:
+            return None
         try:
-            resp = self._client.responses.create(model=self.model, input=prompt, timeout=30)
-            text = getattr(resp, "output_text", None)
-            if text is None:
-                text = str(resp)
-            m = re.search(r"\{.*\}", text, re.DOTALL)
-            if not m:
-                return None
             obj = json.loads(m.group(0))
             code = int(obj["action"])
             ga = GameAction.from_int(code)

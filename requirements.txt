@@ -1,3 +1,3 @@
 numpy>=1.24
 arc-agi==0.9.9  # optional; only needed for real Kaggle/online environments
-# openai  # optional; only for the LLM-based planner (arc_agi3.llm_planner). Set OPENAI_API_KEY / ARC_LLM_MODEL to enable.
+openai>=1.0  # optional; only for the LLM-based planner (arc_agi3.llm_planner). Set OPENAI_API_KEY / ARC_LLM_MODEL to enable.
