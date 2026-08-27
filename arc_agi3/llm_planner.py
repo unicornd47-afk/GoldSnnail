@@ -99,15 +99,33 @@ class LLMPlanner:
         grid_txt = render_frame(frame)
         avail = ", ".join(str(a) for a in available_actions if a not in (-1, 0))
         hist_txt = "\n".join(f"{i}: {h}" for i, h in enumerate(history[-6:])) or "(none)"
+        # Structured scene gives the model far more signal than raw ints.
+        scene_txt = "n/a"
+        try:
+            from arc_agi3.perception import Perception
+
+            sc = Perception().observe(frame)
+            objs = [
+                f"color{o.color}@({int(o.centroid[0])},{int(o.centroid[1])}) area{o.area}"
+                for o in sc.objects
+                if o.color != 0
+            ]
+            scene_txt = "; ".join(objs) if objs else "none"
+        except Exception:
+            pass
         prompt = (
             "You are playing an interactive ARC-AGI-3 grid game. The grid below "
             "shows the current state as rows of integers (0 = background).\n\n"
             f"{grid_txt}\n\n"
+            f"Distinct non-background objects: {scene_txt}\n"
             f"Available action codes (ignore -1 and 0): {avail}\n"
             "Simple actions 1-5 need no arguments. Complex actions 6-7 require a "
             'JSON "data" field with {"x": column, "y": row} where x,y are in [0, 63].\n'
             f"Recent history (action -> outcome):\n{hist_txt}\n\n"
-            "Choose the single best next action to make progress toward winning. "
+            "Reason step by step about how each action changes the grid and which "
+            "action most increases progress toward winning (e.g. move a distinct "
+            "marker onto a target, match a pattern, or clear an obstruction). "
+            "Then choose the single best next action. "
             "Respond with ONLY a JSON object of the form "
             '{"action": <int>, "data": {"x": int, "y": int} or null, "reason": "..."}.'
         )
