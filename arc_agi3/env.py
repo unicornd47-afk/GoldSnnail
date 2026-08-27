@@ -182,18 +182,14 @@ class Arcade:
         self.logger = logger or logging.getLogger(__name__)
         self._entries: list[ScorecardEntry] = []
         self._real_arcade: Any = None
-        if _REAL_AVAILABLE and operation_mode in (
-            OperationMode.NORMAL,
-            OperationMode.ONLINE,
-            OperationMode.COMPETITION,
-        ):
+        if _REAL_AVAILABLE:
             try:
                 self._real_arcade = _RealArcade(
                     operation_mode=_RealOM(operation_mode.value),
                     environments_dir=environments_dir,
                     recordings_dir=recordings_dir,
                 )
-                self.logger.info("Real arc_agi toolkit loaded.")
+                self.logger.info("Real arc_agi toolkit loaded (mode=%s).", operation_mode.value)
             except Exception as exc:
                 self.logger.warning("Failed to load real arc_agi toolkit: %s", exc)
 
