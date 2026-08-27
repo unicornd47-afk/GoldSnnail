@@ -32,6 +32,7 @@ def _run_one(arcade: Arcade, game_id: str, args) -> dict:
         use_rust=not args.no_rust,
         verbose=args.verbose,
         budget_override=args.budget,
+        use_llm=not args.no_llm,
     )
     entry = agent.run(max_steps=args.max_steps)
     return {
@@ -61,6 +62,7 @@ def main(argv=None) -> int:
     parser.add_argument("--operation-mode", default="OFFLINE", choices=[m.name for m in OperationMode])
     parser.add_argument("--environments-dir", default="environment_files", help="Directory scanned for local game metadata.json files.")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--no-llm", action="store_true", help="Disable the optional LLM planner (force rule-based).")
     args = parser.parse_args(argv)
 
     arcade = Arcade(

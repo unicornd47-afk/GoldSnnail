@@ -26,6 +26,7 @@ from arc_agi3.types import (
 )
 from arc_agi3.verifier import Verifier
 from arc_agi3.world_model import WorldModel
+from arc_agi3.llm_planner import LLMPlanner
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,7 @@ class ARCAgent:
         use_rust: bool = True,
         verbose: bool = False,
         budget_override: Optional[int] = None,
+        use_llm: bool = True,
     ) -> None:
         self.arcade = arcade
         self.game_id = game_id
@@ -77,6 +79,8 @@ class ARCAgent:
         self.world_model = WorldModel(self.memory, self.perception, use_rust=use_rust)
         self.verifier = Verifier(self.world_model, self.memory)
         self.planner = Planner(self.world_model, self.perception, self.memory)
+        self.llm = LLMPlanner() if use_llm else None
+        self.history: list[str] = []
         self.allow_complex = game_id in _COMPLEX_GAMES
         self.goal_test: Callable[[FrameData], bool] = self._make_goal_test(game_id)
 
@@ -130,9 +134,15 @@ class ARCAgent:
             if steps_used >= max_steps:
                 break
             remaining = self.budget - steps_used
-            action, why = self.planner.next_action(
-                self.env, frame, self.goal_test, remaining, allow_complex=self.allow_complex
-            )
+            action, why = None, "default"
+            if self.llm is not None and self.llm.available:
+                action = self.llm.choose_action(frame, self.history, frame.available_actions)
+                if action is not None:
+                    why = "llm"
+            if action is None:
+                action, why = self.planner.next_action(
+                    self.env, frame, self.goal_test, remaining, allow_complex=self.allow_complex
+                )
             if self.verbose:
                 logger.info("step %d: %s (%s) budget_left=%d", steps_used, action.action, why, remaining)
 
@@ -149,6 +159,9 @@ class ARCAgent:
                 transition = Transition(frame, action, actual, frame.step)
                 self.world_model.learn(transition)
 
+            self.history.append(
+                f"a={action.action.value} -> {actual.state.value} L{actual.levels_completed}"
+            )
             frame = actual
 
             if correct is False:
