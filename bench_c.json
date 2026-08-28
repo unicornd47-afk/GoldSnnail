@@ -1,0 +1,82 @@
+{
+  "results": [
+    {
+      "game_id": "ka59-38d34dbb",
+      "seed": 0,
+      "won": false,
+      "levels_completed": 0,
+      "total_score": 0.0,
+      "steps_used": 0,
+      "budget": 0,
+      "error": "Complex action GameAction.ACTION6 requires data with 'x' and 'y' keys.",
+      "use_llm": false
+    },
+    {
+      "game_id": "sc25-635fd71a",
+      "seed": 0,
+      "won": false,
+      "levels_completed": 0,
+      "total_score": 0.0,
+      "steps_used": 57,
+      "budget": 287,
+      "n_transitions": 57,
+      "n_hypotheses": 204,
+      "distinct_states": 47,
+      "n_verification_failures": 16,
+      "n_verification_successes": 0,
+      "n_contradictions": 16,
+      "n_contradictions_pruned": 118,
+      "n_step_failed": 0,
+      "n_replan": 16,
+      "n_level_progress": 0,
+      "inert_actions": 11,
+      "repeated_state_visits": 67,
+      "visited_set_size": 64045,
+      "state_outcomes_size": 64045,
+      "llm_calls": 0,
+      "llm_failures": 0,
+      "compaction_triggers": 0,
+      "hypotheses_surfaced": 0,
+      "cot_memory_len": 0,
+      "use_llm": false
+    },
+    {
+      "game_id": "dc22-fdcac232",
+      "seed": 0,
+      "won": false,
+      "levels_completed": 0,
+      "total_score": 0.0,
+      "steps_used": 0,
+      "budget": 0,
+      "error": "Complex action GameAction.ACTION6 requires data with 'x' and 'y' keys.",
+      "use_llm": false
+    },
+    {
+      "game_id": "tn36-ef4dde99",
+      "seed": 0,
+      "won": false,
+      "levels_completed": 0,
+      "total_score": 0.0,
+      "steps_used": 0,
+      "budget": 0,
+      "error": "Complex action GameAction.ACTION6 requires data with 'x' and 'y' keys.",
+      "use_llm": false
+    }
+  ],
+  "aggregate": {
+    "games": 4,
+    "wins": 0,
+    "total_score": 0.0,
+    "avg_steps": 14.25,
+    "avg_budget": 71.75,
+    "avg_transitions": 14.25,
+    "avg_hypotheses": 51.0,
+    "avg_verification_failures": 4.0,
+    "avg_inert_actions": 2.75,
+    "avg_repeated_state_visits": 16.75,
+    "total_visited_set_entries": 64045,
+    "total_contradictions": 16,
+    "total_contradictions_pruned": 118,
+    "total_hypotheses_surfaced": 0
+  }
+}

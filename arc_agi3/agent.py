@@ -223,7 +223,12 @@ class ARCAgent:
                     action = Action(GameAction.from_int(code))
                     why = "stuck_random"
                 else:
-                    action = Action(GameAction.from_int(random.choice(avail) if avail else 1))
+                    simple_candidates = [a for a in avail if a in (1, 2, 3, 4, 5)]
+                    if simple_candidates:
+                        code = random.choice(simple_candidates)
+                        action = Action(GameAction.from_int(code))
+                    else:
+                        action = Action(GameAction.ACTION1)
                     why = "stuck_default"
 
             if action is None and self.llm is not None and self.llm.available:
@@ -238,7 +243,7 @@ class ARCAgent:
             # Tuning 2: avoid recently inert actions.
             if action is not None and action.action.value in self._inert_actions:
                 avail = frame.available_actions or []
-                alternatives = [a for a in avail if a not in self._inert_actions and a not in (0, -1)]
+                alternatives = [a for a in avail if a not in self._inert_actions and a in (1, 2, 3, 4, 5)]
                 if alternatives:
                     action = Action(GameAction.from_int(random.choice(alternatives)))
                     why = "inert_avoidance"

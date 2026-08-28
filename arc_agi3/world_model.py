@@ -217,19 +217,22 @@ class WorldModel:
 
         if not applied:
             self._rust_confidence = 0.0
-            templates = self.memory.similar_transitions(current_frame, action.action, k=1)
-            if templates and RUST_AVAILABLE and self.use_rust:
-                tt = templates[0]
-                if tt.state_before.frame is not None and tt.state_after.frame is not None:
-                    prog = solve_grid_transform(
-                        tt.state_before.frame, tt.state_after.frame, timeout=10
-                    )
-                    if prog:
-                        res = rust_apply_program(current_frame.frame, prog)
-                        if res is not None:
-                            new_grid = np.array(res, dtype=int)
-                            applied = True
-                            self._rust_confidence = 0.4
+            # Only query similar transitions when the Rust solver will use
+            # them; otherwise the O(n_transitions) scan is wasted work.
+            if RUST_AVAILABLE and self.use_rust:
+                templates = self.memory.similar_transitions(current_frame, action.action, k=1)
+                if templates:
+                    tt = templates[0]
+                    if tt.state_before.frame is not None and tt.state_after.frame is not None:
+                        prog = solve_grid_transform(
+                            tt.state_before.frame, tt.state_after.frame, timeout=10
+                        )
+                        if prog:
+                            res = rust_apply_program(current_frame.frame, prog)
+                            if res is not None:
+                                new_grid = np.array(res, dtype=int)
+                                applied = True
+                                self._rust_confidence = 0.4
 
         if not applied:
             return None

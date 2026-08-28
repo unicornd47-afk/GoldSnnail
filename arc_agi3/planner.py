@@ -230,12 +230,15 @@ class Planner:
                 if nxt is None:
                     continue
                 nsig = self.perception.signature(nxt)
+                # Record every expanded edge so it is simulated at most once
+                # across all search_plan calls (previously edges leading to
+                # already-visited states were re-expanded on every call).
+                self._visited.add(key)
+                self._state_outcomes[key] = nsig
                 if nsig in visited:
                     continue
                 visited.add(nsig)
                 parent[nsig] = (sig, action, frame)
-                self._visited.add(key)
-                self._state_outcomes[key] = nsig
                 expansions += 1
                 if goal_test(nxt):
                     return self._reconstruct(start_sig, nsig, parent, nxt)
