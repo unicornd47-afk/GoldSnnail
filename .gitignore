@@ -48,6 +48,10 @@ examples/train_shd_snn.rs
 r1html.html
 shaders/IDEA.md
 
+# ── Python cache (any depth) ────────────────────
+__pycache__/
+*.pyc
+
 # ── Editor / OS ─────────────────────────────────
 *.swp
 *.swo

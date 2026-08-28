@@ -9,6 +9,7 @@ action budget and falling back to exploration when the world model is stale
 from __future__ import annotations
 
 import logging
+import random
 from typing import Callable, Optional
 
 from arc_agi3.env import Arcade, Environment, ScorecardEntry, competition_score
@@ -79,10 +80,15 @@ class ARCAgent:
         self.world_model = WorldModel(self.memory, self.perception, use_rust=use_rust)
         self.verifier = Verifier(self.world_model, self.memory)
         self.planner = Planner(self.world_model, self.perception, self.memory)
-        self.llm = LLMPlanner() if use_llm else None
+        self.llm = LLMPlanner(world_model=self.world_model, memory=self.memory) if use_llm else None
         self.history: list[str] = []
         self.allow_complex = game_id in _COMPLEX_GAMES
         self.goal_test: Callable[[FrameData], bool] = self._make_goal_test(game_id)
+        # Tuning 2: penalize actions that recently produced no grid change.
+        self._inert_actions: set[int] = set()
+        # Tuning 4: detect when stuck in the same state.
+        self._consecutive_same_state: int = 0
+        self._last_state_sig: str = ""
 
     # ------------------------------------------------------------------
     # Goal definitions (per simulated game)
@@ -115,27 +121,112 @@ class ARCAgent:
         return lambda frame: frame.state == GameState.WIN
 
     # ------------------------------------------------------------------
-    # Main loop
+    # Bootstrap
     # ------------------------------------------------------------------
+
+    def _systematic_bootstrap(self, frame: FrameData) -> tuple[FrameData, int]:
+        """Systematic bootstrap: try each simple action once, then random probes.
+
+        Returns (final_frame, steps_used).
+        """
+        steps_used = 0
+        avail = frame.available_actions or []
+        simple_actions = [a for a in avail if a in (1, 2, 3, 4, 5)]
+        if not simple_actions:
+            boot = self.planner.directed_explore(self.env, frame, n_probes=3)
+            if boot:
+                return boot[-1].state_after, len(boot)
+            return frame, 0
+
+        # Phase 1: systematic coverage of simple actions.
+        changed_actions: list[int] = []
+        for code in simple_actions:
+            ga = GameAction.from_int(code)
+            action = Action(ga)
+            actual = self.env.step(action)
+            steps_used += 1
+            if actual is not None and actual.state != GameState.UNKNOWN:
+                transition = Transition(frame, action, actual, frame.step)
+                self.world_model.learn(transition)
+                sig_before = self.perception.signature(frame)
+                sig_after = self.perception.signature(actual)
+                if sig_before != sig_after:
+                    changed_actions.append(code)
+                frame = actual
+                if frame.state.is_terminal():
+                    break
+
+        # Phase 2: extra random probes (prioritize actions that changed state).
+        budget = self.budget - steps_used
+        extra_n = min(5, max(2, budget // 5))
+        rng = random.Random(self.seed)
+        for _ in range(extra_n):
+            if changed_actions:
+                code = rng.choice(changed_actions)
+            else:
+                code = rng.choice(simple_actions)
+            ga = GameAction.from_int(code)
+            action = Action(ga)
+            actual = self.env.step(action)
+            steps_used += 1
+            if actual is not None and actual.state != GameState.UNKNOWN:
+                transition = Transition(frame, action, actual, frame.step)
+                self.world_model.learn(transition)
+                frame = actual
+                if frame.state.is_terminal():
+                    break
+
+        return frame, steps_used
 
     def run(self, max_steps: int = 300) -> ScorecardEntry:
         frame = self.env.reset()
         steps_used = 0
         start_levels = 0
+        last_levels = 0
 
         # Bootstrap: gather initial transitions so the world model has rules.
-        boot_n = min(8, max(3, self.budget // 4))
-        boot = self.planner.directed_explore(self.env, frame, n_probes=boot_n)
-        if boot:
-            frame = boot[-1].state_after
-            steps_used += len(boot)
+        boot_n = min(10, max(5, self.budget // 5))
+        if boot_n > 0:
+            frame, boot_steps = self._systematic_bootstrap(frame)
+            steps_used += boot_steps
+            last_levels = frame.levels_completed
+            self.planner.clear_visited()
 
         while steps_used < self.budget and not frame.state.is_terminal():
             if steps_used >= max_steps:
                 break
+            # Clear visited set and inert penalties on level transition.
+            if frame.levels_completed > last_levels:
+                self.planner.clear_visited()
+                self._inert_actions.clear()
+                self._consecutive_same_state = 0
+                self._last_state_sig = ""
+                last_levels = frame.levels_completed
+
             remaining = self.budget - steps_used
             action, why = None, "default"
-            if self.llm is not None and self.llm.available:
+
+            # Tuning 4: stuck-state detection — if same state for > 5 steps, randomize.
+            current_sig = self.perception.signature(frame)
+            if current_sig == self._last_state_sig and current_sig != "none":
+                self._consecutive_same_state += 1
+            else:
+                self._consecutive_same_state = 0
+            self._last_state_sig = current_sig
+            stuck = self._consecutive_same_state > 5
+
+            if stuck:
+                avail = frame.available_actions or []
+                simple = [a for a in avail if a in (1, 2, 3, 4, 5) and a not in self._inert_actions]
+                if simple:
+                    code = random.Random(self.seed + steps_used).choice(simple)
+                    action = Action(GameAction.from_int(code))
+                    why = "stuck_random"
+                else:
+                    action = Action(GameAction.from_int(random.choice(avail) if avail else 1))
+                    why = "stuck_default"
+
+            if action is None and self.llm is not None and self.llm.available:
                 action = self.llm.choose_action(frame, self.history, frame.available_actions)
                 if action is not None:
                     why = "llm"
@@ -143,25 +234,60 @@ class ARCAgent:
                 action, why = self.planner.next_action(
                     self.env, frame, self.goal_test, remaining, allow_complex=self.allow_complex
                 )
+
+            # Tuning 2: avoid recently inert actions.
+            if action is not None and action.action.value in self._inert_actions:
+                avail = frame.available_actions or []
+                alternatives = [a for a in avail if a not in self._inert_actions and a not in (0, -1)]
+                if alternatives:
+                    action = Action(GameAction.from_int(random.choice(alternatives)))
+                    why = "inert_avoidance"
             if self.verbose:
                 logger.info("step %d: %s (%s) budget_left=%d", steps_used, action.action, why, remaining)
 
-            executed_ok, correct, actual = self.verifier.verify_action(self.env, action, frame)
+            executed_action = action
+            executed_ok, correct, actual = self.verifier.verify_action(self.env, executed_action, frame)
             steps_used += 1
 
             if not executed_ok or actual is None:
-                self.memory.record_event("step_failed", {"action": action.action.value})
-                frame = actual if actual is not None else frame
-                continue
+                self.memory.record_event("step_failed", {"action": executed_action.action.value})
+                # Retry with a different simple action up to 2 times (Fix 4).
+                retries = 0
+                while retries < 2 and (not executed_ok or actual is None):
+                    avail = frame.available_actions or []
+                    fallback_codes = [c for c in avail if c in (1, 2, 3, 4, 5)]
+                    if not fallback_codes:
+                        break
+                    fallback_code = random.Random(self.seed + steps_used).choice(fallback_codes)
+                    fallback_action = Action(GameAction.from_int(fallback_code))
+                    executed_ok, correct, actual = self.verifier.verify_action(self.env, fallback_action, frame)
+                    steps_used += 1
+                    retries += 1
+                    if executed_ok and actual is not None:
+                        executed_action = fallback_action
+                        break
+                if not executed_ok or actual is None:
+                    frame = actual if actual is not None else frame
+                    continue
 
             # Learn the real outcome (skip when exploration already learned it).
             if why != "explore":
-                transition = Transition(frame, action, actual, frame.step)
+                transition = Transition(frame, executed_action, actual, frame.step)
                 self.world_model.learn(transition)
 
             self.history.append(
-                f"a={action.action.value} -> {actual.state.value} L{actual.levels_completed}"
+                f"a={executed_action.action.value} -> {actual.state.value} L{actual.levels_completed}"
             )
+            # Tuning 2: track inert actions (no grid change).
+            try:
+                sig_before = self.perception.signature(frame)
+                sig_after = self.perception.signature(actual)
+                if sig_before == sig_after:
+                    self._inert_actions.add(executed_action.action.value)
+                else:
+                    self._inert_actions.discard(executed_action.action.value)
+            except Exception:
+                pass
             frame = actual
 
             if correct is False:
@@ -171,6 +297,8 @@ class ARCAgent:
                 if re:
                     frame = re[-1].state_after
                     steps_used += len(re)
+                    # Reset stale flag after learning new transitions.
+                    self.world_model.reset_stale()
 
             if frame.state == GameState.WIN:
                 break

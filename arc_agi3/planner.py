@@ -117,6 +117,15 @@ class Planner:
         self.memory = memory
         self.explore_probes = explore_probes
         self.bandit = _make_bandit(7)
+        # State-action visited set (Task 3)
+        self._visited: set[tuple[str, int]] = set()
+        self._state_outcomes: dict[tuple[str, int], str] = {}
+        self._last_levels_completed: int = -1
+
+    def clear_visited(self) -> None:
+        """Clear the visited set (call on level transition)."""
+        self._visited.clear()
+        self._state_outcomes.clear()
 
     # ------------------------------------------------------------------
     # Exploration
@@ -151,6 +160,16 @@ class Planner:
                 # Keep exploration on simple actions; complex handled by planning.
                 ga = GameAction.ACTION1
             action = Action(ga)
+            sig = self.perception.signature(frame)
+            key = (sig, action.action.value)
+            if key in self._visited:
+                # Try a different untried simple action.
+                tried = {a for (s, a) in self._visited if s == sig}
+                untried = [c for c in frame.available_actions if c in _SIMPLE_CODES and c not in tried]
+                if not untried:
+                    break
+                code = random.choice(untried)
+                action = Action(GameAction.from_int(code))
             before = frame
             after = env.step(action)
             if after is None:
@@ -164,6 +183,8 @@ class Planner:
             ) else 0.1
             self.bandit.update(arm, reward)
             collected.append(t)
+            self._visited.add((sig_before, action.action.value))
+            self._state_outcomes[(sig_before, action.action.value)] = sig_after
             frame = after
             if after.state.is_terminal():
                 break
@@ -200,6 +221,10 @@ class Planner:
             for code in frame.available_actions:
                 if code not in _SIMPLE_CODES:
                     continue
+                key = (sig, code)
+                if key in self._visited:
+                    # Skip already-expanded edge.
+                    continue
                 action = Action(GameAction.from_int(code))
                 nxt = self.world_model.predict(action, frame)
                 if nxt is None:
@@ -209,6 +234,8 @@ class Planner:
                     continue
                 visited.add(nsig)
                 parent[nsig] = (sig, action, frame)
+                self._visited.add(key)
+                self._state_outcomes[key] = nsig
                 expansions += 1
                 if goal_test(nxt):
                     return self._reconstruct(start_sig, nsig, parent, nxt)
@@ -268,10 +295,31 @@ class Planner:
         if plan is not None and plan.steps:
             return plan.steps[0].action, "planned"
 
+        # 2.5) Hill-climbing fallback: pick simple action with highest world-model confidence.
+        best_action, best_score = None, -1.0
+        for code in (current_frame.available_actions or []):
+            if code not in _SIMPLE_CODES:
+                continue
+            a = Action(GameAction.from_int(code))
+            score = self.world_model.confidence(a, current_frame)
+            if score > best_score:
+                best_score = score
+                best_action = a
+        if best_action is not None and best_score > 0.0:
+            return best_action, "hill_climb"
+
         # 3) Explore one more step.
         ts = self.directed_explore(env, current_frame, n_probes=1)
         if ts:
             return ts[-1].action, "explore"
+
+        # 4) Fallback: pick an untried simple action for this state (Fix 3).
+        sig = self.perception.signature(current_frame)
+        tried = {a for (s, a) in self._visited if s == sig}
+        untried = [c for c in (current_frame.available_actions or []) if c in _SIMPLE_CODES and c not in tried]
+        if untried:
+            code = random.choice(untried)
+            return Action(GameAction.from_int(code)), "untried_fallback"
 
         return Action(GameAction.ACTION1), "default"
 

@@ -79,13 +79,56 @@ def _overlap(bbox_a: tuple[int, int, int, int], bbox_b: tuple[int, int, int, int
 class Perception:
     """Extract structured scene data from ARC-AGI-3 frame observations."""
 
+    def __init__(self, ignore_border: int = 0) -> None:
+        self.ignore_border = ignore_border
+
+    def _detect_border(self, grid: np.ndarray) -> int:
+        """Auto-detect uniform border rows/cols and return border width."""
+        h, w = grid.shape
+        if h < 3 or w < 3:
+            return 0
+        top_row = grid[0, :]
+        bottom_row = grid[h - 1, :]
+        left_col = grid[:, 0]
+        right_col = grid[:, w - 1]
+        # Border if first/last rows are uniform non-zero.
+        if (
+            np.all(top_row == top_row[0])
+            and np.all(bottom_row == bottom_row[0])
+            and top_row[0] != 0
+            and bottom_row[0] != 0
+        ):
+            return 1
+        return 0
+
+    def _apply_border_mask(self, grid: np.ndarray) -> np.ndarray:
+        """Return a copy of grid with border cells zeroed out."""
+        if self.ignore_border <= 0:
+            return grid
+        masked = grid.copy()
+        h, w = masked.shape
+        b = self.ignore_border
+        if h > 2 * b:
+            masked[:b, :] = 0
+            masked[h - b :, :] = 0
+        if w > 2 * b:
+            masked[:, :b] = 0
+            masked[:, w - b :] = 0
+        return masked
+
     def extract_objects(self, grid: Optional[np.ndarray]) -> list[SceneObject]:
         if grid is None or grid.size == 0:
             return []
-        components = _cc4(grid)
+        # Auto-detect border if not explicitly set.
+        if self.ignore_border == 0:
+            self.ignore_border = self._detect_border(grid)
+        masked = self._apply_border_mask(grid)
+        components = _cc4(masked)
         objects: list[SceneObject] = []
         oid = 0
         for color, pixels in sorted(components.items()):
+            if not pixels:
+                continue
             bbox = _bbox(pixels)
             cen = _centroid(pixels)
             objects.append(SceneObject(
@@ -141,12 +184,15 @@ class Perception:
             return {"compatible": False}
 
         h, w = gb.shape
+        # Mask border region before diffing (Task 7).
+        masked_gb = self._apply_border_mask(gb)
+        masked_ga = self._apply_border_mask(ga)
         changed_cells: list[tuple[int, int, int, int]] = []
         color_changes: list[dict[str, int]] = []
         for r in range(h):
             for c in range(w):
-                ov = int(gb[r, c])
-                nv = int(ga[r, c])
+                ov = int(masked_gb[r, c])
+                nv = int(masked_ga[r, c])
                 if ov != nv:
                     changed_cells.append((r, c, ov, nv))
                     if ov != 0 and nv != 0:
@@ -226,10 +272,14 @@ class Perception:
         g = frame.grid()
         if g is None:
             return "none"
+        # Auto-detect border on first call.
+        if self.ignore_border == 0:
+            self.ignore_border = self._detect_border(g)
+        masked = self._apply_border_mask(g)
         cells = []
-        for r in range(g.shape[0]):
-            for c in range(g.shape[1]):
-                v = int(g[r, c])
+        for r in range(masked.shape[0]):
+            for c in range(masked.shape[1]):
+                v = int(masked[r, c])
                 if v != 0:
                     cells.append(f"{r},{c},{v}")
         cells.sort()

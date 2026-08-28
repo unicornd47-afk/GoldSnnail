@@ -56,6 +56,8 @@ class WorldModel:
         self.paint_counts: dict[tuple[int, tuple[int, int]], int] = {}
         self._hypotheses: list[Hypothesis] = []
         self._rust_confidence: float = 0.0
+        # Minimum supporting transitions before a hypothesis is created / surfaced.
+        self.min_evidence = int(os.environ.get("ARC_WM_MIN_EVIDENCE", "2"))
 
     def learn(self, t: Transition) -> None:
         """Ingest a transition and update parametric rules and hypotheses."""
@@ -68,9 +70,15 @@ class WorldModel:
         d = self.perception.diff(t.state_before, t.state_after)
         action_code = t.action.action.value
 
+        # Detect contradictions with existing motion/paint rules (Task 4).
         for m in d.get("moved_objects", []):
             key = (action_code, int(m["color"]))
             dr, dc = int(m["dr"]), int(m["dc"])
+            if key in self.motion_rules:
+                old_dr, old_dc = self.motion_rules[key]
+                if (old_dr, old_dc) != (dr, dc):
+                    # Contradiction: decay conflicting motion hypotheses.
+                    self._prune_contradictions("motion", key, action_code)
             self.motion_rules[key] = (dr, dc)
             self.motion_counts[key] = self.motion_counts.get(key, 0) + 1
             count = self.motion_counts[key]
@@ -86,7 +94,10 @@ class WorldModel:
 
         for c in d.get("color_changes", []):
             key = (action_code, (int(c["r"]), int(c["c"])))
-            self.paint_rules[key] = int(c["new"])
+            new_color = int(c["new"])
+            if key in self.paint_rules and self.paint_rules[key] != new_color:
+                self._prune_contradictions("paint", key, action_code)
+            self.paint_rules[key] = new_color
             self.paint_counts[key] = self.paint_counts.get(key, 0) + 1
             count = self.paint_counts[key]
             desc = f"ACTION{action_code} sets cell ({c['r']},{c['c']}) to color {c['new']}"
@@ -109,6 +120,33 @@ class WorldModel:
                 },
             )
 
+    def _prune_contradictions(
+        self, hyp_type: str, key: tuple, action_code: int
+    ) -> None:
+        """Decay confidence of the specific contradicted hypothesis only (Fix 2)."""
+        action = GameAction.from_int(action_code)
+        hyp_id = f"{hyp_type}_{action.value}_{hash(key) & 0xFFFFFFFF:08x}"
+        target = None
+        for h in self._hypotheses:
+            if h.id == hyp_id:
+                target = h
+                break
+        if target is None:
+            return
+        target.confidence = max(0.0, target.confidence * 0.5)
+        target.contradicting_transitions += 1
+        self.memory.record_event(
+            "contradiction_pruned",
+            {
+                "hypothesis_id": hyp_id,
+                "new_confidence": target.confidence,
+            },
+        )
+
+    def reset_stale(self) -> None:
+        """Clear the stale flag after learning new transitions."""
+        self._stale = False
+
     def _upsert_hypothesis(
         self,
         hyp_type: str,
@@ -124,6 +162,9 @@ class WorldModel:
                 h.confidence = confidence
                 h.supporting_transitions = supporting_transitions
                 return
+        # Only create a hypothesis when we have minimum evidence (Fix 1).
+        if supporting_transitions < self.min_evidence:
+            return
         h = Hypothesis(
             id=hyp_id,
             action=action,

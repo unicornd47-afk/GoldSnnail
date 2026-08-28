@@ -121,8 +121,13 @@ class Environment:
 
         if _REAL_AVAILABLE:
             try:
-                raw = backend.step(action)
-                return _from_toolkit_frame(raw) if raw is not None else _empty_frame(self.game_id)
+                result = backend.step(action)
+                # _RealToolkitWrapper.step already returns a FrameData (converted
+                # from the raw toolkit frame), so avoid a redundant second
+                # conversion via _from_toolkit_frame.
+                if isinstance(result, FrameData):
+                    return result
+                return _from_toolkit_frame(result) if result is not None else _empty_frame(self.game_id)
             except Exception as exc:
                 logger.warning("Real toolkit step failed: %s", exc)
                 raise
@@ -299,14 +304,26 @@ class _RealToolkitWrapper:
         if hasattr(self._real, "reset") and callable(self._real.reset):
             raw = self._real.reset()
         else:
-            raw = self._real.step(_to_toolkit_action(Action(GameAction.RESET)))
+            tk_action, _data = _to_toolkit_action(Action(GameAction.RESET))
+            raw = self._real.step(tk_action, data=_data)
         return _from_toolkit_frame(raw) if raw is not None else _empty_frame(getattr(self._real, "game_id", "unknown"))
 
     def step(self, action: Action) -> FrameData:
-        tk_action = _to_toolkit_action(action)
-        raw = self._real.step(tk_action)
+        tk_action, data = _to_toolkit_action(action)
+        reasoning = action.reasoning
+        raw = self._real.step(tk_action, data=data, reasoning=reasoning)
         if raw is None:
-            return _empty_frame(getattr(self._real, "game_id", "unknown"))
+            # Server-side session may have expired (~30-35s timeout).
+            # Refresh by re-resetting and retry the step once.
+            game_id = getattr(self._real, "game_id", "unknown")
+            logger.info("Step returned None for %s, refreshing session and retrying", game_id)
+            try:
+                self._real.reset()
+            except Exception as exc:
+                logger.warning("Re-reset failed for %s: %s", game_id, exc)
+            raw = self._real.step(tk_action, data=data, reasoning=reasoning)
+            if raw is None:
+                return _empty_frame(game_id)
         fd = _from_toolkit_frame(raw)
         self.state = fd.state
         self._levels_completed = fd.levels_completed
@@ -345,13 +362,19 @@ class _RealToolkitWrapper:
 
 
 def _to_toolkit_action(action: Action) -> Any:
+    """Convert our Action to an arcengine.GameAction enum member.
+
+    Returns a tuple of (game_action, data) so callers can pass data separately
+    to RemoteEnvironmentWrapper.step which expects (action, data, reasoning).
+    """
     if not _REAL_AVAILABLE:
         raise RuntimeError("Real toolkit not installed.")
     from arcengine import GameAction as _TKAction  # type: ignore
     tk = _TKAction[action.action.name]
-    if action.data is not None:
-        tk = tk.set_data(action.data)
-    return tk
+    data = action.data
+    if data is not None:
+        tk.set_data(data)
+    return tk, data
 
 
 def _from_toolkit_frame(raw: Any) -> FrameData:
