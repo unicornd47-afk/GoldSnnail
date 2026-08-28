@@ -52,6 +52,9 @@ shaders/IDEA.md
 __pycache__/
 *.pyc
 
+# ── Secrets / environment ───────────────────────
+.env
+
 # ── Editor / OS ─────────────────────────────────
 *.swp
 *.swo

@@ -1,0 +1,3 @@
+arc-agi==0.9.9
+openai
+numpy
