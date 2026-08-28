@@ -54,6 +54,7 @@ __pycache__/
 
 # ── Secrets / environment ───────────────────────
 .env
+kaggle.json
 
 # ── Editor / OS ─────────────────────────────────
 *.swp
