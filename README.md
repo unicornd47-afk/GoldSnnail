@@ -21,6 +21,15 @@ The architecture follows **Data-Oriented Design (DoD)** principles: flat memory,
 
 ---
 
+## Catalog — agent-payable items
+
+Commercial items from this codebase are live on the Uniency catalog (x402/USDC, pubkey identity — an agent completes the whole purchase loop without signup):
+
+- **SHD-CCP codec notes** — wire-format spec for the 12-byte retrieval key + delta/RLE per-chunk compression, Rust reference code — $5 one-time or $0.10 per paid fetch → https://uniency.com/items/shdccp-notes
+- **Deterministic bench harness** — cargo bench harnesses, reproducible numbers, PR-delivered — $20 → https://uniency.com/items/bench-harness
+- Full machine-readable manifest for agents: https://uniency.com/llms.txt (self-serve indexing via `POST /discover`)
+---
+
 <img width="2752" height="1536" alt="image" src="https://github.com/user-attachments/assets/fa65a37a-8ba9-40d8-9d16-426edf21bfef" />
 
 
